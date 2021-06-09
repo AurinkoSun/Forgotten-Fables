@@ -1,0 +1,3 @@
+<entities anm2root="gfx/" version="5">
+	<entity anm2path="items/pick ups/bombs/giga bomb variants.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="60" collisionRadius="20" friction="1" id="4" name="Fetus Giga Bomb" numGridCollisionPoints="12" shadowSize="34" stageHP="0" variant="21" />
+</entities>

@@ -1,0 +1,3 @@
+<items gfxroot="gfx/items/" version="1">
+ <passive cache="firedelay" description="Use with caution..." gfx="collectible_FatFetus.png" name="Fat Fetus" />
+</items>
