@@ -25,7 +25,10 @@ fatFetusID = Isaac.GetItemIdByName("Fat Fetus")
 function evalCache(self, player, flags)
     if flags == CacheFlag.CACHE_FIREDELAY then
         if player:HasCollectible(fatFetusID) then
-            player.MaxFireDelay = player.MaxFireDelay * 10
+            player.MaxFireDelay = player.MaxFireDelay * 15
+            if player:HasCollectible(CollectibleType.COLLECTIBLE_MR_MEGA) then
+                player.Damage = player.Damage * 1.5
+            end
         end
     end
 end
@@ -39,18 +42,15 @@ function onFireTear(self, tear)
     if player == nil then
         return
     end
-    if player:HasCollectible(CollectibleType.COLLECTIBLE_SATURNUS) then
-    else
-        if player:HasCollectible(fatFetusID) then
-            local dmg = player.Damage * (300 / 3.5)
-            bomb = Isaac.Spawn(EntityType.ENTITY_BOMBDROP, 21, 0, player.Position, tear.Velocity, player):ToBomb()
-            if bomb == nil then
-                return
-            end
-            bomb:GetData().colupdated = false
-            tear:Remove()
-            bomb.ExplosionDamage = dmg
+    if player:HasCollectible(fatFetusID) then
+        local dmg = player.Damage * (300 / 3.5)
+        bomb = Isaac.Spawn(EntityType.ENTITY_BOMBDROP, 21, 0, player.Position, tear.Velocity, player):ToBomb()
+        if bomb == nil then
+            return
         end
+        bomb:GetData().colupdated = false
+        tear:Remove()
+        bomb.ExplosionDamage = dmg
     end
 end
 FatFetus:AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, onFireTear)
@@ -104,48 +104,51 @@ function fetusGigaUpdate(self, bomb)
                     bomb:GetSprite():Reload()
                     bomb.RadiusMultiplier = 0.5
                 end
-                if player:HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE_BOMBS) or player:HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE) then
+                if player:HasCollectible(CollectibleType.COLLECTIBLE_MR_MEGA) then
+                    bomb.SpriteScale:__mul(1.5)
+                    bomb.RadiusMultiplier = bomb.RadiusMultiplier * 2
+                end
+                if player:HasCollectible(CollectibleType.COLLECTIBLE_MR_MEGA) then
                     bomb:GetData().colupdated = true
-                    bomb:GetData().syntype = BombTypes.Brim
+                    print("megabomb")
+                    bomb:GetSprite():Play("megapulse", true)
+                elseif player:HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE_BOMBS) or player:HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE) then
+                    bomb:GetData().colupdated = true
                     bomb:GetSprite():Play("brimpulse", true)
                 elseif player:HasCollectible(CollectibleType.COLLECTIBLE_STICKY_BOMBS) then
                     bomb:GetData().colupdated = true
-                    bomb:GetData().syntype = BombTypes.Sticky
                     bomb:AddTearFlags(TearFlags.TEAR_STICKY)
                     bomb:GetSprite():Play("stickypulse", true)
                 elseif player:HasCollectible(CollectibleType.COLLECTIBLE_BUTT_BOMBS) then
                     bomb:GetData().colupdated = true
-                    bomb:GetData().syntype = BombTypes.Butt
                     bomb:AddTearFlags(TearFlags.TEAR_BUTT_BOMB)
                     bomb:GetSprite():Play("buttpulse", true)
                 elseif player:HasCollectible(CollectibleType.COLLECTIBLE_BLOOD_BOMBS) then
                     bomb:GetData().colupdated = true
-                    bomb:GetData().syntype = BombTypes.Blood
                     bomb:GetSprite():Play("bloodpulse", true)
                 elseif player:HasCollectible(CollectibleType.COLLECTIBLE_SCATTER_BOMBS) then
                     bomb:GetData().colupdated = true
-                    bomb:GetData().syntype = BombTypes.Scatter
                     bomb:AddTearFlags(TearFlags.TEAR_SCATTER_BOMB)
                 elseif player:HasCollectible(
                     CollectibleType.COLLECTIBLE_HOT_BOMBS or player:HasCollectible(CollectibleType.COLLECTIBLE_FIRE_MIND)
                 ) then
                     bomb:GetData().colupdated = true
-                    bomb:GetData().syntype = BombTypes.Fire
                     bomb.CollisionDamage = 32
                     bomb:AddTearFlags(TearFlags.TEAR_BURN)
                     bomb:GetSprite():Play("flamepulse", true)
                 elseif player:HasGoldenBomb() then
                     bomb:GetData().colupdated = true
-                    bomb:GetData().syntype = BombTypes.Gold
                     bomb:GetSprite():Play("goldenpulse", true)
+                elseif player:HasCollectible(CollectibleType.COLLECTIBLE_BOBS_CURSE) or player:HasCollectible(CollectibleType.COLLECTIBLE_IPECAC) then
+                    bomb:GetData().colupdated = true
+                    bomb:GetSprite():Play("poisonpulse", true)
                 else
                     bomb:GetData().colupdated = true
-                    bomb:GetData().syntype = BombTypes.Normal
                     bomb:GetSprite():Play("Pulse", true)
                 end
             end
-            if (((((bomb:GetSprite():IsFinished("Pulse") or bomb:GetSprite():IsFinished("brimpulse")) or bomb:GetSprite():IsFinished("stickypulse")) or bomb:GetSprite():IsFinished("goldenpulse")) or bomb:GetSprite():IsFinished("flamepulse")) or bomb:GetSprite():IsFinished("bloodpulse")) or bomb:GetSprite():IsFinished("buttpulse") then
-                if bomb:GetData().syntype == BombTypes.Brim then
+            if (((((((bomb:GetSprite():IsFinished("Pulse") or bomb:GetSprite():IsFinished("brimpulse")) or bomb:GetSprite():IsFinished("stickypulse")) or bomb:GetSprite():IsFinished("goldenpulse")) or bomb:GetSprite():IsFinished("flamepulse")) or bomb:GetSprite():IsFinished("bloodpulse")) or bomb:GetSprite():IsFinished("buttpulse")) or bomb:GetSprite():IsFinished("poisonpulse")) or bomb:GetSprite():IsFinished("megapulse") then
+                if player:HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE_BOMBS) or player:HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE) then
                     EntityLaser.ShootAngle(
                         1,
                         bomb.Position,
@@ -191,14 +194,21 @@ function fetusGigaUpdate(self, bomb)
                     return
                 end
                 explody.Visible = false
-                if bomb:GetData().syntype == BombTypes.Sticky then
+                if player:HasCollectible(CollectibleType.COLLECTIBLE_MR_MEGA) then
+                    explody.RadiusMultiplier = explody.RadiusMultiplier * 2
+                end
+                if player:HasCollectible(CollectibleType.COLLECTIBLE_SOY_MILK) or player:HasCollectible(CollectibleType.COLLECTIBLE_ALMOND_MILK) then
+                    explody.RadiusMultiplier = explody.RadiusMultiplier * 0.5
+                end
+                if player:HasCollectible(CollectibleType.COLLECTIBLE_STICKY_BOMBS) then
                     explody:AddTearFlags(TearFlags.TEAR_STICKY)
                 end
-                if bomb:GetData().syntype == BombTypes.Butt then
+                if player:HasCollectible(CollectibleType.COLLECTIBLE_BUTT_BOMBS) then
                     explody:AddTearFlags(TearFlags.TEAR_BUTT_BOMB)
                 end
+                explody.ExplosionDamage = player.Damage * (300 / 3.5)
                 explody:SetExplosionCountdown(0)
-                if bomb:GetData().syntype == BombTypes.Blood then
+                if player:HasCollectible(CollectibleType.COLLECTIBLE_BLOOD_BOMBS) then
                     local creep = Isaac.Spawn(
                         EntityType.ENTITY_EFFECT,
                         EffectVariant.PLAYER_CREEP_RED,
@@ -214,6 +224,9 @@ function fetusGigaUpdate(self, bomb)
                     creep:SetDamageSource(EntityType.ENTITY_PLAYER)
                     creep.Scale = creep.Scale * 10
                     creep.LifeSpan = creep.LifeSpan * 1000
+                end
+                if player:HasCollectible(CollectibleType.COLLECTIBLE_BOBS_CURSE) or player:HasCollectible(CollectibleType.COLLECTIBLE_IPECAC) then
+                    explody:AddTearFlags(TearFlags.TEAR_POISON)
                 end
                 bomb:GetSprite():Play("Explode", false)
             end
