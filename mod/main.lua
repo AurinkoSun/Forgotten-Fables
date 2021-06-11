@@ -227,6 +227,18 @@ function fetusGigaUpdate(self, bomb)
                 end
                 if player:HasCollectible(CollectibleType.COLLECTIBLE_BOBS_CURSE) or player:HasCollectible(CollectibleType.COLLECTIBLE_IPECAC) then
                     explody:AddTearFlags(TearFlags.TEAR_POISON)
+                    local cloud = Isaac.Spawn(
+                        EntityType.ENTITY_EFFECT,
+                        EffectVariant.SMOKE_CLOUD,
+                        0,
+                        bomb.Position,
+                        Vector(0, 0),
+                        player
+                    ):ToEffect()
+                    if cloud == nil then
+                        return
+                    end
+                    cloud.Scale = cloud.Scale * 4
                 end
                 bomb:GetSprite():Play("Explode", false)
             end

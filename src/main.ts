@@ -146,6 +146,9 @@ function fetusGigaUpdate(bomb:EntityBomb){
         }
         if(player.HasCollectible(CollectibleType.COLLECTIBLE_BOBS_CURSE) || player.HasCollectible(CollectibleType.COLLECTIBLE_IPECAC)){
           explody.AddTearFlags(TearFlags.TEAR_POISON);
+          let cloud=Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.SMOKE_CLOUD, 0, bomb.Position, Vector(0,0), player).ToEffect();
+          if(cloud==null){return;}
+          cloud.Scale*=4;
         }
         bomb.GetSprite().Play("Explode", false);
       }
