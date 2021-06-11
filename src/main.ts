@@ -93,7 +93,14 @@ function fetusGigaUpdate(bomb:EntityBomb){
         } else if(player.HasCollectible(CollectibleType.COLLECTIBLE_SCATTER_BOMBS)){
           bomb.GetData().colupdated=true;
           bomb.AddTearFlags(TearFlags.TEAR_SCATTER_BOMB);
-          //bomb.GetSprite().Play("scatterpulse",true);
+          bomb.GetSprite().Play("scatterpulse",true);
+        } else if(player.HasCollectible(CollectibleType.COLLECTIBLE_GHOST_BOMBS)){
+          bomb.GetData().colupdated=true;
+          bomb.AddTearFlags(TearFlags.TEAR_GHOST_BOMB);
+          bomb.GetSprite().Play("ghostpulse",true);
+        } else if (player.HasCollectible(CollectibleType.COLLECTIBLE_SAD_BOMBS)){
+          bomb.GetData().colupdated=true;
+          bomb.GetSprite().Play("sadpulse", true);
         } else if(player.HasCollectible(CollectibleType.COLLECTIBLE_HOT_BOMBS || player.HasCollectible(CollectibleType.COLLECTIBLE_FIRE_MIND))){
           bomb.GetData().colupdated=true;
           bomb.CollisionDamage=32;
@@ -110,7 +117,7 @@ function fetusGigaUpdate(bomb:EntityBomb){
           bomb.GetSprite().Play("Pulse", true);
         }
       }
-      if(bomb.GetSprite().IsFinished("Pulse") || bomb.GetSprite().IsFinished("brimpulse") || bomb.GetSprite().IsFinished("stickypulse") || bomb.GetSprite().IsFinished("goldenpulse") || bomb.GetSprite().IsFinished("flamepulse") || bomb.GetSprite().IsFinished("bloodpulse") || bomb.GetSprite().IsFinished("buttpulse") || bomb.GetSprite().IsFinished("poisonpulse") || bomb.GetSprite().IsFinished("megapulse")){
+      if(bomb.GetSprite().IsFinished("Pulse") || bomb.GetSprite().IsFinished("brimpulse") || bomb.GetSprite().IsFinished("stickypulse") || bomb.GetSprite().IsFinished("goldenpulse") || bomb.GetSprite().IsFinished("flamepulse") || bomb.GetSprite().IsFinished("bloodpulse") || bomb.GetSprite().IsFinished("buttpulse") || bomb.GetSprite().IsFinished("poisonpulse") || bomb.GetSprite().IsFinished("megapulse") || bomb.GetSprite().IsFinished("scatterpulse") || bomb.GetSprite().IsFinished("ghostpulse") || bomb.GetSprite().IsFinished("sadpulse")){
         if(player.HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE_BOMBS) || player.HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE)){
           EntityLaser.ShootAngle(LaserVariant.THICK_RED,bomb.Position,0,15,Vector(0,0),bomb);
           EntityLaser.ShootAngle(LaserVariant.THICK_RED,bomb.Position,90,15,Vector(0,0),bomb);
@@ -150,10 +157,35 @@ function fetusGigaUpdate(bomb:EntityBomb){
           if(cloud==null){return;}
           cloud.Scale*=4;
         }
+        if(player.HasCollectible(CollectibleType.COLLECTIBLE_GHOST_BOMBS)){
+          Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.HUNGRY_SOUL, 0, bomb.Position, Vector(-3,0), player);
+          Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.HUNGRY_SOUL, 0, bomb.Position, Vector(0,-3), player);
+          Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.HUNGRY_SOUL, 0, bomb.Position, Vector(0,3), player);
+          Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.HUNGRY_SOUL, 0, bomb.Position, Vector(3,0), player);
+        }
         bomb.GetSprite().Play("Explode", false);
       }
       if(bomb.GetSprite().IsFinished("Explode")){
         bomb.Remove();
+        if(player.HasCollectible(CollectibleType.COLLECTIBLE_SAD_BOMBS)){
+          let sad;
+          sad=Isaac.Spawn(EntityType.ENTITY_TEAR, 0, 0, bomb.Position, Vector(10,0), player).ToTear();
+          if(sad!=null){sad.Scale*=2;sad.CollisionDamage=player.Damage*2;sad.GetData().sad=true;}
+          sad=Isaac.Spawn(EntityType.ENTITY_TEAR, 0, 0, bomb.Position, Vector(-10,0), player).ToTear();
+          if(sad!=null){sad.Scale*=2;sad.CollisionDamage=player.Damage*2;sad.GetData().sad=true;}
+          sad=Isaac.Spawn(EntityType.ENTITY_TEAR, 0, 0, bomb.Position, Vector(0,10), player).ToTear();
+          if(sad!=null){sad.Scale*=2;sad.CollisionDamage=player.Damage*2;sad.GetData().sad=true;}
+          sad=Isaac.Spawn(EntityType.ENTITY_TEAR, 0, 0, bomb.Position, Vector(0,-10), player).ToTear();
+          if(sad!=null){sad.Scale*=2;sad.CollisionDamage=player.Damage*2;sad.GetData().sad=true;}
+          sad=Isaac.Spawn(EntityType.ENTITY_TEAR, 0, 0, bomb.Position, Vector((10/math.sqrt(2)),(10/math.sqrt(2))), player).ToTear();
+          if(sad!=null){sad.Scale*=2;sad.CollisionDamage=player.Damage*2;sad.GetData().sad=true;}
+          sad=Isaac.Spawn(EntityType.ENTITY_TEAR, 0, 0, bomb.Position, Vector(0-(10/math.sqrt(2)),(10/math.sqrt(2))), player).ToTear();
+          if(sad!=null){sad.Scale*=2;sad.CollisionDamage=player.Damage*2;sad.GetData().sad=true;}
+          sad=Isaac.Spawn(EntityType.ENTITY_TEAR, 0, 0, bomb.Position, Vector((10/math.sqrt(2)),0-(10/math.sqrt(2))), player).ToTear();
+          if(sad!=null){sad.Scale*=2;sad.CollisionDamage=player.Damage*2;sad.GetData().sad=true;}
+          sad=Isaac.Spawn(EntityType.ENTITY_TEAR, 0, 0, bomb.Position, Vector(0-(10/math.sqrt(2)),0-(10/math.sqrt(2))), player).ToTear();
+          if(sad!=null){sad.Scale*=2;sad.CollisionDamage=player.Damage*2;sad.GetData().sad=true;}
+        }
       }
     } else {
       if(bomb.GetData().colupdated==false){

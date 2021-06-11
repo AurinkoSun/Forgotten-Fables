@@ -129,6 +129,14 @@ function fetusGigaUpdate(self, bomb)
                 elseif player:HasCollectible(CollectibleType.COLLECTIBLE_SCATTER_BOMBS) then
                     bomb:GetData().colupdated = true
                     bomb:AddTearFlags(TearFlags.TEAR_SCATTER_BOMB)
+                    bomb:GetSprite():Play("scatterpulse", true)
+                elseif player:HasCollectible(CollectibleType.COLLECTIBLE_GHOST_BOMBS) then
+                    bomb:GetData().colupdated = true
+                    bomb:AddTearFlags(TearFlags.TEAR_GHOST_BOMB)
+                    bomb:GetSprite():Play("ghostpulse", true)
+                elseif player:HasCollectible(CollectibleType.COLLECTIBLE_SAD_BOMBS) then
+                    bomb:GetData().colupdated = true
+                    bomb:GetSprite():Play("sadpulse", true)
                 elseif player:HasCollectible(
                     CollectibleType.COLLECTIBLE_HOT_BOMBS or player:HasCollectible(CollectibleType.COLLECTIBLE_FIRE_MIND)
                 ) then
@@ -147,7 +155,7 @@ function fetusGigaUpdate(self, bomb)
                     bomb:GetSprite():Play("Pulse", true)
                 end
             end
-            if (((((((bomb:GetSprite():IsFinished("Pulse") or bomb:GetSprite():IsFinished("brimpulse")) or bomb:GetSprite():IsFinished("stickypulse")) or bomb:GetSprite():IsFinished("goldenpulse")) or bomb:GetSprite():IsFinished("flamepulse")) or bomb:GetSprite():IsFinished("bloodpulse")) or bomb:GetSprite():IsFinished("buttpulse")) or bomb:GetSprite():IsFinished("poisonpulse")) or bomb:GetSprite():IsFinished("megapulse") then
+            if ((((((((((bomb:GetSprite():IsFinished("Pulse") or bomb:GetSprite():IsFinished("brimpulse")) or bomb:GetSprite():IsFinished("stickypulse")) or bomb:GetSprite():IsFinished("goldenpulse")) or bomb:GetSprite():IsFinished("flamepulse")) or bomb:GetSprite():IsFinished("bloodpulse")) or bomb:GetSprite():IsFinished("buttpulse")) or bomb:GetSprite():IsFinished("poisonpulse")) or bomb:GetSprite():IsFinished("megapulse")) or bomb:GetSprite():IsFinished("scatterpulse")) or bomb:GetSprite():IsFinished("ghostpulse")) or bomb:GetSprite():IsFinished("sadpulse") then
                 if player:HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE_BOMBS) or player:HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE) then
                     EntityLaser.ShootAngle(
                         1,
@@ -240,10 +248,163 @@ function fetusGigaUpdate(self, bomb)
                     end
                     cloud.Scale = cloud.Scale * 4
                 end
+                if player:HasCollectible(CollectibleType.COLLECTIBLE_GHOST_BOMBS) then
+                    Isaac.Spawn(
+                        EntityType.ENTITY_EFFECT,
+                        EffectVariant.HUNGRY_SOUL,
+                        0,
+                        bomb.Position,
+                        Vector(-3, 0),
+                        player
+                    )
+                    Isaac.Spawn(
+                        EntityType.ENTITY_EFFECT,
+                        EffectVariant.HUNGRY_SOUL,
+                        0,
+                        bomb.Position,
+                        Vector(0, -3),
+                        player
+                    )
+                    Isaac.Spawn(
+                        EntityType.ENTITY_EFFECT,
+                        EffectVariant.HUNGRY_SOUL,
+                        0,
+                        bomb.Position,
+                        Vector(0, 3),
+                        player
+                    )
+                    Isaac.Spawn(
+                        EntityType.ENTITY_EFFECT,
+                        EffectVariant.HUNGRY_SOUL,
+                        0,
+                        bomb.Position,
+                        Vector(3, 0),
+                        player
+                    )
+                end
                 bomb:GetSprite():Play("Explode", false)
             end
             if bomb:GetSprite():IsFinished("Explode") then
                 bomb:Remove()
+                if player:HasCollectible(CollectibleType.COLLECTIBLE_SAD_BOMBS) then
+                    local sad
+                    sad = Isaac.Spawn(
+                        EntityType.ENTITY_TEAR,
+                        0,
+                        0,
+                        bomb.Position,
+                        Vector(10, 0),
+                        player
+                    ):ToTear()
+                    if sad ~= nil then
+                        sad.Scale = sad.Scale * 2
+                        sad.CollisionDamage = player.Damage * 2
+                        sad:GetData().sad = true
+                    end
+                    sad = Isaac.Spawn(
+                        EntityType.ENTITY_TEAR,
+                        0,
+                        0,
+                        bomb.Position,
+                        Vector(-10, 0),
+                        player
+                    ):ToTear()
+                    if sad ~= nil then
+                        sad.Scale = sad.Scale * 2
+                        sad.CollisionDamage = player.Damage * 2
+                        sad:GetData().sad = true
+                    end
+                    sad = Isaac.Spawn(
+                        EntityType.ENTITY_TEAR,
+                        0,
+                        0,
+                        bomb.Position,
+                        Vector(0, 10),
+                        player
+                    ):ToTear()
+                    if sad ~= nil then
+                        sad.Scale = sad.Scale * 2
+                        sad.CollisionDamage = player.Damage * 2
+                        sad:GetData().sad = true
+                    end
+                    sad = Isaac.Spawn(
+                        EntityType.ENTITY_TEAR,
+                        0,
+                        0,
+                        bomb.Position,
+                        Vector(0, -10),
+                        player
+                    ):ToTear()
+                    if sad ~= nil then
+                        sad.Scale = sad.Scale * 2
+                        sad.CollisionDamage = player.Damage * 2
+                        sad:GetData().sad = true
+                    end
+                    sad = Isaac.Spawn(
+                        EntityType.ENTITY_TEAR,
+                        0,
+                        0,
+                        bomb.Position,
+                        Vector(
+                            10 / math.sqrt(2),
+                            10 / math.sqrt(2)
+                        ),
+                        player
+                    ):ToTear()
+                    if sad ~= nil then
+                        sad.Scale = sad.Scale * 2
+                        sad.CollisionDamage = player.Damage * 2
+                        sad:GetData().sad = true
+                    end
+                    sad = Isaac.Spawn(
+                        EntityType.ENTITY_TEAR,
+                        0,
+                        0,
+                        bomb.Position,
+                        Vector(
+                            0 - (10 / math.sqrt(2)),
+                            10 / math.sqrt(2)
+                        ),
+                        player
+                    ):ToTear()
+                    if sad ~= nil then
+                        sad.Scale = sad.Scale * 2
+                        sad.CollisionDamage = player.Damage * 2
+                        sad:GetData().sad = true
+                    end
+                    sad = Isaac.Spawn(
+                        EntityType.ENTITY_TEAR,
+                        0,
+                        0,
+                        bomb.Position,
+                        Vector(
+                            10 / math.sqrt(2),
+                            0 - (10 / math.sqrt(2))
+                        ),
+                        player
+                    ):ToTear()
+                    if sad ~= nil then
+                        sad.Scale = sad.Scale * 2
+                        sad.CollisionDamage = player.Damage * 2
+                        sad:GetData().sad = true
+                    end
+                    sad = Isaac.Spawn(
+                        EntityType.ENTITY_TEAR,
+                        0,
+                        0,
+                        bomb.Position,
+                        Vector(
+                            0 - (10 / math.sqrt(2)),
+                            0 - (10 / math.sqrt(2))
+                        ),
+                        player
+                    ):ToTear()
+                    if sad ~= nil then
+                        sad.Scale = sad.Scale * 2
+                        sad.CollisionDamage = player.Damage * 2
+                        sad:GetData().sad = true
+                    end
+                end
             end
         else
             if bomb:GetData().colupdated == false then
