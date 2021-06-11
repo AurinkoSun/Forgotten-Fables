@@ -26,9 +26,11 @@ function evalCache(self, player, flags)
     if flags == CacheFlag.CACHE_FIREDELAY then
         if player:HasCollectible(fatFetusID) then
             player.MaxFireDelay = player.MaxFireDelay * 15
-            if player:HasCollectible(CollectibleType.COLLECTIBLE_MR_MEGA) then
-                player.Damage = player.Damage * 1.5
-            end
+        end
+    end
+    if flags == CacheFlag.CACHE_DAMAGE then
+        if player:HasCollectible(fatFetusID) and player:HasCollectible(CollectibleType.COLLECTIBLE_MR_MEGA) then
+            player.Damage = player.Damage * 2
         end
     end
 end
@@ -110,7 +112,6 @@ function fetusGigaUpdate(self, bomb)
                 end
                 if player:HasCollectible(CollectibleType.COLLECTIBLE_MR_MEGA) then
                     bomb:GetData().colupdated = true
-                    print("megabomb")
                     bomb:GetSprite():Play("megapulse", true)
                 elseif player:HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE_BOMBS) or player:HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE) then
                     bomb:GetData().colupdated = true
@@ -163,7 +164,7 @@ function fetusGigaUpdate(self, bomb)
                         0,
                         15,
                         Vector(0, 0),
-                        bomb
+                        player
                     )
                     EntityLaser.ShootAngle(
                         1,
@@ -171,7 +172,7 @@ function fetusGigaUpdate(self, bomb)
                         90,
                         15,
                         Vector(0, 0),
-                        bomb
+                        player
                     )
                     EntityLaser.ShootAngle(
                         1,
@@ -179,7 +180,7 @@ function fetusGigaUpdate(self, bomb)
                         180,
                         15,
                         Vector(0, 0),
-                        bomb
+                        player
                     )
                     EntityLaser.ShootAngle(
                         1,
@@ -187,7 +188,7 @@ function fetusGigaUpdate(self, bomb)
                         270,
                         15,
                         Vector(0, 0),
-                        bomb
+                        player
                     )
                 end
                 local explody = Isaac.Spawn(
@@ -202,8 +203,8 @@ function fetusGigaUpdate(self, bomb)
                     return
                 end
                 explody.Visible = false
-                if player:HasCollectible(CollectibleType.COLLECTIBLE_MR_MEGA) then
-                    explody.RadiusMultiplier = explody.RadiusMultiplier * 2
+                if player:HasCollectible(CollectibleType.COLLECTIBLE_MR_MEGA) or player:HasCollectible(CollectibleType.COLLECTIBLE_BOMBER_BOY) then
+                    explody:AddTearFlags(TearFlags.TEAR_CROSS_BOMB)
                 end
                 if player:HasCollectible(CollectibleType.COLLECTIBLE_SOY_MILK) or player:HasCollectible(CollectibleType.COLLECTIBLE_ALMOND_MILK) then
                     explody.RadiusMultiplier = explody.RadiusMultiplier * 0.5
@@ -213,6 +214,9 @@ function fetusGigaUpdate(self, bomb)
                 end
                 if player:HasCollectible(CollectibleType.COLLECTIBLE_BUTT_BOMBS) then
                     explody:AddTearFlags(TearFlags.TEAR_BUTT_BOMB)
+                end
+                if player:HasCollectible(CollectibleType.COLLECTIBLE_SCATTER_BOMBS) then
+                    explody:AddTearFlags(TearFlags.TEAR_SCATTER_BOMB)
                 end
                 explody.ExplosionDamage = player.Damage * (300 / 3.5)
                 explody:SetExplosionCountdown(0)

@@ -1,16 +1,17 @@
 const FatFetus = RegisterMod("FatFetus", 1);
 const game = Game();
 const fatFetusID = Isaac.GetItemIdByName("Fat Fetus");
-
 function evalCache(player:EntityPlayer, flags:CacheFlag){
   if(flags == CacheFlag.CACHE_FIREDELAY){
     if(player.HasCollectible(fatFetusID)){
       player.MaxFireDelay *= 15;
-      if(player.HasCollectible(CollectibleType.COLLECTIBLE_MR_MEGA)){
-        player.Damage*=1.5;
-      }
     }
   }
+  if(flags == CacheFlag.CACHE_DAMAGE){
+    if(player.HasCollectible(fatFetusID) && player.HasCollectible(CollectibleType.COLLECTIBLE_MR_MEGA)){
+      player.Damage*=2;
+  }
+}
 }
 FatFetus.AddCallback(ModCallbacks.MC_EVALUATE_CACHE,evalCache);
 function onFireTear(tear:EntityTear){
@@ -74,7 +75,6 @@ function fetusGigaUpdate(bomb:EntityBomb){
         }
         if(player.HasCollectible(CollectibleType.COLLECTIBLE_MR_MEGA)){
           bomb.GetData().colupdated=true;
-          print("megabomb");
           bomb.GetSprite().Play("megapulse", true);
         } else if(player.HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE_BOMBS) || player.HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE)){
           bomb.GetData().colupdated=true;
@@ -119,16 +119,16 @@ function fetusGigaUpdate(bomb:EntityBomb){
       }
       if(bomb.GetSprite().IsFinished("Pulse") || bomb.GetSprite().IsFinished("brimpulse") || bomb.GetSprite().IsFinished("stickypulse") || bomb.GetSprite().IsFinished("goldenpulse") || bomb.GetSprite().IsFinished("flamepulse") || bomb.GetSprite().IsFinished("bloodpulse") || bomb.GetSprite().IsFinished("buttpulse") || bomb.GetSprite().IsFinished("poisonpulse") || bomb.GetSprite().IsFinished("megapulse") || bomb.GetSprite().IsFinished("scatterpulse") || bomb.GetSprite().IsFinished("ghostpulse") || bomb.GetSprite().IsFinished("sadpulse")){
         if(player.HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE_BOMBS) || player.HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE)){
-          EntityLaser.ShootAngle(LaserVariant.THICK_RED,bomb.Position,0,15,Vector(0,0),bomb);
-          EntityLaser.ShootAngle(LaserVariant.THICK_RED,bomb.Position,90,15,Vector(0,0),bomb);
-          EntityLaser.ShootAngle(LaserVariant.THICK_RED,bomb.Position,180,15,Vector(0,0),bomb);
-          EntityLaser.ShootAngle(LaserVariant.THICK_RED,bomb.Position,270,15,Vector(0,0),bomb);
+          EntityLaser.ShootAngle(LaserVariant.THICK_RED,bomb.Position,0,15,Vector(0,0),player);
+          EntityLaser.ShootAngle(LaserVariant.THICK_RED,bomb.Position,90,15,Vector(0,0),player);
+          EntityLaser.ShootAngle(LaserVariant.THICK_RED,bomb.Position,180,15,Vector(0,0),player);
+          EntityLaser.ShootAngle(LaserVariant.THICK_RED,bomb.Position,270,15,Vector(0,0),player);
         }
         let explody=Isaac.Spawn(4, 17, 0, bomb.Position, Vector(0,0), player).ToBomb();
         if(explody===null){return;}
         explody.Visible=false;
-        if(player.HasCollectible(CollectibleType.COLLECTIBLE_MR_MEGA)){
-          explody.RadiusMultiplier*=2;
+        if(player.HasCollectible(CollectibleType.COLLECTIBLE_MR_MEGA) || player.HasCollectible(CollectibleType.COLLECTIBLE_BOMBER_BOY)){
+          explody.AddTearFlags(TearFlags.TEAR_CROSS_BOMB);
         }
         if(player.HasCollectible(CollectibleType.COLLECTIBLE_SOY_MILK) || player.HasCollectible(CollectibleType.COLLECTIBLE_ALMOND_MILK)){
           explody.RadiusMultiplier*=0.5;
@@ -138,6 +138,9 @@ function fetusGigaUpdate(bomb:EntityBomb){
         }
         if(player.HasCollectible(CollectibleType.COLLECTIBLE_BUTT_BOMBS)){
           explody.AddTearFlags(TearFlags.TEAR_BUTT_BOMB);
+        }
+        if(player.HasCollectible(CollectibleType.COLLECTIBLE_SCATTER_BOMBS)){
+          explody.AddTearFlags(TearFlags.TEAR_SCATTER_BOMB);
         }
         explody.ExplosionDamage=player.Damage*(300/3.5);
         explody.SetExplosionCountdown(0);
