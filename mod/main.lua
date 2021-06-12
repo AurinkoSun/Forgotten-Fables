@@ -25,7 +25,9 @@ fatFetusID = Isaac.GetItemIdByName("Fat Fetus")
 function evalCache(self, player, flags)
     if flags == CacheFlag.CACHE_FIREDELAY then
         if player:HasCollectible(fatFetusID) then
-            player.MaxFireDelay = player.MaxFireDelay * 15
+            if (player:HasCollectible(CollectibleType.COLLECTIBLE_LUDOVICO_TECHNIQUE) == false) and (player:HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE) == false) then
+                player.MaxFireDelay = player.MaxFireDelay * 15
+            end
         end
     end
     if flags == CacheFlag.CACHE_DAMAGE then
@@ -100,7 +102,7 @@ function gigaUpdate(self, bomb)
                     0,
                     bomb.Position,
                     Vector(0, 0),
-                    player
+                    bomb
                 ):ToBomb()
                 if explody == nil then
                     return
@@ -122,6 +124,7 @@ function gigaUpdate(self, bomb)
                     explody:AddTearFlags(TearFlags.TEAR_SCATTER_BOMB)
                 end
                 explody.ExplosionDamage = player.Damage * (300 / 3.5)
+                explody:GetData().explody = 3
                 explody:SetExplosionCountdown(0)
                 if player:HasCollectible(CollectibleType.COLLECTIBLE_BLOOD_BOMBS) then
                     local creep = Isaac.Spawn(

@@ -4,14 +4,16 @@ const fatFetusID = Isaac.GetItemIdByName("Fat Fetus");
 function evalCache(player:EntityPlayer, flags:CacheFlag){
   if(flags == CacheFlag.CACHE_FIREDELAY){
     if(player.HasCollectible(fatFetusID)){
-      player.MaxFireDelay *= 15;
+      if(player.HasCollectible(CollectibleType.COLLECTIBLE_LUDOVICO_TECHNIQUE)==false && player.HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE)==false){
+        player.MaxFireDelay *= 15;
+      }
     }
   }
   if(flags == CacheFlag.CACHE_DAMAGE){
     if(player.HasCollectible(fatFetusID) && player.HasCollectible(CollectibleType.COLLECTIBLE_MR_MEGA)){
       player.Damage*=2;
+    }
   }
-}
 }
 talesOfGuppy.AddCallback(ModCallbacks.MC_EVALUATE_CACHE,evalCache);
 function fatFetusTears(tear:EntityTear){
@@ -45,7 +47,7 @@ function gigaUpdate(bomb:EntityBomb){
           EntityLaser.ShootAngle(LaserVariant.THICK_RED,bomb.Position,180,15,Vector(0,0),player);
           EntityLaser.ShootAngle(LaserVariant.THICK_RED,bomb.Position,270,15,Vector(0,0),player);
         }
-        let explody=Isaac.Spawn(4, 17, 0, bomb.Position, Vector(0,0), player).ToBomb();
+        let explody=Isaac.Spawn(4, 17, 0, bomb.Position, Vector(0,0), bomb).ToBomb();
         if(explody===null){return;}
         explody.Visible=false;
         if(player.HasCollectible(CollectibleType.COLLECTIBLE_MR_MEGA) || player.HasCollectible(CollectibleType.COLLECTIBLE_BOMBER_BOY)){
@@ -64,6 +66,7 @@ function gigaUpdate(bomb:EntityBomb){
           explody.AddTearFlags(TearFlags.TEAR_SCATTER_BOMB);
         }
         explody.ExplosionDamage=player.Damage*(300/3.5);
+        explody.GetData().explody=3;
         explody.SetExplosionCountdown(0);
         if(player.HasCollectible(CollectibleType.COLLECTIBLE_BLOOD_BOMBS)){
           let creep=Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.PLAYER_CREEP_RED, 0, bomb.Position, Vector(0,0), player).ToEffect();
