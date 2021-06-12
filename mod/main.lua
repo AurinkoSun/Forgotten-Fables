@@ -50,7 +50,6 @@ function fatFetusTears(self, tear)
         if bomb == nil then
             return
         end
-        bomb:GetData().colupdated = false
         tear:Remove()
         bomb.ExplosionDamage = dmg
     end
@@ -314,16 +313,6 @@ function gigaUpdate(self, bomb)
                     end
                 end
             end
-        else
-            if bomb:GetData().colupdated == false then
-                bomb:SetExplosionCountdown(87)
-                bomb.ExplosionDamage = 300
-                bomb:GetData().colupdated = true
-                bomb:GetSprite():Play("Pulse", true)
-            end
-            if bomb:GetSprite():IsFinished("Pulse") then
-                bomb:GetSprite():Play("Explode", false)
-            end
         end
     end
 end
@@ -359,50 +348,42 @@ function gigaInit(self, bomb)
                 bomb.RadiusMultiplier = bomb.RadiusMultiplier * 2
             end
             if player:HasCollectible(CollectibleType.COLLECTIBLE_MR_MEGA) then
-                bomb:GetData().colupdated = true
                 bomb:GetSprite():Play("megapulse", true)
             elseif player:HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE_BOMBS) or player:HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE) then
-                bomb:GetData().colupdated = true
                 bomb:GetSprite():Play("brimpulse", true)
             elseif player:HasCollectible(CollectibleType.COLLECTIBLE_STICKY_BOMBS) then
-                bomb:GetData().colupdated = true
                 bomb:AddTearFlags(TearFlags.TEAR_STICKY)
                 bomb:GetSprite():Play("stickypulse", true)
             elseif player:HasCollectible(CollectibleType.COLLECTIBLE_BUTT_BOMBS) then
-                bomb:GetData().colupdated = true
                 bomb:AddTearFlags(TearFlags.TEAR_BUTT_BOMB)
                 bomb:GetSprite():Play("buttpulse", true)
             elseif player:HasCollectible(CollectibleType.COLLECTIBLE_BLOOD_BOMBS) then
-                bomb:GetData().colupdated = true
                 bomb:GetSprite():Play("bloodpulse", true)
             elseif player:HasCollectible(CollectibleType.COLLECTIBLE_SCATTER_BOMBS) then
-                bomb:GetData().colupdated = true
                 bomb:AddTearFlags(TearFlags.TEAR_SCATTER_BOMB)
                 bomb:GetSprite():Play("scatterpulse", true)
             elseif player:HasCollectible(CollectibleType.COLLECTIBLE_GHOST_BOMBS) then
-                bomb:GetData().colupdated = true
                 bomb:AddTearFlags(TearFlags.TEAR_GHOST_BOMB)
                 bomb:GetSprite():Play("ghostpulse", true)
             elseif player:HasCollectible(CollectibleType.COLLECTIBLE_SAD_BOMBS) then
-                bomb:GetData().colupdated = true
                 bomb:GetSprite():Play("sadpulse", true)
             elseif player:HasCollectible(
                 CollectibleType.COLLECTIBLE_HOT_BOMBS or player:HasCollectible(CollectibleType.COLLECTIBLE_FIRE_MIND)
             ) then
-                bomb:GetData().colupdated = true
                 bomb.CollisionDamage = 32
                 bomb:AddTearFlags(TearFlags.TEAR_BURN)
                 bomb:GetSprite():Play("flamepulse", true)
             elseif player:HasGoldenBomb() then
-                bomb:GetData().colupdated = true
                 bomb:GetSprite():Play("goldenpulse", true)
             elseif player:HasCollectible(CollectibleType.COLLECTIBLE_BOBS_CURSE) or player:HasCollectible(CollectibleType.COLLECTIBLE_IPECAC) then
-                bomb:GetData().colupdated = true
                 bomb:GetSprite():Play("poisonpulse", true)
             else
-                bomb:GetData().colupdated = true
                 bomb:GetSprite():Play("Pulse", true)
             end
+        else
+            bomb:SetExplosionCountdown(87)
+            bomb.ExplosionDamage = 300
+            bomb:GetSprite():Play("Pulse", true)
         end
     end
 end
