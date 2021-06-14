@@ -1,5 +1,6 @@
 const talesOfGuppy = RegisterMod("Tales of Guppy", 1);
 const game = Game();
+const rng = RNG();
 const fatFetusID = Isaac.GetItemIdByName("Fat Fetus");
 function evalCache(player:EntityPlayer, flags:CacheFlag){
   if(flags == CacheFlag.CACHE_FIREDELAY){
@@ -67,7 +68,6 @@ function gigaUpdate(bomb:EntityBomb){
         }
         bomb.ExplosionDamage=player.Damage*(300/3.5);
         explody.ExplosionDamage=player.Damage*(300/3.5);
-        explody.GetData().explody=3;
         explody.SetExplosionCountdown(0);
         if(player.HasCollectible(CollectibleType.COLLECTIBLE_BLOOD_BOMBS)){
           let creep=Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.PLAYER_CREEP_RED, 0, bomb.Position, Vector(0,0), player).ToEffect();
@@ -202,7 +202,30 @@ function rocks(projectile:EntityProjectile){
     }
   }
 }
+function glitterdrops(entity:Entity,amount:number,flags:DamageFlag,source:EntityRef,frames:number){
+  if(amount==frames){
+    print(flags);
+  }
+  if(amount>=entity.HitPoints){
+    if(source.Entity.ToBomb()!=null && source.Entity.Type==EntityType.ENTITY_BOMBDROP && source.Entity.Variant==BombVariant.BOMB_GIGA && source.Entity.SpawnerEntity != null && source.Entity.SpawnerEntity.SpawnerEntity!=null){
+      let player=source.Entity.SpawnerEntity.SpawnerEntity.ToPlayer();
+      if(player != null){
+        if(player.HasCollectible(CollectibleType.COLLECTIBLE_GLITTER_BOMBS) && player.HasCollectible(fatFetusID)){
+          if(math.random()<=0.1){
+            let pickup=Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_NULL, 0, Isaac.GetFreeNearPosition(entity.Position, 1), entity.Velocity, null).ToPickup();
+            if(pickup!=null && pickup.GetCoinValue()>5){
+              Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COIN, 0, pickup.Position, pickup.Velocity, null);
+              pickup.Remove();
+            }
+          }
+        }
+      }
+    }
+  }
+  return null;
+}
 talesOfGuppy.AddCallback(ModCallbacks.MC_POST_BOMB_UPDATE,gigaUpdate,21);
 talesOfGuppy.AddCallback(ModCallbacks.MC_POST_BOMB_INIT,gigaBombReplace,BombVariant.BOMB_GIGA);
 talesOfGuppy.AddCallback(ModCallbacks.MC_POST_BOMB_INIT,gigaInit,21);
 talesOfGuppy.AddCallback(ModCallbacks.MC_POST_PROJECTILE_INIT,rocks,ProjectileVariant.PROJECTILE_ROCK);
+talesOfGuppy.AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG,glitterdrops);

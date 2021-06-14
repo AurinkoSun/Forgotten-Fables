@@ -21,6 +21,7 @@ ____modules = {
 ["main"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
 talesOfGuppy = RegisterMod("Tales of Guppy", 1)
 game = Game()
+rng = RNG()
 fatFetusID = Isaac.GetItemIdByName("Fat Fetus")
 function evalCache(self, player, flags)
     if flags == CacheFlag.CACHE_FIREDELAY then
@@ -125,7 +126,6 @@ function gigaUpdate(self, bomb)
                 end
                 bomb.ExplosionDamage = player.Damage * (300 / 3.5)
                 explody.ExplosionDamage = player.Damage * (300 / 3.5)
-                explody:GetData().explody = 3
                 explody:SetExplosionCountdown(0)
                 if player:HasCollectible(CollectibleType.COLLECTIBLE_BLOOD_BOMBS) then
                     local creep = Isaac.Spawn(
@@ -413,10 +413,40 @@ function rocks(self, projectile)
         end
     end
 end
+function glitterdrops(self, entity, amount, flags, source, frames)
+    if amount == frames then
+        print(flags)
+    end
+    if amount >= entity.HitPoints then
+        if ((((source.Entity:ToBomb() ~= nil) and (source.Entity.Type == EntityType.ENTITY_BOMBDROP)) and (source.Entity.Variant == BombVariant.BOMB_GIGA)) and (source.Entity.SpawnerEntity ~= nil)) and (source.Entity.SpawnerEntity.SpawnerEntity ~= nil) then
+            local player = source.Entity.SpawnerEntity.SpawnerEntity:ToPlayer()
+            if player ~= nil then
+                if player:HasCollectible(CollectibleType.COLLECTIBLE_GLITTER_BOMBS) and player:HasCollectible(fatFetusID) then
+                    if math.random() <= 0.1 then
+                        local pickup = Isaac.Spawn(
+                            EntityType.ENTITY_PICKUP,
+                            PickupVariant.PICKUP_NULL,
+                            0,
+                            Isaac.GetFreeNearPosition(entity.Position, 1),
+                            entity.Velocity,
+                            nil
+                        ):ToPickup()
+                        if (pickup ~= nil) and (pickup:GetCoinValue() > 5) then
+                            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COIN, 0, pickup.Position, pickup.Velocity, nil)
+                            pickup:Remove()
+                        end
+                    end
+                end
+            end
+        end
+    end
+    return nil
+end
 talesOfGuppy:AddCallback(ModCallbacks.MC_POST_BOMB_UPDATE, gigaUpdate, 21)
 talesOfGuppy:AddCallback(ModCallbacks.MC_POST_BOMB_INIT, gigaBombReplace, BombVariant.BOMB_GIGA)
 talesOfGuppy:AddCallback(ModCallbacks.MC_POST_BOMB_INIT, gigaInit, 21)
 talesOfGuppy:AddCallback(ModCallbacks.MC_POST_PROJECTILE_INIT, rocks, ProjectileVariant.PROJECTILE_ROCK)
+talesOfGuppy:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, glitterdrops)
 end,
 }
 return require("main")
