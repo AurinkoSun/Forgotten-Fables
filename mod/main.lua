@@ -61,7 +61,7 @@ function gigaUpdate(self, bomb)
     if bomb.SpawnerEntity ~= nil then
         local player = bomb.SpawnerEntity:ToPlayer()
         if player ~= nil then
-            if ((((((((((((bomb:GetSprite():IsFinished("Pulse") or bomb:GetSprite():IsFinished("brimpulse")) or bomb:GetSprite():IsFinished("stickypulse")) or bomb:GetSprite():IsFinished("goldenpulse")) or bomb:GetSprite():IsFinished("flamepulse")) or bomb:GetSprite():IsFinished("bloodpulse")) or bomb:GetSprite():IsFinished("buttpulse")) or bomb:GetSprite():IsFinished("poisonpulse")) or bomb:GetSprite():IsFinished("megapulse")) or bomb:GetSprite():IsFinished("scatterpulse")) or bomb:GetSprite():IsFinished("ghostpulse")) or bomb:GetSprite():IsFinished("sadpulse")) or bomb:GetSprite():IsFinished("homingpulse")) or bomb:GetSprite():IsFinished("goldhomingpulse") then
+            if ((((((((((((((bomb:GetSprite():IsFinished("Pulse") or bomb:GetSprite():IsFinished("brimpulse")) or bomb:GetSprite():IsFinished("stickypulse")) or bomb:GetSprite():IsFinished("goldenpulse")) or bomb:GetSprite():IsFinished("flamepulse")) or bomb:GetSprite():IsFinished("bloodpulse")) or bomb:GetSprite():IsFinished("buttpulse")) or bomb:GetSprite():IsFinished("poisonpulse")) or bomb:GetSprite():IsFinished("megapulse")) or bomb:GetSprite():IsFinished("scatterpulse")) or bomb:GetSprite():IsFinished("ghostpulse")) or bomb:GetSprite():IsFinished("sadpulse")) or bomb:GetSprite():IsFinished("homingpulse")) or bomb:GetSprite():IsFinished("goldhomingpulse")) or bomb:GetSprite():IsFinished("crosspulse")) or bomb:GetSprite():IsFinished("glitterpulse") then
                 if player:HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE_BOMBS) or player:HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE) then
                     EntityLaser.ShootAngle(
                         1,
@@ -123,6 +123,7 @@ function gigaUpdate(self, bomb)
                 if player:HasCollectible(CollectibleType.COLLECTIBLE_SCATTER_BOMBS) then
                     explody:AddTearFlags(TearFlags.TEAR_SCATTER_BOMB)
                 end
+                bomb.ExplosionDamage = player.Damage * (300 / 3.5)
                 explody.ExplosionDamage = player.Damage * (300 / 3.5)
                 explody:GetData().explody = 3
                 explody:SetExplosionCountdown(0)
@@ -342,16 +343,15 @@ function gigaInit(self, bomb)
                 bomb:AddTearFlags(TearFlags.TEAR_HOMING)
             end
             if player:HasCollectible(CollectibleType.COLLECTIBLE_SOY_MILK) or player:HasCollectible(CollectibleType.COLLECTIBLE_ALMOND_MILK) then
-                bomb.SpriteScale:__div(2)
-                bomb:GetSprite():Reload()
                 bomb.RadiusMultiplier = 0.5
             end
             if player:HasCollectible(CollectibleType.COLLECTIBLE_MR_MEGA) then
-                bomb.SpriteScale:__mul(1.5)
                 bomb.RadiusMultiplier = bomb.RadiusMultiplier * 2
             end
             if player:HasCollectible(CollectibleType.COLLECTIBLE_MR_MEGA) then
                 bomb:GetSprite():Play("megapulse", true)
+            elseif player:HasCollectible(CollectibleType.COLLECTIBLE_BOMBER_BOY) then
+                bomb:GetSprite():Play("crosspulse", true)
             elseif player:HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE_BOMBS) or player:HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE) then
                 bomb:GetSprite():Play("brimpulse", true)
             elseif player:HasCollectible(CollectibleType.COLLECTIBLE_STICKY_BOMBS) then
@@ -370,6 +370,8 @@ function gigaInit(self, bomb)
                 bomb:GetSprite():Play("ghostpulse", true)
             elseif player:HasCollectible(CollectibleType.COLLECTIBLE_SAD_BOMBS) then
                 bomb:GetSprite():Play("sadpulse", true)
+            elseif player:HasCollectible(CollectibleType.COLLECTIBLE_GLITTER_BOMBS) then
+                bomb:GetSprite():Play("glitterpulse", true)
             elseif player:HasCollectible(
                 CollectibleType.COLLECTIBLE_HOT_BOMBS or player:HasCollectible(CollectibleType.COLLECTIBLE_FIRE_MIND)
             ) then
@@ -377,11 +379,19 @@ function gigaInit(self, bomb)
                 bomb:AddTearFlags(TearFlags.TEAR_BURN)
                 bomb:GetSprite():Play("flamepulse", true)
             elseif player:HasGoldenBomb() then
-                bomb:GetSprite():Play("goldenpulse", true)
+                if bomb:HasTearFlags(TearFlags.TEAR_HOMING) then
+                    bomb:GetSprite():Play("goldhomingpulse", true)
+                else
+                    bomb:GetSprite():Play("goldenpulse", true)
+                end
             elseif player:HasCollectible(CollectibleType.COLLECTIBLE_BOBS_CURSE) or player:HasCollectible(CollectibleType.COLLECTIBLE_IPECAC) then
                 bomb:GetSprite():Play("poisonpulse", true)
             else
-                bomb:GetSprite():Play("Pulse", true)
+                if bomb:HasTearFlags(TearFlags.TEAR_HOMING) then
+                    bomb:GetSprite():Play("homingpulse", true)
+                else
+                    bomb:GetSprite():Play("Pulse", true)
+                end
             end
         else
             bomb:SetExplosionCountdown(87)
@@ -390,9 +400,23 @@ function gigaInit(self, bomb)
         end
     end
 end
+function rocks(self, projectile)
+    if projectile.SpawnerEntity ~= nil then
+        local bomb = projectile.SpawnerEntity:ToBomb()
+        if (bomb ~= nil) and (bomb.SpawnerEntity ~= nil) then
+            local player = bomb.SpawnerEntity:ToPlayer()
+            if player ~= nil then
+                projectile:AddProjectileFlags(ProjectileFlags.CANT_HIT_PLAYER)
+                projectile:AddProjectileFlags(ProjectileFlags.HIT_ENEMIES)
+                projectile.Damage = player.Damage
+            end
+        end
+    end
+end
 talesOfGuppy:AddCallback(ModCallbacks.MC_POST_BOMB_UPDATE, gigaUpdate, 21)
 talesOfGuppy:AddCallback(ModCallbacks.MC_POST_BOMB_INIT, gigaBombReplace, BombVariant.BOMB_GIGA)
 talesOfGuppy:AddCallback(ModCallbacks.MC_POST_BOMB_INIT, gigaInit, 21)
+talesOfGuppy:AddCallback(ModCallbacks.MC_POST_PROJECTILE_INIT, rocks, ProjectileVariant.PROJECTILE_ROCK)
 end,
 }
 return require("main")
