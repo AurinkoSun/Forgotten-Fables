@@ -203,11 +203,8 @@ function rocks(projectile:EntityProjectile){
   }
 }
 function glitterdrops(entity:Entity,amount:number,flags:DamageFlag,source:EntityRef,frames:number){
-  if(amount==frames){
-    print(flags);
-  }
   if(amount>=entity.HitPoints){
-    if(source.Entity.ToBomb()!=null && source.Entity.Type==EntityType.ENTITY_BOMBDROP && source.Entity.Variant==BombVariant.BOMB_GIGA && source.Entity.SpawnerEntity != null && source.Entity.SpawnerEntity.SpawnerEntity!=null){
+    if(source.Entity != null && source.Entity.ToBomb()!=null && source.Entity.Type==EntityType.ENTITY_BOMBDROP && source.Entity.Variant==BombVariant.BOMB_GIGA && source.Entity.SpawnerEntity != null && source.Entity.SpawnerEntity.SpawnerEntity!=null){
       let player=source.Entity.SpawnerEntity.SpawnerEntity.ToPlayer();
       if(player != null){
         if(player.HasCollectible(CollectibleType.COLLECTIBLE_GLITTER_BOMBS) && player.HasCollectible(fatFetusID)){
