@@ -1,0 +1,17 @@
+<players root="gfx/characters/costumes/" 
+         portraitroot="gfx/ui/stage/" 
+         nameimageroot="gfx/ui/boss/" 
+         bigportraitroot="gfx/ui/stage/">
+      <player name="Sarah" skin="character_SarahN.png" hp="2" bombs="0"
+          nameimage="playername_Sarah.png" 
+          portrait="playerportrait_Sarah.png" 
+          bigportrait="playerportrait_Sarah.png"
+          skinColor="-1"/>
+      <player name="Sarah" skin="character_SarahAlt.png" hp="8" bombs="0"
+          nameimage="playername_Sarah.png" 
+          portrait="playerportrait_SarahAlt.png" 
+          bigportrait="playerportrait_SarahAlt.png"
+          skinColor="-1"
+          bSkinParent="Sarah"/>
+</players>
+
