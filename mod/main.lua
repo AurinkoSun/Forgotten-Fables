@@ -1882,9 +1882,14 @@ function evalCache(self, player, flags)
 end
 talesOfGuppy:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, evalCache)
 function playerInit(self, player)
-    player:AddCollectible(suicideID, 0, false, ActiveSlot.SLOT_POCKET)
+    if player:GetPlayerType() == TaintedSarahPlayerType then
+        if player:HasCollectible(suicideID) == false then
+            print("tsarahinit")
+            player:AddCollectible(suicideID, 0, true, ActiveSlot.SLOT_POCKET)
+        end
+    end
 end
-talesOfGuppy:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, playerInit, TaintedSarahPlayerType)
+talesOfGuppy:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, playerInit, 0)
 function costumes(self)
     do
         local i = 0

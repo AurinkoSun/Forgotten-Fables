@@ -42,9 +42,14 @@ function evalCache(player:EntityPlayer, flags:CacheFlag){
 }
 talesOfGuppy.AddCallback(ModCallbacks.MC_EVALUATE_CACHE,evalCache);
 function playerInit(player:EntityPlayer){
-  player.AddCollectible(suicideID,0,false,ActiveSlot.SLOT_POCKET);
+  if(player.GetPlayerType()==TaintedSarahPlayerType){
+    if(player.HasCollectible(suicideID)==false){
+      print("tsarahinit");
+      player.AddCollectible(suicideID,0,true,ActiveSlot.SLOT_POCKET);
+    }
+  }
 }
-talesOfGuppy.AddCallback(ModCallbacks.MC_POST_PLAYER_INIT,playerInit,TaintedSarahPlayerType);
+talesOfGuppy.AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE,playerInit,0);
 function costumes(){ //Hair costume
   for(let i=0;i<game.GetNumPlayers();i++) {
     let player = Isaac.GetPlayer(i);
