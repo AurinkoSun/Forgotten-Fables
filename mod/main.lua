@@ -1839,8 +1839,8 @@ game = Game()
 rng = RNG()
 fatFetusID = Isaac.GetItemIdByName("Fat Fetus")
 SarahPlayerType = Isaac.GetPlayerTypeByName("Sarah")
-TaintedSarahPlayerType = Isaac.GetPlayerTypeByName("Sarah", true)
-LostSarahPlayerType = Isaac.GetPlayerTypeByName("Lost Sarah", true)
+TaintedSarahPlayerType = Isaac.GetPlayerTypeByName("Tainted Sarah", true)
+LostSarahPlayerType = Isaac.GetPlayerTypeByName("Sarah's Soul")
 SarahCostume = Isaac.GetCostumeIdByPath("gfx/characters/sarahhair.anm2")
 TaintedSarahCostume = Isaac.GetCostumeIdByPath("gfx/characters/SaraAlthair.anm2")
 LostSarahCostume = Isaac.GetCostumeIdByPath("gfx/characters/sarahLosthair.anm2")
@@ -1883,20 +1883,28 @@ end
 talesOfGuppy:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, evalCache)
 function playerInit(self, player)
     if player:GetPlayerType() == TaintedSarahPlayerType then
-        if player:HasCollectible(suicideID) == false then
-            print("tsarahinit")
-            player:AddCollectible(suicideID, 0, true, ActiveSlot.SLOT_POCKET)
+        if player:GetActiveItem(ActiveSlot.SLOT_POCKET) ~= suicideID then
+            player:SetPocketActiveItem(suicideID, ActiveSlot.SLOT_POCKET)
+            player:AddCollectible(CollectibleType.COLLECTIBLE_HEARTBREAK)
+            player:AddBrokenHearts(-2)
         end
     end
 end
-talesOfGuppy:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, playerInit, 0)
+talesOfGuppy:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, playerInit, 0)
+function playerUpdate(self, player)
+    if player:GetPlayerType() == LostSarahPlayerType then
+        if player:GetActiveItem(ActiveSlot.SLOT_POCKET) ~= suicideID then
+            player:SetPocketActiveItem(suicideID, ActiveSlot.SLOT_POCKET)
+        end
+    end
+end
+talesOfGuppy:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, playerUpdate, 0)
 function costumes(self)
     do
         local i = 0
         while i < game:GetNumPlayers() do
             local player = Isaac.GetPlayer(i)
             if player ~= nil then
-                player:GetData().id = i
                 if player:GetPlayerType() == SarahPlayerType then
                     player:TryRemoveNullCostume(SarahCostume)
                     player:AddNullCostume(SarahCostume)
@@ -1954,6 +1962,7 @@ talesOfGuppy:AddCallback(ModCallbacks.MC_USE_ITEM, postItemCostumes)
 talesOfGuppy:AddCallback(ModCallbacks.MC_USE_CARD, costumes)
 talesOfGuppy:AddCallback(ModCallbacks.MC_USE_PILL, costumes)
 function suicide(self, item, rng, player)
+    local returner = false
     if item ~= suicideID then
         print("how the fuck did you break the game this much")
         print(
@@ -1973,6 +1982,7 @@ function suicide(self, item, rng, player)
             Vector(0, 0),
             player
         )
+        returner = true
     elseif player:GetPlayerType() == LostSarahPlayerType then
         local body = false
         __TS__ArrayForEach(
@@ -1980,6 +1990,7 @@ function suicide(self, item, rng, player)
             function(self, entity)
                 if (entity.Type == EntityType.ENTITY_EFFECT) and (entity.Variant == 200) then
                     body = true
+                    entity:Remove()
                 end
             end
         )
@@ -1987,9 +1998,10 @@ function suicide(self, item, rng, player)
             player:ChangePlayerType(TaintedSarahPlayerType)
             player:AddCacheFlags(CacheFlag.CACHE_ALL)
             player:EvaluateItems()
+            returner = true
         end
     end
-    return true
+    return returner
 end
 talesOfGuppy:AddCallback(ModCallbacks.MC_USE_ITEM, suicide, suicideID)
 function razor(self, pickup)
