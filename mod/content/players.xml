@@ -1,17 +1,23 @@
-<players root="gfx/characters/costumes/" 
-         portraitroot="gfx/ui/stage/" 
-         nameimageroot="gfx/ui/boss/" 
+<players root="gfx/characters/costumes/"
+         portraitroot="gfx/ui/stage/"
+         nameimageroot="gfx/ui/boss/"
          bigportraitroot="gfx/ui/stage/">
       <player name="Sarah" skin="character_SarahN.png" hp="2" bombs="0"
-          nameimage="playername_Sarah.png" 
-          portrait="playerportrait_Sarah.png" 
+          nameimage="playername_Sarah.png"
+          portrait="playerportrait_Sarah.png"
           bigportrait="playerportrait_Sarah.png"
           skinColor="-1"/>
-      <player name="Sarah" skin="character_SarahAlt.png" hp="8" bombs="0"
-          nameimage="playername_Sarah.png" 
-          portrait="playerportrait_SarahAlt.png" 
+      <player name="Tainted Sarah" skin="character_SarahAlt.png" hp="8" bombs="0" broken="1"
+          nameimage="playername_Sarah.png"
+          portrait="playerportrait_SarahAlt.png"
           bigportrait="playerportrait_SarahAlt.png"
           skinColor="-1"
           bSkinParent="Sarah"/>
+      <player name="Sarah's Soul" skin="character_SarahLost.png" hp="0" armor="1" bombs="0"
+          nameimage="playername_Sarah.png"
+          portrait="playerportrait_SarahAlt.png"
+          bigportrait="playerportrait_SarahAlt.png"
+          skinColor="-1"
+          hidden="true"/>
 </players>
 

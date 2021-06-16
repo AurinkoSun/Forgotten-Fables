@@ -2,6 +2,27 @@ const talesOfGuppy = RegisterMod("Tales of Guppy", 1);
 const game = Game();
 const rng = RNG();
 const fatFetusID = Isaac.GetItemIdByName("Fat Fetus");
+const SarahPlayerType = Isaac.GetPlayerTypeByName("Sarah");
+const TaintedSarahPlayerType = Isaac.GetPlayerTypeByName("Sarah",true);
+const LostSarahPlayerType = Isaac.GetPlayerTypeByName("Lost Sarah",true);
+const SarahCostume = Isaac.GetCostumeIdByPath("gfx/characters/sarahhair.anm2");
+const TaintedSarahCostume = Isaac.GetCostumeIdByPath("gfx/characters/SaraAlthair.anm2");
+const LostSarahCostume = Isaac.GetCostumeIdByPath("gfx/characters/sarahLosthair.anm2");
+const suicideID = Isaac.GetItemIdByName("Suicide");
+let razors=[0,0,0,0];
+let razorsfloor=[0,0,0,0];
+function playerID(player:EntityPlayer){
+  let val=-1;
+  for(let i=0;i<game.GetNumPlayers();i++){
+    let playeri=game.GetPlayer(i);
+    if(playeri!=null){
+      if(player.Index==playeri.Index){
+        val=i;
+      }
+    }
+  }
+  return val;
+}
 function evalCache(player:EntityPlayer, flags:CacheFlag){
   if(flags == CacheFlag.CACHE_FIREDELAY){
     if(player.HasCollectible(fatFetusID)){
@@ -11,12 +32,124 @@ function evalCache(player:EntityPlayer, flags:CacheFlag){
     }
   }
   if(flags == CacheFlag.CACHE_DAMAGE){
+    if(player.GetPlayerType()==TaintedSarahPlayerType || player.GetPlayerType() == LostSarahPlayerType && playerID(player)!=-1){
+      player.Damage+=0.5*razors[playerID(player)];
+    }
     if(player.HasCollectible(fatFetusID) && player.HasCollectible(CollectibleType.COLLECTIBLE_MR_MEGA)){
       player.Damage*=2;
     }
   }
 }
 talesOfGuppy.AddCallback(ModCallbacks.MC_EVALUATE_CACHE,evalCache);
+function playerInit(player:EntityPlayer){
+  player.AddCollectible(suicideID,0,false,ActiveSlot.SLOT_POCKET);
+}
+talesOfGuppy.AddCallback(ModCallbacks.MC_POST_PLAYER_INIT,playerInit,TaintedSarahPlayerType);
+function costumes(){ //Hair costume
+  for(let i=0;i<game.GetNumPlayers();i++) {
+    let player = Isaac.GetPlayer(i);
+    if(player!=null){
+      player.GetData().id=i;
+      if(player.GetPlayerType() == SarahPlayerType){
+      player.TryRemoveNullCostume(SarahCostume);
+      player.AddNullCostume(SarahCostume);
+      player.GetData().costumeEquipped = true;
+      }
+      if (player.GetPlayerType() == TaintedSarahPlayerType) {
+        player.TryRemoveNullCostume(TaintedSarahCostume)
+        player.AddNullCostume(TaintedSarahCostume)
+        player.GetData().costumeEquipped = true
+      }
+      if (player.GetPlayerType() == LostSarahPlayerType) {
+        player.TryRemoveNullCostume(LostSarahCostume)
+        player.AddNullCostume(LostSarahCostume)
+        player.GetData().costumeEquipped = true
+      }
+    }
+  }
+}
+function postItemCostumes(){ //Hair costume
+  for(let i=0;i<game.GetNumPlayers();i++) {
+    let player = Isaac.GetPlayer(i);
+    if(player!=null){
+      if(player.GetPlayerType() == SarahPlayerType){
+      player.TryRemoveNullCostume(SarahCostume);
+      player.AddNullCostume(SarahCostume);
+      player.GetData().costumeEquipped = true;
+      }
+      if (player.GetPlayerType() == TaintedSarahPlayerType) {
+        player.TryRemoveNullCostume(TaintedSarahCostume)
+        player.AddNullCostume(TaintedSarahCostume)
+        player.GetData().costumeEquipped = true
+      }
+      if (player.GetPlayerType() == LostSarahPlayerType) {
+        player.TryRemoveNullCostume(LostSarahCostume)
+        player.AddNullCostume(LostSarahCostume)
+        player.GetData().costumeEquipped = true
+      }
+    }
+  }
+  return true;
+}
+function razorsReset(){
+  razorsfloor=[0,0,0,0];
+}
+talesOfGuppy.AddCallback(ModCallbacks.MC_POST_NEW_LEVEL,razorsReset);
+talesOfGuppy.AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, costumes);
+talesOfGuppy.AddCallback(ModCallbacks.MC_POST_NEW_ROOM, costumes);
+talesOfGuppy.AddCallback(ModCallbacks.MC_USE_ITEM,postItemCostumes);
+talesOfGuppy.AddCallback(ModCallbacks.MC_USE_CARD,costumes);
+talesOfGuppy.AddCallback(ModCallbacks.MC_USE_PILL,costumes);
+function suicide(item:CollectibleType,rng:RNG,player:EntityPlayer){
+  if(item!=suicideID){
+    print("how the fuck did you break the game this much");
+    print(rng.RandomInt(10));
+  }
+  if(player.GetPlayerType()==TaintedSarahPlayerType){
+    player.AddBrokenHearts(1);
+    player.ChangePlayerType(LostSarahPlayerType);
+    player.AddCacheFlags(CacheFlag.CACHE_ALL);
+    player.EvaluateItems();
+    Isaac.Spawn(EntityType.ENTITY_EFFECT, 200, 0, player.Position, Vector(0,0), player);
+  } else if(player.GetPlayerType()==LostSarahPlayerType){
+    let body=false;
+    Isaac.GetRoomEntities().forEach(function(entity:Entity){if(entity.Type==EntityType.ENTITY_EFFECT && entity.Variant==200){body=true;}});
+    if(body){
+      player.ChangePlayerType(TaintedSarahPlayerType);
+      player.AddCacheFlags(CacheFlag.CACHE_ALL);
+      player.EvaluateItems();
+    }
+  }
+  return true;
+}
+talesOfGuppy.AddCallback(ModCallbacks.MC_USE_ITEM,suicide,suicideID);
+function razor(pickup:EntityPickup){
+  if(pickup.SubType==13){
+    for(let i=0;i<game.GetNumPlayers();i++){
+      let player=game.GetPlayer(i);
+      if(player!=null && player.GetPlayerType()==TaintedSarahPlayerType){
+        if(player.Position.Distance(pickup.Position)<15 && razorsfloor[i]<5){
+          player.TakeDamage(1, DamageFlag.DAMAGE_RED_HEARTS, EntityRef(pickup), 0);
+          pickup.Remove();
+          razors[i]+=1;
+          razorsfloor[i]+=1;
+          player.AddCacheFlags(CacheFlag.CACHE_DAMAGE);
+          player.EvaluateItems();
+        }
+      }
+    }
+  } else {
+    for(let i=0;i<game.GetNumPlayers();i++){
+      let player=game.GetPlayer(i);
+      if(player!=null && player.GetPlayerType()==TaintedSarahPlayerType){
+        if(player.Position.Distance(pickup.Position)<100){
+          pickup.Morph(5, 10, 13);
+        }
+      }
+    }
+  }
+}
+talesOfGuppy.AddCallback(ModCallbacks.MC_POST_PICKUP_UPDATE,razor,10);
 function fatFetusTears(tear:EntityTear){
   let bomb:EntityBomb|null;
   if(tear.SpawnerEntity===null){
@@ -202,8 +335,8 @@ function rocks(projectile:EntityProjectile){
     }
   }
 }
-function glitterdrops(entity:Entity,amount:number,flags:DamageFlag,source:EntityRef,frames:number){
-  if(amount>=entity.HitPoints){
+function glitterdrops(entity:Entity,amount:number,flags:DamageFlag,source:EntityRef){
+  if(amount>=entity.HitPoints && flags!=DamageFlag.DAMAGE_NOKILL){
     if(source.Entity != null && source.Entity.ToBomb()!=null && source.Entity.Type==EntityType.ENTITY_BOMBDROP && source.Entity.Variant==BombVariant.BOMB_GIGA && source.Entity.SpawnerEntity != null && source.Entity.SpawnerEntity.SpawnerEntity!=null){
       let player=source.Entity.SpawnerEntity.SpawnerEntity.ToPlayer();
       if(player != null){
