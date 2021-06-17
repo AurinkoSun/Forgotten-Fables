@@ -1,4 +1,4 @@
 <items gfxroot="gfx/items/" version="1">
  <passive cache="firedelay damage" description="Use with caution..." gfx="collectible_FatFetus.png" name="Fat Fetus" />
- <active description="Kill Yourself" maxcharges="0" name="Suicide" gfx="suicide.png" />
+ <active description="Kill Yourself" maxcharges="0" name="Suicide" gfx="suicide.png"/>
 </items>

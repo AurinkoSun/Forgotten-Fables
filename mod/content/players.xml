@@ -12,12 +12,14 @@
           portrait="playerportrait_SarahAlt.png"
           bigportrait="playerportrait_SarahAlt.png"
           skinColor="-1"
+          pocketActive="731"
           bSkinParent="Sarah"/>
       <player name="Sarah's Soul" skin="character_SarahLost.png" hp="0" armor="1" bombs="0"
           nameimage="playername_Sarah.png"
           portrait="playerportrait_SarahAlt.png"
           bigportrait="playerportrait_SarahAlt.png"
           skinColor="-1"
+          pocketActive="731"
           hidden="true"/>
 </players>
 
