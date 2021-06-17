@@ -4,14 +4,13 @@ const rng = RNG();
 const fatFetusID = Isaac.GetItemIdByName("Fat Fetus");
 const SarahPlayerType = Isaac.GetPlayerTypeByName("Sarah");
 const TaintedSarahPlayerType = Isaac.GetPlayerTypeByName("Tainted Sarah",true);
-const LostSarahPlayerType = Isaac.GetPlayerTypeByName("Sarah's Soul");
 const SarahCostume = Isaac.GetCostumeIdByPath("gfx/characters/sarahhair.anm2");
 const TaintedSarahCostume = Isaac.GetCostumeIdByPath("gfx/characters/SaraAlthair.anm2");
 const LostSarahCostume = Isaac.GetCostumeIdByPath("gfx/characters/sarahLosthair.anm2");
 const suicideID = Isaac.GetItemIdByName("Suicide");
-let razors=[0,0,0,0];
-let razorsfloor=[0,0,0,0];
-function playerID(player:EntityPlayer){
+let razors=[0,0,0,0,0,0,0,0]; //max of 8 players if all 4 are playing j&e
+let lost=[false,false,false,false,false,false,false,false]; //max of 8 players if all 4 are playing j&e
+function playerID(player:EntityPlayer){ //Function to identify players. Returns a value from 0 to 3 that can be passed to Game().GetPlayer() to get the original EntityPlayer
   let val=-1;
   for(let i=0;i<game.GetNumPlayers();i++){
     let playeri=game.GetPlayer(i);
@@ -32,7 +31,7 @@ function evalCache(player:EntityPlayer, flags:CacheFlag){
     }
   }
   if(flags == CacheFlag.CACHE_DAMAGE){
-    if(player.GetPlayerType()==TaintedSarahPlayerType || player.GetPlayerType() == LostSarahPlayerType && playerID(player)!=-1){
+    if(player.GetPlayerType()==TaintedSarahPlayerType && playerID(player)!=-1){
       player.Damage+=0.5*razors[playerID(player)];
     }
     if(player.HasCollectible(fatFetusID) && player.HasCollectible(CollectibleType.COLLECTIBLE_MR_MEGA)){
@@ -43,22 +42,21 @@ function evalCache(player:EntityPlayer, flags:CacheFlag){
 talesOfGuppy.AddCallback(ModCallbacks.MC_EVALUATE_CACHE,evalCache);
 function playerInit(player:EntityPlayer){
   if(player.GetPlayerType()==TaintedSarahPlayerType){
-    if(player.GetActiveItem(ActiveSlot.SLOT_POCKET)!=suicideID){
-      player.SetPocketActiveItem(suicideID,ActiveSlot.SLOT_POCKET);
-      player.AddCollectible(CollectibleType.COLLECTIBLE_HEARTBREAK);
-      player.AddBrokenHearts(-2);
-    }
+    player.SetPocketActiveItem(suicideID,ActiveSlot.SLOT_POCKET);
+    player.AddCollectible(CollectibleType.COLLECTIBLE_HEARTBREAK);
+    player.AddBrokenHearts(-2);
+    player.GetData().lost=false;
   }
 }
 talesOfGuppy.AddCallback(ModCallbacks.MC_POST_PLAYER_INIT,playerInit,0);
-function playerUpdate(player:EntityPlayer){
-  if(player.GetPlayerType()==LostSarahPlayerType){
+/*function playerUpdate(player:EntityPlayer){
+  if(player.GetData().lost==true){
     if(player.GetActiveItem(ActiveSlot.SLOT_POCKET)!=suicideID){
       player.SetPocketActiveItem(suicideID,ActiveSlot.SLOT_POCKET);
     }
   }
 }
-talesOfGuppy.AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE,playerUpdate,0);
+talesOfGuppy.AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE,playerUpdate,0);*/
 function costumes(){ //Hair costume
   for(let i=0;i<game.GetNumPlayers();i++) {
     let player = Isaac.GetPlayer(i);
@@ -69,13 +67,13 @@ function costumes(){ //Hair costume
         player.GetData().costumeEquipped = true;
       }
       if (player.GetPlayerType() == TaintedSarahPlayerType) {
-        player.TryRemoveNullCostume(TaintedSarahCostume)
-        player.AddNullCostume(TaintedSarahCostume)
-        player.GetData().costumeEquipped = true
-      }
-      if (player.GetPlayerType() == LostSarahPlayerType) {
-        player.TryRemoveNullCostume(LostSarahCostume)
-        player.AddNullCostume(LostSarahCostume)
+        if(player.GetData().lost==true){
+          player.TryRemoveNullCostume(LostSarahCostume);
+          player.AddNullCostume(LostSarahCostume);
+        } else {
+          player.TryRemoveNullCostume(TaintedSarahCostume);
+          player.AddNullCostume(TaintedSarahCostume);
+        }
         player.GetData().costumeEquipped = true
       }
     }
@@ -86,28 +84,38 @@ function postItemCostumes(){ //Hair costume
     let player = Isaac.GetPlayer(i);
     if(player!=null){
       if(player.GetPlayerType() == SarahPlayerType){
-      player.TryRemoveNullCostume(SarahCostume);
-      player.AddNullCostume(SarahCostume);
-      player.GetData().costumeEquipped = true;
+        player.TryRemoveNullCostume(SarahCostume);
+        player.AddNullCostume(SarahCostume);
+        player.GetData().costumeEquipped = true;
       }
       if (player.GetPlayerType() == TaintedSarahPlayerType) {
-        player.TryRemoveNullCostume(TaintedSarahCostume)
-        player.AddNullCostume(TaintedSarahCostume)
-        player.GetData().costumeEquipped = true
-      }
-      if (player.GetPlayerType() == LostSarahPlayerType) {
-        player.TryRemoveNullCostume(LostSarahCostume)
-        player.AddNullCostume(LostSarahCostume)
+        if(player.GetData().lost==true){
+          player.TryRemoveNullCostume(LostSarahCostume);
+          player.AddNullCostume(LostSarahCostume);
+        } else {
+          player.TryRemoveNullCostume(TaintedSarahCostume);
+          player.AddNullCostume(TaintedSarahCostume);
+        }
         player.GetData().costumeEquipped = true
       }
     }
   }
   return true;
 }
-function razorsReset(){
-  razorsfloor=[0,0,0,0];
+let evenstage=false;
+function newFloor(){
+  if(evenstage){
+    for(let i=0;i<game.GetNumPlayers();i++){
+      let player=game.GetPlayer(i);
+      if(player!=null && player.GetPlayerType()==TaintedSarahPlayerType){
+        player.AddBrokenHearts(-1);
+      }
+    }
+  }else{
+    evenstage=true;
+  }
 }
-talesOfGuppy.AddCallback(ModCallbacks.MC_POST_NEW_LEVEL,razorsReset);
+talesOfGuppy.AddCallback(ModCallbacks.MC_POST_NEW_LEVEL,newFloor);
 talesOfGuppy.AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, costumes);
 talesOfGuppy.AddCallback(ModCallbacks.MC_POST_NEW_ROOM, costumes);
 talesOfGuppy.AddCallback(ModCallbacks.MC_USE_ITEM,postItemCostumes);
@@ -119,18 +127,18 @@ function suicide(item:CollectibleType,rng:RNG,player:EntityPlayer){
     print("how the fuck did you break the game this much");
     print(rng.RandomInt(10));
   }
-  if(player.GetPlayerType()==TaintedSarahPlayerType){
+  if(player.GetPlayerType()==TaintedSarahPlayerType && lost[playerID(player)]==false){
     player.AddBrokenHearts(1);
-    player.ChangePlayerType(LostSarahPlayerType);
+    player.GetData().lost=true;
     player.AddCacheFlags(CacheFlag.CACHE_ALL);
     player.EvaluateItems();
     Isaac.Spawn(EntityType.ENTITY_EFFECT, 200, 0, player.Position, Vector(0,0), player);
     returner=true;
-  } else if(player.GetPlayerType()==LostSarahPlayerType){
+  } else if(player.GetPlayerType()==TaintedSarahPlayerType && lost[playerID(player)]==true){
     let body=false;
     Isaac.GetRoomEntities().forEach(function(entity:Entity){if(entity.Type==EntityType.ENTITY_EFFECT && entity.Variant==200){body=true;entity.Remove();}});
     if(body){
-      player.ChangePlayerType(TaintedSarahPlayerType);
+      player.GetData().lost=false;
       player.AddCacheFlags(CacheFlag.CACHE_ALL);
       player.EvaluateItems();
       returner=true;
@@ -144,11 +152,10 @@ function razor(pickup:EntityPickup){
     for(let i=0;i<game.GetNumPlayers();i++){
       let player=game.GetPlayer(i);
       if(player!=null && player.GetPlayerType()==TaintedSarahPlayerType){
-        if(player.Position.Distance(pickup.Position)<15 && razorsfloor[i]<5){
+        if(player.Position.Distance(pickup.Position)<15 && razors[i]<5){
           player.TakeDamage(1, DamageFlag.DAMAGE_RED_HEARTS, EntityRef(pickup), 0);
           pickup.Remove();
           razors[i]+=1;
-          razorsfloor[i]+=1;
           player.AddCacheFlags(CacheFlag.CACHE_DAMAGE);
           player.EvaluateItems();
         }
