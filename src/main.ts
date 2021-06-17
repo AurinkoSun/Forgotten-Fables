@@ -24,9 +24,16 @@ function playerID(player:EntityPlayer){ //Function to identify players. Returns 
 }
 function evalCache(player:EntityPlayer, flags:CacheFlag){
   if(flags == CacheFlag.CACHE_FIREDELAY){
-    if(player.HasCollectible(fatFetusID)){
+if(player.HasCollectible(fatFetusID)){
       if(player.HasCollectible(CollectibleType.COLLECTIBLE_LUDOVICO_TECHNIQUE)==false && player.HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE)==false){
         player.MaxFireDelay *= 15;
+      }
+    }
+    if(player.GetPlayerType()==TaintedSarahPlayerType){
+      if(lost[playerID(player)]){//player is sarah's lost form
+        player.MaxFireDelay-= 2.68421052632; //tears are complicated
+      } else { //player is regular t sarah
+        player.MaxFireDelay-=1; //...sometimes less than others
       }
     }
   }
@@ -36,6 +43,33 @@ function evalCache(player:EntityPlayer, flags:CacheFlag){
     }
     if(player.HasCollectible(fatFetusID) && player.HasCollectible(CollectibleType.COLLECTIBLE_MR_MEGA)){
       player.Damage*=2;
+    }
+    if(player.GetPlayerType()==TaintedSarahPlayerType){
+     player.Damage-=1.5; //Tainted Sarah and her lost form have the same damage stat (basically none)
+    }
+  }
+  if(flags=CacheFlag.CACHE_LUCK){
+    if(player.GetPlayerType()==TaintedSarahPlayerType && (lost[playerID(player)]==true)){
+      player.Luck-=2
+    }
+  }
+  if(flags==CacheFlag.CACHE_SPEED){
+    if(player.GetPlayerType==TaintedSarahPlayerType){
+      if(lost[playerID(player)]){
+        player.MoveSpeed-=0.1;
+      } else {
+        player.MoveSpeed+=0.2;
+      }
+    }
+  }
+  if(flags==CacheFlag.CACHE_FLYING){
+    if(player.GetPlayerType()==TaintedSarahPlayerType && lost[playerID(player)]){
+      player.CanFly=true;
+    }
+  }
+  if(flags==CacheFlag.CACHE_RANGE){
+    if(player.GetPlayerType()==TaintedSarahPlayerType){
+      player.TearHeight-=1.5; //this should equal 8 base range once tearheight gets fixed
     }
   }
 }
