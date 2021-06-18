@@ -17,7 +17,7 @@ talesOfGuppy.AddCallback(ModCallbacks.MC_POST_GAME_STARTED,startGame);
 function playerID(player:EntityPlayer){ //Function to identify players. Inverse of Game().GetPlayer() (Game.GetPlayer(playerID(i)) should return i)
   let val=-1;
   for(let i=0;i<game.GetNumPlayers();i++){
-    let playeri=game.GetPlayer(i);
+  let playeri=game.GetPlayer(i);
     if(playeri!=null){
       if(player.Index==playeri.Index){
         val=i;
@@ -35,7 +35,7 @@ if(player.HasCollectible(fatFetusID)){
     }
     if(player.GetPlayerType()==TaintedSarahPlayerType){
       if(lost[playerID(player)]){
-        player.MaxFireDelay-= 2.68421052632; //tears are complicated...
+        player.MaxFireDelay-= 3; //tears are complicated...
       } else {
         player.MaxFireDelay-=1; //...sometimes
       }
@@ -83,12 +83,12 @@ function playerInit(player:EntityPlayer){
     player.SetPocketActiveItem(suicideID,ActiveSlot.SLOT_POCKET);
     player.AddCollectible(CollectibleType.COLLECTIBLE_HEARTBREAK);
     player.AddBrokenHearts(-2);
-    player.GetData().lost=false;
+    lost[playerID(player)]=false;
   }
 }
 talesOfGuppy.AddCallback(ModCallbacks.MC_POST_PLAYER_INIT,playerInit,0);
 /*function playerUpdate(player:EntityPlayer){
-  if(player.GetData().lost==true){
+  if(lost[playerID(player)]==true){
     if(player.GetActiveItem(ActiveSlot.SLOT_POCKET)!=suicideID){
       player.SetPocketActiveItem(suicideID,ActiveSlot.SLOT_POCKET);
     }
@@ -105,7 +105,7 @@ function costumes(){ //Hair costume
         player.GetData().costumeEquipped = true;
       }
       if (player.GetPlayerType() == TaintedSarahPlayerType) {
-        if(player.GetData().lost==true){
+        if(lost[playerID(player)]==true){
           player.TryRemoveNullCostume(LostSarahCostume);
           player.AddNullCostume(LostSarahCostume);
         } else {
@@ -127,7 +127,7 @@ function postItemCostumes(){ //Hair costume
         player.GetData().costumeEquipped = true;
       }
       if (player.GetPlayerType() == TaintedSarahPlayerType) {
-        if(player.GetData().lost==true){
+        if(lost[playerID(player)]==true){
           player.TryRemoveNullCostume(LostSarahCostume);
           player.AddNullCostume(LostSarahCostume);
         } else {
@@ -170,7 +170,9 @@ function suicide(item:CollectibleType,rng:RNG,player:EntityPlayer){
     lost[playerID(player)]=true;
     player.AddCacheFlags(CacheFlag.CACHE_ALL);
     player.EvaluateItems();
-    Isaac.Spawn(EntityType.ENTITY_EFFECT, 200, 0, player.Position, Vector(0,0), player);
+    let body=Isaac.Spawn(EntityType.ENTITY_EFFECT, 200, 0, player.Position, Vector(0,0), player);
+    //animate body here
+    body.GetSprite().Play("sarahdeath", true); //<-- change this
     returner=true;
   } else if(player.GetPlayerType()==TaintedSarahPlayerType && lost[playerID(player)]==true){
     let body=false;
@@ -178,6 +180,7 @@ function suicide(item:CollectibleType,rng:RNG,player:EntityPlayer){
     for(let entity of entities){
       if(entity.Type==EntityType.ENTITY_EFFECT && entity.Variant==200){
         body=true;
+        //add revive animation code here
         entity.Remove();
       }
     }
@@ -191,6 +194,16 @@ function suicide(item:CollectibleType,rng:RNG,player:EntityPlayer){
   return returner;
 }
 talesOfGuppy.AddCallback(ModCallbacks.MC_USE_ITEM,suicide,suicideID);
+function sarahLostKill(tookDamage:Entity,amount:number,flags:DamageFlag){
+  let player=tookDamage.ToPlayer();
+  if(player!=null&&player.GetPlayerType()==TaintedSarahPlayerType&&lost[playerID(player)]&&amount!=0&&flags!=DamageFlag.DAMAGE_NOKILL){
+    player.Kill();
+    return false;
+  }else{
+    return true;
+  }
+}
+talesOfGuppy.AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG,sarahLostKill,EntityType.ENTITY_PLAYER);
 function razor(pickup:EntityPickup){
   if(pickup.SubType==13){
     for(let i=0;i<game.GetNumPlayers();i++){

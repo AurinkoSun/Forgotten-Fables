@@ -59,7 +59,7 @@ function evalCache(self, player, flags)
         end
         if player:GetPlayerType() == TaintedSarahPlayerType then
             if lost[playerID(nil, player) + 1] then
-                player.MaxFireDelay = player.MaxFireDelay - 2.68421052632
+                player.MaxFireDelay = player.MaxFireDelay - 3
             else
                 player.MaxFireDelay = player.MaxFireDelay - 1
             end
@@ -107,7 +107,7 @@ function playerInit(self, player)
         player:SetPocketActiveItem(suicideID, ActiveSlot.SLOT_POCKET)
         player:AddCollectible(CollectibleType.COLLECTIBLE_HEARTBREAK)
         player:AddBrokenHearts(-2)
-        player:GetData().lost = false
+        lost[playerID(nil, player) + 1] = false
     end
 end
 talesOfGuppy:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, playerInit, 0)
@@ -123,7 +123,7 @@ function costumes(self)
                     player:GetData().costumeEquipped = true
                 end
                 if player:GetPlayerType() == TaintedSarahPlayerType then
-                    if player:GetData().lost == true then
+                    if lost[playerID(nil, player) + 1] == true then
                         player:TryRemoveNullCostume(LostSarahCostume)
                         player:AddNullCostume(LostSarahCostume)
                     else
@@ -149,7 +149,7 @@ function postItemCostumes(self)
                     player:GetData().costumeEquipped = true
                 end
                 if player:GetPlayerType() == TaintedSarahPlayerType then
-                    if player:GetData().lost == true then
+                    if lost[playerID(nil, player) + 1] == true then
                         player:TryRemoveNullCostume(LostSarahCostume)
                         player:AddNullCostume(LostSarahCostume)
                     else
@@ -200,7 +200,7 @@ function suicide(self, item, rng, player)
         lost[playerID(nil, player) + 1] = true
         player:AddCacheFlags(CacheFlag.CACHE_ALL)
         player:EvaluateItems()
-        Isaac.Spawn(
+        local body = Isaac.Spawn(
             EntityType.ENTITY_EFFECT,
             200,
             0,
@@ -208,6 +208,7 @@ function suicide(self, item, rng, player)
             Vector(0, 0),
             player
         )
+        body:GetSprite():Play("sarahdeath", true)
         returner = true
     elseif (player:GetPlayerType() == TaintedSarahPlayerType) and (lost[playerID(nil, player) + 1] == true) then
         local body = false
@@ -228,6 +229,16 @@ function suicide(self, item, rng, player)
     return returner
 end
 talesOfGuppy:AddCallback(ModCallbacks.MC_USE_ITEM, suicide, suicideID)
+function sarahLostKill(self, tookDamage, amount, flags)
+    local player = tookDamage:ToPlayer()
+    if ((((player ~= nil) and (player:GetPlayerType() == TaintedSarahPlayerType)) and lost[playerID(nil, player) + 1]) and (amount ~= 0)) and (flags ~= DamageFlag.DAMAGE_NOKILL) then
+        player:Kill()
+        return false
+    else
+        return true
+    end
+end
+talesOfGuppy:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, sarahLostKill, EntityType.ENTITY_PLAYER)
 function razor(self, pickup)
     if pickup.SubType == 13 then
         do
