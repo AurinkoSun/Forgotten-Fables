@@ -10,6 +10,10 @@ const LostSarahCostume = Isaac.GetCostumeIdByPath("gfx/characters/sarahLosthair.
 const suicideID = Isaac.GetItemIdByName("Suicide");
 let razors=[0,0,0,0,0,0,0,0]; //max of 8 players if all 4 are playing j&e
 let lost=[false,false,false,false,false,false,false,false]; //max of 8 players if all 4 are playing j&e
+function startGame(){
+  
+}
+talesOfGuppy.AddCallback(ModCallbacks.MC_POST_GAME_STARTED,startGame);
 function playerID(player:EntityPlayer){ //Function to identify players. Returns a value from 0 to 3 that can be passed to Game().GetPlayer() to get the original EntityPlayer
   let val=-1;
   for(let i=0;i<game.GetNumPlayers();i++){
@@ -163,7 +167,7 @@ function suicide(item:CollectibleType,rng:RNG,player:EntityPlayer){
   }
   if(player.GetPlayerType()==TaintedSarahPlayerType && lost[playerID(player)]==false){
     player.AddBrokenHearts(1);
-    player.GetData().lost=true;
+    lost[playerID(player)]=true;
     player.AddCacheFlags(CacheFlag.CACHE_ALL);
     player.EvaluateItems();
     Isaac.Spawn(EntityType.ENTITY_EFFECT, 200, 0, player.Position, Vector(0,0), player);
@@ -172,7 +176,7 @@ function suicide(item:CollectibleType,rng:RNG,player:EntityPlayer){
     let body=false;
     Isaac.GetRoomEntities().forEach(function(entity:Entity){if(entity.Type==EntityType.ENTITY_EFFECT && entity.Variant==200){body=true;entity.Remove();}});
     if(body){
-      player.GetData().lost=false;
+      lost[playerID(player)]=false;
       player.AddCacheFlags(CacheFlag.CACHE_ALL);
       player.EvaluateItems();
       returner=true;
