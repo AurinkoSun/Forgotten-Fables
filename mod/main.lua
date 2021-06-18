@@ -1846,6 +1846,9 @@ LostSarahCostume = Isaac.GetCostumeIdByPath("gfx/characters/sarahLosthair.anm2")
 suicideID = Isaac.GetItemIdByName("Suicide")
 razors = {0, 0, 0, 0, 0, 0, 0, 0}
 lost = {false, false, false, false, false, false, false, false}
+function startGame(self)
+end
+talesOfGuppy:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, startGame)
 function playerID(self, player)
     local val = -1
     do
@@ -1869,6 +1872,13 @@ function evalCache(self, player, flags)
                 player.MaxFireDelay = player.MaxFireDelay * 15
             end
         end
+        if player:GetPlayerType() == TaintedSarahPlayerType then
+            if lost[playerID(nil, player) + 1] then
+                player.MaxFireDelay = player.MaxFireDelay - 2.68421052632
+            else
+                player.MaxFireDelay = player.MaxFireDelay - 1
+            end
+        end
     end
     if flags == CacheFlag.CACHE_DAMAGE then
         if (player:GetPlayerType() == TaintedSarahPlayerType) and (playerID(nil, player) ~= -1) then
@@ -1876,6 +1886,36 @@ function evalCache(self, player, flags)
         end
         if player:HasCollectible(fatFetusID) and player:HasCollectible(CollectibleType.COLLECTIBLE_MR_MEGA) then
             player.Damage = player.Damage * 2
+        end
+        if player:GetPlayerType() == TaintedSarahPlayerType then
+            player.Damage = player.Damage - 1.5
+        end
+    end
+    if (function()
+        flags = CacheFlag.CACHE_LUCK
+        return flags
+    end)() then
+        if (player:GetPlayerType() == TaintedSarahPlayerType) and (lost[playerID(nil, player) + 1] == true) then
+            player.Luck = player.Luck - 2
+        end
+    end
+    if flags == CacheFlag.CACHE_SPEED then
+        if player.GetPlayerType == TaintedSarahPlayerType then
+            if lost[playerID(nil, player) + 1] then
+                player.MoveSpeed = player.MoveSpeed - 0.1
+            else
+                player.MoveSpeed = player.MoveSpeed + 0.2
+            end
+        end
+    end
+    if flags == CacheFlag.CACHE_FLYING then
+        if (player:GetPlayerType() == TaintedSarahPlayerType) and lost[playerID(nil, player) + 1] then
+            player.CanFly = true
+        end
+    end
+    if flags == CacheFlag.CACHE_RANGE then
+        if player:GetPlayerType() == TaintedSarahPlayerType then
+            player.TearHeight = player.TearHeight - 1.5
         end
     end
 end
@@ -1975,7 +2015,7 @@ function suicide(self, item, rng, player)
     end
     if (player:GetPlayerType() == TaintedSarahPlayerType) and (lost[playerID(nil, player) + 1] == false) then
         player:AddBrokenHearts(1)
-        player:GetData().lost = true
+        lost[playerID(nil, player) + 1] = true
         player:AddCacheFlags(CacheFlag.CACHE_ALL)
         player:EvaluateItems()
         Isaac.Spawn(
@@ -1999,7 +2039,7 @@ function suicide(self, item, rng, player)
             end
         )
         if body then
-            player:GetData().lost = false
+            lost[playerID(nil, player) + 1] = false
             player:AddCacheFlags(CacheFlag.CACHE_ALL)
             player:EvaluateItems()
             returner = true
