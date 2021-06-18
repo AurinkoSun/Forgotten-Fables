@@ -11,10 +11,10 @@ const suicideID = Isaac.GetItemIdByName("Suicide");
 let razors=[0,0,0,0,0,0,0,0]; //max of 8 players if all 4 are playing j&e
 let lost=[false,false,false,false,false,false,false,false]; //max of 8 players if all 4 are playing j&e
 function startGame(){
-  
+
 }
 talesOfGuppy.AddCallback(ModCallbacks.MC_POST_GAME_STARTED,startGame);
-function playerID(player:EntityPlayer){ //Function to identify players. Returns a value from 0 to 3 that can be passed to Game().GetPlayer() to get the original EntityPlayer
+function playerID(player:EntityPlayer){ //Function to identify players. Inverse of Game().GetPlayer() (Game.GetPlayer(playerID(i)) should return i)
   let val=-1;
   for(let i=0;i<game.GetNumPlayers();i++){
     let playeri=game.GetPlayer(i);
@@ -34,15 +34,15 @@ if(player.HasCollectible(fatFetusID)){
       }
     }
     if(player.GetPlayerType()==TaintedSarahPlayerType){
-      if(lost[playerID(player)]){//player is sarah's lost form
-        player.MaxFireDelay-= 2.68421052632; //tears are complicated
-      } else { //player is regular t sarah
-        player.MaxFireDelay-=1; //...sometimes less than others
+      if(lost[playerID(player)]){
+        player.MaxFireDelay-= 2.68421052632; //tears are complicated...
+      } else {
+        player.MaxFireDelay-=1; //...sometimes
       }
     }
   }
   if(flags == CacheFlag.CACHE_DAMAGE){
-    if(player.GetPlayerType()==TaintedSarahPlayerType && playerID(player)!=-1){
+    if(player.GetPlayerType()==TaintedSarahPlayerType){
       player.Damage+=0.5*razors[playerID(player)];
     }
     if(player.HasCollectible(fatFetusID) && player.HasCollectible(CollectibleType.COLLECTIBLE_MR_MEGA)){
@@ -52,13 +52,13 @@ if(player.HasCollectible(fatFetusID)){
      player.Damage-=1.5; //Tainted Sarah and her lost form have the same damage stat (basically none)
     }
   }
-  if(flags=CacheFlag.CACHE_LUCK){
+  if(flags==CacheFlag.CACHE_LUCK){
     if(player.GetPlayerType()==TaintedSarahPlayerType && (lost[playerID(player)]==true)){
-      player.Luck-=2
+      player.Luck-=2;
     }
   }
   if(flags==CacheFlag.CACHE_SPEED){
-    if(player.GetPlayerType==TaintedSarahPlayerType){
+    if(player.GetPlayerType()==TaintedSarahPlayerType){
       if(lost[playerID(player)]){
         player.MoveSpeed-=0.1;
       } else {
@@ -174,7 +174,13 @@ function suicide(item:CollectibleType,rng:RNG,player:EntityPlayer){
     returner=true;
   } else if(player.GetPlayerType()==TaintedSarahPlayerType && lost[playerID(player)]==true){
     let body=false;
-    Isaac.GetRoomEntities().forEach(function(entity:Entity){if(entity.Type==EntityType.ENTITY_EFFECT && entity.Variant==200){body=true;entity.Remove();}});
+    let entities=Isaac.GetRoomEntities();
+    for(let entity of entities){
+      if(entity.Type==EntityType.ENTITY_EFFECT && entity.Variant==200){
+        body=true;
+        entity.Remove();
+      }
+    }
     if(body){
       lost[playerID(player)]=false;
       player.AddCacheFlags(CacheFlag.CACHE_ALL);
