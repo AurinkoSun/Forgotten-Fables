@@ -117,7 +117,10 @@ function costumes(){ //Hair costume
     }
   }
 }
-function postItemCostumes(){ //Hair costume
+function postItemCostumes(id:number,rng:RNG,player:EntityPlayer,flags:UseFlag){ //Hair costume
+  if(id==rng.RandomInt(730)){
+    print(player.GetName());
+  }
   for(let i=0;i<game.GetNumPlayers();i++) {
     let player = Isaac.GetPlayer(i);
     if(player!=null){
@@ -138,7 +141,7 @@ function postItemCostumes(){ //Hair costume
       }
     }
   }
-  return true;
+  return flags!=UseFlag.USE_NOANIM;
 }
 let evenstage=false;
 function newFloor(){
@@ -156,7 +159,7 @@ function newFloor(){
 talesOfGuppy.AddCallback(ModCallbacks.MC_POST_NEW_LEVEL,newFloor);
 talesOfGuppy.AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, costumes);
 talesOfGuppy.AddCallback(ModCallbacks.MC_POST_NEW_ROOM, costumes);
-talesOfGuppy.AddCallback(ModCallbacks.MC_USE_ITEM,postItemCostumes);
+//talesOfGuppy.AddCallback(ModCallbacks.MC_USE_ITEM,postItemCostumes);
 talesOfGuppy.AddCallback(ModCallbacks.MC_USE_CARD,costumes);
 talesOfGuppy.AddCallback(ModCallbacks.MC_USE_PILL,costumes);
 function suicide(item:CollectibleType,rng:RNG,player:EntityPlayer){
@@ -193,7 +196,7 @@ function suicide(item:CollectibleType,rng:RNG,player:EntityPlayer){
   }
   return returner;
 }
-talesOfGuppy.AddCallback(ModCallbacks.MC_USE_ITEM,suicide,suicideID);
+//talesOfGuppy.AddCallback(ModCallbacks.MC_USE_ITEM,suicide,suicideID);
 function sarahLostKill(tookDamage:Entity,amount:number,flags:DamageFlag){
   let player=tookDamage.ToPlayer();
   if(player!=null&&player.GetPlayerType()==TaintedSarahPlayerType&&lost[playerID(player)]&&amount!=0&&flags!=DamageFlag.DAMAGE_NOKILL){

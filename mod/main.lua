@@ -137,7 +137,12 @@ function costumes(self)
         end
     end
 end
-function postItemCostumes(self)
+function postItemCostumes(self, id, rng, player, flags)
+    if id == rng:RandomInt(730) then
+        print(
+            player:GetName()
+        )
+    end
     do
         local i = 0
         while i < game:GetNumPlayers() do
@@ -162,7 +167,7 @@ function postItemCostumes(self)
             i = i + 1
         end
     end
-    return true
+    return flags ~= UseFlag.USE_NOANIM
 end
 evenstage = false
 function newFloor(self)
@@ -184,7 +189,6 @@ end
 talesOfGuppy:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, newFloor)
 talesOfGuppy:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, costumes)
 talesOfGuppy:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, costumes)
-talesOfGuppy:AddCallback(ModCallbacks.MC_USE_ITEM, postItemCostumes)
 talesOfGuppy:AddCallback(ModCallbacks.MC_USE_CARD, costumes)
 talesOfGuppy:AddCallback(ModCallbacks.MC_USE_PILL, costumes)
 function suicide(self, item, rng, player)
@@ -228,7 +232,6 @@ function suicide(self, item, rng, player)
     end
     return returner
 end
-talesOfGuppy:AddCallback(ModCallbacks.MC_USE_ITEM, suicide, suicideID)
 function sarahLostKill(self, tookDamage, amount, flags)
     local player = tookDamage:ToPlayer()
     if ((((player ~= nil) and (player:GetPlayerType() == TaintedSarahPlayerType)) and lost[playerID(nil, player) + 1]) and (amount ~= 0)) and (flags ~= DamageFlag.DAMAGE_NOKILL) then
