@@ -19,22 +19,36 @@ local function require(file)
 end
 ____modules = {
 ["main"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
-talesOfGuppy = RegisterMod("Tales of Guppy", 1)
-game = Game()
-rng = RNG()
-fatFetusID = Isaac.GetItemIdByName("Fat Fetus")
-SarahPlayerType = Isaac.GetPlayerTypeByName("Sarah")
-TaintedSarahPlayerType = Isaac.GetPlayerTypeByName("Tainted Sarah", true)
-SarahCostume = Isaac.GetCostumeIdByPath("gfx/characters/sarahhair.anm2")
-TaintedSarahCostume = Isaac.GetCostumeIdByPath("gfx/characters/SaraAlthair.anm2")
-LostSarahCostume = Isaac.GetCostumeIdByPath("gfx/characters/sarahLosthair.anm2")
-suicideID = Isaac.GetItemIdByName("Suicide")
-razors = {0, 0, 0, 0, 0, 0, 0, 0}
-lost = {false, false, false, false, false, false, false, false}
-function startGame(self)
+local ____exports = {}
+local json = require("json")
+local talesOfGuppy = RegisterMod("Tales of Guppy", 1)
+local game = Game()
+local fatFetusID = Isaac.GetItemIdByName("Fat Fetus")
+local SarahPlayerType = Isaac.GetPlayerTypeByName("Sarah")
+local TaintedSarahPlayerType = Isaac.GetPlayerTypeByName("Tainted Sarah", true)
+local SarahCostume = Isaac.GetCostumeIdByPath("gfx/characters/sarahhair.anm2")
+local TaintedSarahCostume = Isaac.GetCostumeIdByPath("gfx/characters/SaraAlthair.anm2")
+local LostSarahCostume = Isaac.GetCostumeIdByPath("gfx/characters/sarahLosthair.anm2")
+local suicideID = Isaac.GetItemIdByName("Suicide")
+local razors = {0, 0, 0, 0, 0, 0, 0, 0}
+local lost = {0, 0, 0, 0, 0, 0, 0, 0}
+local function startGame(self)
+    local data = {{0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0}}
+    data = json.decode(
+        talesOfGuppy:LoadData()
+    )
+    if (data ~= nil) and (data ~= ({{0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0}})) then
+        lost = data[1]
+        razors = data[2]
+    end
 end
+local function save(self)
+    local data = json.encode({lost, razors})
+    talesOfGuppy:SaveData(data)
+end
+talesOfGuppy:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, save)
 talesOfGuppy:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, startGame)
-function playerID(self, player)
+local function playerID(self, player)
     local val = -1
     do
         local i = 0
@@ -50,7 +64,7 @@ function playerID(self, player)
     end
     return val
 end
-function evalCache(self, player, flags)
+local function evalCache(self, player, flags)
     if flags == CacheFlag.CACHE_FIREDELAY then
         if player:HasCollectible(fatFetusID) then
             if (player:HasCollectible(CollectibleType.COLLECTIBLE_LUDOVICO_TECHNIQUE) == false) and (player:HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE) == false) then
@@ -77,7 +91,7 @@ function evalCache(self, player, flags)
         end
     end
     if flags == CacheFlag.CACHE_LUCK then
-        if (player:GetPlayerType() == TaintedSarahPlayerType) and (lost[playerID(nil, player) + 1] == true) then
+        if (player:GetPlayerType() == TaintedSarahPlayerType) and (lost[playerID(nil, player) + 1] == 1) then
             player.Luck = player.Luck - 2
         end
     end
@@ -91,7 +105,7 @@ function evalCache(self, player, flags)
         end
     end
     if flags == CacheFlag.CACHE_FLYING then
-        if (player:GetPlayerType() == TaintedSarahPlayerType) and lost[playerID(nil, player) + 1] then
+        if (player:GetPlayerType() == TaintedSarahPlayerType) and (lost[playerID(nil, player) + 1] == 1) then
             player.CanFly = true
         end
     end
@@ -102,16 +116,15 @@ function evalCache(self, player, flags)
     end
 end
 talesOfGuppy:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, evalCache)
-function playerInit(self, player)
+local function playerInit(self, player)
     if player:GetPlayerType() == TaintedSarahPlayerType then
-        player:SetPocketActiveItem(suicideID, ActiveSlot.SLOT_POCKET)
         player:AddCollectible(CollectibleType.COLLECTIBLE_HEARTBREAK)
         player:AddBrokenHearts(-2)
-        lost[playerID(nil, player) + 1] = false
+        lost[playerID(nil, player) + 1] = 1
     end
 end
 talesOfGuppy:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, playerInit, 0)
-function costumes(self)
+local function costumes(self)
     do
         local i = 0
         while i < game:GetNumPlayers() do
@@ -123,7 +136,7 @@ function costumes(self)
                     player:GetData().costumeEquipped = true
                 end
                 if player:GetPlayerType() == TaintedSarahPlayerType then
-                    if lost[playerID(nil, player) + 1] == true then
+                    if lost[playerID(nil, player) + 1] == 1 then
                         player:TryRemoveNullCostume(LostSarahCostume)
                         player:AddNullCostume(LostSarahCostume)
                     else
@@ -137,40 +150,26 @@ function costumes(self)
         end
     end
 end
-function postItemCostumes(self, id, rng, player, flags)
-    if id == rng:RandomInt(730) then
-        print(
-            player:GetName()
-        )
+local function postItemCostumes(self, _id, _rng, player, flags)
+    if player:GetPlayerType() == SarahPlayerType then
+        player:TryRemoveNullCostume(SarahCostume)
+        player:AddNullCostume(SarahCostume)
+        player:GetData().costumeEquipped = true
     end
-    do
-        local i = 0
-        while i < game:GetNumPlayers() do
-            local player = Isaac.GetPlayer(i)
-            if player ~= nil then
-                if player:GetPlayerType() == SarahPlayerType then
-                    player:TryRemoveNullCostume(SarahCostume)
-                    player:AddNullCostume(SarahCostume)
-                    player:GetData().costumeEquipped = true
-                end
-                if player:GetPlayerType() == TaintedSarahPlayerType then
-                    if lost[playerID(nil, player) + 1] == true then
-                        player:TryRemoveNullCostume(LostSarahCostume)
-                        player:AddNullCostume(LostSarahCostume)
-                    else
-                        player:TryRemoveNullCostume(TaintedSarahCostume)
-                        player:AddNullCostume(TaintedSarahCostume)
-                    end
-                    player:GetData().costumeEquipped = true
-                end
-            end
-            i = i + 1
+    if player:GetPlayerType() == TaintedSarahPlayerType then
+        if lost[playerID(nil, player) + 1] == 1 then
+            player:TryRemoveNullCostume(LostSarahCostume)
+            player:AddNullCostume(LostSarahCostume)
+        else
+            player:TryRemoveNullCostume(TaintedSarahCostume)
+            player:AddNullCostume(TaintedSarahCostume)
         end
+        player:GetData().costumeEquipped = true
     end
     return flags ~= UseFlag.USE_NOANIM
 end
-evenstage = false
-function newFloor(self)
+local evenstage = false
+local function newFloor(self)
     if evenstage then
         do
             local i = 0
@@ -189,19 +188,15 @@ end
 talesOfGuppy:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, newFloor)
 talesOfGuppy:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, costumes)
 talesOfGuppy:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, costumes)
+talesOfGuppy:AddCallback(ModCallbacks.MC_USE_ITEM, postItemCostumes)
 talesOfGuppy:AddCallback(ModCallbacks.MC_USE_CARD, costumes)
 talesOfGuppy:AddCallback(ModCallbacks.MC_USE_PILL, costumes)
-function suicide(self, item, rng, player)
+local function suicide(self, _item, _rng, player)
     local returner = false
-    if item ~= suicideID then
-        print("how the fuck did you break the game this much")
-        print(
-            rng:RandomInt(10)
-        )
-    end
-    if (player:GetPlayerType() == TaintedSarahPlayerType) and (lost[playerID(nil, player) + 1] == false) then
+    if (player:GetPlayerType() == TaintedSarahPlayerType) and (lost[playerID(nil, player) + 1] == 0) then
+        print("tsarah killed herself")
         player:AddBrokenHearts(1)
-        lost[playerID(nil, player) + 1] = true
+        lost[playerID(nil, player) + 1] = 1
         player:AddCacheFlags(CacheFlag.CACHE_ALL)
         player:EvaluateItems()
         local body = Isaac.Spawn(
@@ -212,9 +207,9 @@ function suicide(self, item, rng, player)
             Vector(0, 0),
             player
         )
-        body:GetSprite():Play("sarahdeath", true)
+        print(body.Position.X, body.Position.Y)
         returner = true
-    elseif (player:GetPlayerType() == TaintedSarahPlayerType) and (lost[playerID(nil, player) + 1] == true) then
+    elseif (player:GetPlayerType() == TaintedSarahPlayerType) and (lost[playerID(nil, player) + 1] == 0) then
         local body = false
         local entities = Isaac.GetRoomEntities()
         for ____, entity in ipairs(entities) do
@@ -224,15 +219,18 @@ function suicide(self, item, rng, player)
             end
         end
         if body then
-            lost[playerID(nil, player) + 1] = false
+            lost[playerID(nil, player) + 1] = 0
             player:AddCacheFlags(CacheFlag.CACHE_ALL)
             player:EvaluateItems()
             returner = true
         end
+    else
+        print("broken")
     end
     return returner
 end
-function sarahLostKill(self, tookDamage, amount, flags)
+talesOfGuppy:AddCallback(ModCallbacks.MC_USE_ITEM, suicide, suicideID)
+local function sarahLostKill(self, tookDamage, amount, flags)
     local player = tookDamage:ToPlayer()
     if ((((player ~= nil) and (player:GetPlayerType() == TaintedSarahPlayerType)) and lost[playerID(nil, player) + 1]) and (amount ~= 0)) and (flags ~= DamageFlag.DAMAGE_NOKILL) then
         player:Kill()
@@ -242,7 +240,7 @@ function sarahLostKill(self, tookDamage, amount, flags)
     end
 end
 talesOfGuppy:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, sarahLostKill, EntityType.ENTITY_PLAYER)
-function razor(self, pickup)
+local function razor(self, pickup)
     if pickup.SubType == 13 then
         do
             local i = 0
@@ -281,7 +279,7 @@ function razor(self, pickup)
     end
 end
 talesOfGuppy:AddCallback(ModCallbacks.MC_POST_PICKUP_UPDATE, razor, 10)
-function fatFetusTears(self, tear)
+local function fatFetusTears(self, tear)
     local bomb
     if tear.SpawnerEntity == nil then
         return
@@ -301,7 +299,7 @@ function fatFetusTears(self, tear)
     end
 end
 talesOfGuppy:AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, fatFetusTears)
-function gigaUpdate(self, bomb)
+local function gigaUpdate(self, bomb)
     if bomb.SpawnerEntity ~= nil then
         local player = bomb.SpawnerEntity:ToPlayer()
         if player ~= nil then
@@ -563,7 +561,7 @@ function gigaUpdate(self, bomb)
         end
     end
 end
-function gigaBombReplace(self, bomb)
+local function gigaBombReplace(self, bomb)
     if (bomb.SpawnerEntity ~= nil) and (bomb.SpawnerEntity:ToPlayer() ~= nil) then
         Isaac.Spawn(
             EntityType.ENTITY_BOMBDROP,
@@ -576,7 +574,7 @@ function gigaBombReplace(self, bomb)
         bomb:Remove()
     end
 end
-function gigaInit(self, bomb)
+local function gigaInit(self, bomb)
     bomb.CollisionDamage = 0
     if bomb.SpawnerEntity ~= nil then
         local player = bomb.SpawnerEntity:ToPlayer()
@@ -643,7 +641,7 @@ function gigaInit(self, bomb)
         end
     end
 end
-function rocks(self, projectile)
+local function rocks(self, projectile)
     if projectile.SpawnerEntity ~= nil then
         local bomb = projectile.SpawnerEntity:ToBomb()
         if (bomb ~= nil) and (bomb.SpawnerEntity ~= nil) then
@@ -656,7 +654,7 @@ function rocks(self, projectile)
         end
     end
 end
-function glitterdrops(self, entity, amount, flags, source)
+local function glitterdrops(self, entity, amount, flags, source)
     if (amount >= entity.HitPoints) and (flags ~= DamageFlag.DAMAGE_NOKILL) then
         if (((((source.Entity ~= nil) and (source.Entity:ToBomb() ~= nil)) and (source.Entity.Type == EntityType.ENTITY_BOMBDROP)) and (source.Entity.Variant == BombVariant.BOMB_GIGA)) and (source.Entity.SpawnerEntity ~= nil)) and (source.Entity.SpawnerEntity.SpawnerEntity ~= nil) then
             local player = source.Entity.SpawnerEntity.SpawnerEntity:ToPlayer()
@@ -687,6 +685,7 @@ talesOfGuppy:AddCallback(ModCallbacks.MC_POST_BOMB_INIT, gigaBombReplace, BombVa
 talesOfGuppy:AddCallback(ModCallbacks.MC_POST_BOMB_INIT, gigaInit, 21)
 talesOfGuppy:AddCallback(ModCallbacks.MC_POST_PROJECTILE_INIT, rocks, ProjectileVariant.PROJECTILE_ROCK)
 talesOfGuppy:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, glitterdrops)
+return ____exports
 end,
 }
 return require("main")
