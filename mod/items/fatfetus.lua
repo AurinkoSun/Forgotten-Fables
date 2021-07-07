@@ -348,12 +348,10 @@ function ____exports.gigaInit(self, bomb)
                 end
             elseif player:HasCollectible(CollectibleType.COLLECTIBLE_BOBS_CURSE) or player:HasCollectible(CollectibleType.COLLECTIBLE_IPECAC) then
                 bomb:GetSprite():Play("poisonpulse", true)
+            elseif bomb:HasTearFlags(TearFlags.TEAR_HOMING) then
+                bomb:GetSprite():Play("homingpulse", true)
             else
-                if bomb:HasTearFlags(TearFlags.TEAR_HOMING) then
-                    bomb:GetSprite():Play("homingpulse", true)
-                else
-                    bomb:GetSprite():Play("Pulse", true)
-                end
+                bomb:GetSprite():Play("Pulse", true)
             end
         else
             bomb:SetExplosionCountdown(87)

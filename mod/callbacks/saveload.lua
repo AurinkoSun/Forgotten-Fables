@@ -4,9 +4,9 @@ local ____exports = {}
 local json = require("json")
 local constants = require("constants")
 local ____playerdata = require("playerdata")
+local GetPlayerId = ____playerdata.GetPlayerId
 local modPlayerData = ____playerdata.modPlayerData
 local PlayerData = ____playerdata.PlayerData
-local GetPlayerId = ____playerdata.GetPlayerId
 local PlayerSeed = ____playerdata.PlayerSeed
 function ____exports.loadData(self, mod, player)
     if player == nil then

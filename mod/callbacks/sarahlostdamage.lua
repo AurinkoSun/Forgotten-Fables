@@ -9,8 +9,7 @@ function ____exports.sarahLostKill(self, tookDamage, amount, flags)
     if ((((player ~= nil) and (player:GetPlayerType() == constants.ModPlayerTypes.TAINTED_SARAH)) and modPlayerData[PlayerSeed(nil, player)]) and (amount ~= 0)) and (flags ~= DamageFlag.DAMAGE_NOKILL) then
         player:Kill()
         return false
-    else
-        return true
     end
+    return true
 end
 return ____exports
