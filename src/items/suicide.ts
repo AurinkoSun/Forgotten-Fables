@@ -24,6 +24,10 @@ export function suicide(
       player,
     );
     // animate death and change item sprite to "revive"
+    body.GetSprite().Play("SarahDeath", true);
+    player.SetPocketActiveItem(
+      constants.ModItemTypes.REVIVE as unknown as CollectibleType,
+    );
     print(body.Position.X, body.Position.Y);
   } else if (
     player.GetPlayerType() === constants.ModPlayerTypes.TAINTED_SARAH &&
@@ -35,14 +39,26 @@ export function suicide(
       if (entity.Type === EntityType.ENTITY_EFFECT && entity.Variant === 200) {
         body = true;
         player.Position = entity.Position;
-        entity.Remove();
+        player.Visible = false;
+        entity.GetSprite().Play("Revive", true);
+        entity.GetData().player = player;
       }
     }
     if (body) {
       // change item sprite to "suicide" and animate revive
+      player.SetPocketActiveItem(
+        constants.ModItemTypes.SUICIDE as unknown as CollectibleType,
+      );
       modPlayerData[PlayerSeed(player)].lost = false;
       player.AddCacheFlags(CacheFlag.CACHE_ALL);
       player.EvaluateItems();
     }
+  }
+}
+export function bodyAnim(effect: EntityEffect): void {
+  if (effect.GetSprite().IsFinished("Revive")) {
+    const player = effect.GetData().player as EntityPlayer;
+    player.Visible = true;
+    effect.Remove();
   }
 }

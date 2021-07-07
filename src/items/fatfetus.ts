@@ -1,6 +1,6 @@
 import * as constants from "../constants";
 
-export function fatFetusTears(tear: EntityTear) {
+export function fatFetusTears(tear: EntityTear): void {
   let bomb: EntityBomb | null;
   if (tear.SpawnerEntity === null) {
     return;
@@ -26,7 +26,7 @@ export function fatFetusTears(tear: EntityTear) {
     bomb.ExplosionDamage = dmg;
   }
 }
-export function gigaUpdate(bomb: EntityBomb) {
+export function gigaUpdate(bomb: EntityBomb): void {
   if (bomb.SpawnerEntity !== null) {
     const player = bomb.SpawnerEntity.ToPlayer();
     if (player !== null) {
@@ -305,7 +305,7 @@ export function gigaUpdate(bomb: EntityBomb) {
     }
   }
 }
-export function gigaBombReplace(bomb: EntityBomb) {
+export function gigaBombReplace(bomb: EntityBomb): void {
   if (bomb.SpawnerEntity !== null && bomb.SpawnerEntity.ToPlayer() !== null) {
     Isaac.Spawn(
       EntityType.ENTITY_BOMBDROP,
@@ -318,7 +318,7 @@ export function gigaBombReplace(bomb: EntityBomb) {
     bomb.Remove();
   }
 }
-export function gigaInit(bomb: EntityBomb) {
+export function gigaInit(bomb: EntityBomb): void {
   bomb.CollisionDamage = 0;
   if (bomb.SpawnerEntity !== null) {
     const player = bomb.SpawnerEntity.ToPlayer();
@@ -413,7 +413,7 @@ export function gigaInit(bomb: EntityBomb) {
     }
   }
 }
-export function rocks(projectile: EntityProjectile) {
+export function rocks(projectile: EntityProjectile): void {
   if (projectile.SpawnerEntity !== null) {
     const bomb = projectile.SpawnerEntity.ToBomb();
     if (bomb !== null && bomb.SpawnerEntity !== null) {
@@ -432,7 +432,7 @@ export function glitterdrops(
   flags: DamageFlag,
   source: EntityRef,
   _frames: number,
-) {
+): void {
   if (amount >= entity.HitPoints && flags !== DamageFlag.DAMAGE_NOKILL) {
     if (
       source.Entity !== null &&

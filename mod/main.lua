@@ -22,6 +22,7 @@ local gigaUpdate = ____fatfetus.gigaUpdate
 local glitterdrops = ____fatfetus.glitterdrops
 local rocks = ____fatfetus.rocks
 local ____suicide = require("items.suicide")
+local bodyAnim = ____suicide.bodyAnim
 local suicide = ____suicide.suicide
 local forgottenFables = RegisterMod("Forgotten Fables", 1)
 forgottenFables:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, evalCache)
@@ -44,6 +45,7 @@ forgottenFables:AddCallback(ModCallbacks.MC_USE_ITEM, costumes)
 forgottenFables:AddCallback(ModCallbacks.MC_USE_CARD, costumes)
 forgottenFables:AddCallback(ModCallbacks.MC_USE_PILL, costumes)
 forgottenFables:AddCallback(ModCallbacks.MC_USE_ITEM, suicide, constants.ModItemTypes.SUICIDE)
+forgottenFables:AddCallback(ModCallbacks.MC_POST_EFFECT_RENDER, bodyAnim, constants.ModEffectVariants.TSARAHBODY)
 forgottenFables:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, sarahLostKill, EntityType.ENTITY_PLAYER)
 forgottenFables:AddCallback(ModCallbacks.MC_POST_PICKUP_UPDATE, razor, 10)
 forgottenFables:AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, fatFetusTears)

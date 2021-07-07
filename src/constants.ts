@@ -4,6 +4,13 @@
 export enum ModItemTypes {
   FAT_FETUS = Isaac.GetItemIdByName("Fat Fetus"),
   SUICIDE = Isaac.GetItemIdByName("Suicide"),
+  REVIVE = Isaac.GetItemIdByName("Revive"),
+}
+/**
+ * Enum for custom EntityEffect variants
+ */
+export enum ModEffectVariants {
+  TSARAHBODY = 200,
 }
 /**
  * Enum for new PlayerTypes

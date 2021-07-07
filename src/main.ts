@@ -13,7 +13,7 @@ import {
   glitterdrops,
   rocks,
 } from "./items/fatfetus";
-import { suicide } from "./items/suicide";
+import { bodyAnim, suicide } from "./items/suicide";
 
 const forgottenFables = RegisterMod("Forgotten Fables", 1);
 forgottenFables.AddCallback(ModCallbacks.MC_EVALUATE_CACHE, evalCache);
@@ -36,6 +36,11 @@ forgottenFables.AddCallback(
   ModCallbacks.MC_USE_ITEM,
   suicide,
   constants.ModItemTypes.SUICIDE,
+);
+forgottenFables.AddCallback(
+  ModCallbacks.MC_POST_EFFECT_RENDER,
+  bodyAnim,
+  constants.ModEffectVariants.TSARAHBODY,
 );
 forgottenFables.AddCallback(
   ModCallbacks.MC_ENTITY_TAKE_DMG,
