@@ -1,7 +1,7 @@
 import * as constants from "../constants";
 import { modPlayerData, PlayerSeed } from "../playerdata";
 
-export function costumes() {
+export function costumes(): void {
   for (let i = 0; i < constants.game.GetNumPlayers(); i++) {
     const player = Isaac.GetPlayer(i);
     if (player !== null) {

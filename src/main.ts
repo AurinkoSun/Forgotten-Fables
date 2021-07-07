@@ -33,6 +33,11 @@ forgottenFables.AddCallback(ModCallbacks.MC_USE_ITEM, costumes);
 forgottenFables.AddCallback(ModCallbacks.MC_USE_CARD, costumes);
 forgottenFables.AddCallback(ModCallbacks.MC_USE_PILL, costumes);
 forgottenFables.AddCallback(
+  ModCallbacks.MC_ENTITY_TAKE_DMG,
+  costumes,
+  EntityType.ENTITY_PLAYER,
+);
+forgottenFables.AddCallback(
   ModCallbacks.MC_USE_ITEM,
   suicide,
   constants.ModItemTypes.SUICIDE,
