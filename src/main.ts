@@ -1,30 +1,60 @@
-const forgottenFables = RegisterMod("Forgotten Fables", 1);
-import * as json from "json";
-import * as constants from "./constants";
-import { modPlayerData, PlayerData, GetPlayerId, PlayerSeed } from "./playerdata";
 import { evalCache } from "./callbacks/cache";
-forgottenFables.AddCallback(ModCallbacks.MC_EVALUATE_CACHE,evalCache);
-import {saveData,loadData} from "./callbacks/saveload";
-forgottenFables.AddCallback(ModCallbacks.MC_POST_NEW_ROOM, () =>{saveData(forgottenFables)});
-forgottenFables.AddCallback(ModCallbacks.MC_POST_PLAYER_INIT,(player:EntityPlayer)=>{loadData(forgottenFables,player)});
-import {newFloor} from "./callbacks/floorinit";
-forgottenFables.AddCallback(ModCallbacks.MC_POST_NEW_LEVEL,newFloor);
-import {costumes} from "./callbacks/costumes";
+import { costumes } from "./callbacks/costumes";
+import { newFloor } from "./callbacks/floorinit";
+import { razor } from "./callbacks/razors";
+import { sarahLostKill } from "./callbacks/sarahlostdamage";
+import { loadData, saveData } from "./callbacks/saveload";
+import * as constants from "./constants";
+import {
+  fatFetusTears,
+  gigaBombReplace,
+  gigaInit,
+  gigaUpdate,
+  glitterdrops,
+  rocks,
+} from "./items/fatfetus";
+import { suicide } from "./items/suicide";
+
+const forgottenFables = RegisterMod("Forgotten Fables", 1);
+forgottenFables.AddCallback(ModCallbacks.MC_EVALUATE_CACHE, evalCache);
+forgottenFables.AddCallback(ModCallbacks.MC_POST_NEW_ROOM, () => {
+  saveData(forgottenFables);
+});
+forgottenFables.AddCallback(
+  ModCallbacks.MC_POST_PLAYER_INIT,
+  (player: EntityPlayer) => {
+    loadData(forgottenFables, player);
+  },
+);
+forgottenFables.AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, newFloor);
 forgottenFables.AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, costumes);
 forgottenFables.AddCallback(ModCallbacks.MC_POST_NEW_ROOM, costumes);
-forgottenFables.AddCallback(ModCallbacks.MC_USE_ITEM,costumes);
-forgottenFables.AddCallback(ModCallbacks.MC_USE_CARD,costumes);
-forgottenFables.AddCallback(ModCallbacks.MC_USE_PILL,costumes);
-import {suicide} from "./items/suicide";
-forgottenFables.AddCallback(ModCallbacks.MC_USE_ITEM,suicide,constants.ModItemTypes.SUICIDE);
-import {sarahLostKill} from "./callbacks/sarahlostdamage";
-forgottenFables.AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG,sarahLostKill,EntityType.ENTITY_PLAYER);
-import {razor} from "./callbacks/razors";
-forgottenFables.AddCallback(ModCallbacks.MC_POST_PICKUP_UPDATE,razor,10);
-import {fatFetusTears,gigaUpdate,gigaInit,rocks,glitterdrops,gigaBombReplace} from "./items/fatfetus";
-forgottenFables.AddCallback(ModCallbacks.MC_POST_FIRE_TEAR,fatFetusTears);
-forgottenFables.AddCallback(ModCallbacks.MC_POST_BOMB_UPDATE,gigaUpdate,21);
-forgottenFables.AddCallback(ModCallbacks.MC_POST_BOMB_INIT,gigaBombReplace,BombVariant.BOMB_GIGA);
-forgottenFables.AddCallback(ModCallbacks.MC_POST_BOMB_INIT,gigaInit,21);
-forgottenFables.AddCallback(ModCallbacks.MC_POST_PROJECTILE_INIT,rocks,ProjectileVariant.PROJECTILE_ROCK);
-forgottenFables.AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG,glitterdrops);
+forgottenFables.AddCallback(ModCallbacks.MC_USE_ITEM, costumes);
+forgottenFables.AddCallback(ModCallbacks.MC_USE_CARD, costumes);
+forgottenFables.AddCallback(ModCallbacks.MC_USE_PILL, costumes);
+forgottenFables.AddCallback(
+  ModCallbacks.MC_USE_ITEM,
+  suicide,
+  constants.ModItemTypes.SUICIDE,
+);
+forgottenFables.AddCallback(
+  ModCallbacks.MC_ENTITY_TAKE_DMG,
+  sarahLostKill,
+  EntityType.ENTITY_PLAYER,
+);
+forgottenFables.AddCallback(ModCallbacks.MC_POST_PICKUP_UPDATE, razor, 10);
+
+forgottenFables.AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, fatFetusTears);
+forgottenFables.AddCallback(ModCallbacks.MC_POST_BOMB_UPDATE, gigaUpdate, 21);
+forgottenFables.AddCallback(
+  ModCallbacks.MC_POST_BOMB_INIT,
+  gigaBombReplace,
+  BombVariant.BOMB_GIGA,
+);
+forgottenFables.AddCallback(ModCallbacks.MC_POST_BOMB_INIT, gigaInit, 21);
+forgottenFables.AddCallback(
+  ModCallbacks.MC_POST_PROJECTILE_INIT,
+  rocks,
+  ProjectileVariant.PROJECTILE_ROCK,
+);
+forgottenFables.AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, glitterdrops);
