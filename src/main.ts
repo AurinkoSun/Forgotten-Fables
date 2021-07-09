@@ -3,7 +3,6 @@ import { costumes } from "./callbacks/costumes";
 import { newFloor } from "./callbacks/floorinit";
 import { razor } from "./callbacks/razors";
 import { sarahLostKill } from "./callbacks/sarahlostdamage";
-import { loadData, saveData } from "./callbacks/saveload";
 import * as constants from "./constants";
 import {
   fatFetusTears,
@@ -13,19 +12,10 @@ import {
   glitterdrops,
   rocks,
 } from "./items/fatfetus";
-import { bodyAnim, suicide } from "./items/suicide";
+import { bodyAnim, revive, suicide } from "./items/suicide";
 
 const forgottenFables = RegisterMod("Forgotten Fables", 1);
 forgottenFables.AddCallback(ModCallbacks.MC_EVALUATE_CACHE, evalCache);
-forgottenFables.AddCallback(ModCallbacks.MC_POST_NEW_ROOM, () => {
-  saveData(forgottenFables);
-});
-forgottenFables.AddCallback(
-  ModCallbacks.MC_POST_PLAYER_INIT,
-  (player: EntityPlayer) => {
-    loadData(forgottenFables, player);
-  },
-);
 forgottenFables.AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, newFloor);
 forgottenFables.AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, costumes);
 forgottenFables.AddCallback(ModCallbacks.MC_POST_NEW_ROOM, costumes);
@@ -33,14 +23,14 @@ forgottenFables.AddCallback(ModCallbacks.MC_USE_ITEM, costumes);
 forgottenFables.AddCallback(ModCallbacks.MC_USE_CARD, costumes);
 forgottenFables.AddCallback(ModCallbacks.MC_USE_PILL, costumes);
 forgottenFables.AddCallback(
-  ModCallbacks.MC_ENTITY_TAKE_DMG,
-  costumes,
-  EntityType.ENTITY_PLAYER,
-);
-forgottenFables.AddCallback(
   ModCallbacks.MC_USE_ITEM,
   suicide,
   constants.ModItemTypes.SUICIDE,
+);
+forgottenFables.AddCallback(
+  ModCallbacks.MC_USE_ITEM,
+  revive,
+  constants.ModItemTypes.REVIVE,
 );
 forgottenFables.AddCallback(
   ModCallbacks.MC_POST_EFFECT_RENDER,

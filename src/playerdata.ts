@@ -3,7 +3,7 @@ import * as constants from "./constants";
  * Class to keep track of various mod data regarding a player.
  *
  */
-export const modPlayerData: { [index: number]: PlayerData } = {};
+
 export class PlayerData {
   lost: boolean;
   razors: number;
@@ -19,23 +19,24 @@ export class PlayerData {
    * @returns a new PlayerData object
    */
   constructor(player: EntityPlayer | null = null, lost = false, razors = 0) {
+    this.player = player;
     this.lost = lost;
     this.razors = razors;
     this.id = player !== null ? GetPlayerId(player) : -1;
   }
 
-  RegenerateID() {
+  RegenerateID(): void {
     this.id = GetPlayerId(this.player);
   }
 }
-export function GetPlayerId(player: EntityPlayer | null) {
+export function GetPlayerId(player: EntityPlayer | null): number {
   /**
    * Gets the 'id' of a player. Inverse of Game().GetPlayer()
    * @param player
    * The player to get the index for.
-   * @returns the player's id, as an integer. If the player is null, returns -1
+   * @returns the player's id, as an integer. If the player is null, returns 0
    */
-  let returner = -1;
+  let returner = 0;
   for (let i = 0; i < constants.game.GetNumPlayers(); i++) {
     const playeri = constants.game.GetPlayer(i);
     if (
@@ -49,7 +50,7 @@ export function GetPlayerId(player: EntityPlayer | null) {
   }
   return returner;
 }
-export function PlayerSeed(player: EntityPlayer | null, CollID = 1) {
+export function PlayerSeed(player: EntityPlayer | null, CollID = 1): number {
   /**
    * For when you need to know the seed of the player to check it against something else.
    * @param player
@@ -61,3 +62,14 @@ export function PlayerSeed(player: EntityPlayer | null, CollID = 1) {
    */
   return player !== null ? player.GetCollectibleRNG(CollID).GetSeed() : -1;
 }
+// eslint-disable-next-line prefer-const
+export let modPlayerData: PlayerData[] = [
+  new PlayerData(constants.game.GetPlayer(0), false, 0),
+  new PlayerData(constants.game.GetPlayer(1), false, 0),
+  new PlayerData(constants.game.GetPlayer(2), false, 0),
+  new PlayerData(constants.game.GetPlayer(3), false, 0),
+  new PlayerData(constants.game.GetPlayer(4), false, 0),
+  new PlayerData(constants.game.GetPlayer(5), false, 0),
+  new PlayerData(constants.game.GetPlayer(6), false, 0),
+  new PlayerData(constants.game.GetPlayer(7), false, 0),
+];

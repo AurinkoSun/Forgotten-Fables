@@ -2,13 +2,13 @@
 local ____exports = {}
 local constants = require("constants")
 local ____playerdata = require("playerdata")
+local GetPlayerId = ____playerdata.GetPlayerId
 local modPlayerData = ____playerdata.modPlayerData
-local PlayerSeed = ____playerdata.PlayerSeed
 function ____exports.suicide(self, _item, _rng, player)
-    if (player:GetPlayerType() == constants.ModPlayerTypes.TAINTED_SARAH) and (not modPlayerData[PlayerSeed(nil, player)].lost) then
+    if (player:GetPlayerType() == constants.ModPlayerTypes.TAINTED_SARAH) and (not modPlayerData[GetPlayerId(nil, player) + 1].lost) then
         print("tsarah killed herself")
         player:AddBrokenHearts(1)
-        modPlayerData[PlayerSeed(nil, player)].lost = true
+        modPlayerData[GetPlayerId(nil, player) + 1].lost = true
         player:AddCacheFlags(CacheFlag.CACHE_ALL)
         player:EvaluateItems()
         local body = Isaac.Spawn(
@@ -22,7 +22,12 @@ function ____exports.suicide(self, _item, _rng, player)
         body:GetSprite():Play("SarahDeath", true)
         player:SetPocketActiveItem(constants.ModItemTypes.REVIVE)
         print(body.Position.X, body.Position.Y)
-    elseif (player:GetPlayerType() == constants.ModPlayerTypes.TAINTED_SARAH) and modPlayerData[PlayerSeed(nil, player)].lost then
+        return true
+    end
+    return false
+end
+function ____exports.revive(self, _item, _rng, player)
+    if (player:GetPlayerType() == constants.ModPlayerTypes.TAINTED_SARAH) and modPlayerData[GetPlayerId(nil, player) + 1].lost then
         local body = false
         local entities = Isaac.GetRoomEntities()
         for ____, entity in ipairs(entities) do
@@ -36,7 +41,7 @@ function ____exports.suicide(self, _item, _rng, player)
         end
         if body then
             player:SetPocketActiveItem(constants.ModItemTypes.SUICIDE)
-            modPlayerData[PlayerSeed(nil, player)].lost = false
+            modPlayerData[GetPlayerId(nil, player) + 1].lost = false
             player:AddCacheFlags(CacheFlag.CACHE_ALL)
             player:EvaluateItems()
         end

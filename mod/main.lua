@@ -10,9 +10,6 @@ local ____razors = require("callbacks.razors")
 local razor = ____razors.razor
 local ____sarahlostdamage = require("callbacks.sarahlostdamage")
 local sarahLostKill = ____sarahlostdamage.sarahLostKill
-local ____saveload = require("callbacks.saveload")
-local loadData = ____saveload.loadData
-local saveData = ____saveload.saveData
 local constants = require("constants")
 local ____fatfetus = require("items.fatfetus")
 local fatFetusTears = ____fatfetus.fatFetusTears
@@ -23,29 +20,18 @@ local glitterdrops = ____fatfetus.glitterdrops
 local rocks = ____fatfetus.rocks
 local ____suicide = require("items.suicide")
 local bodyAnim = ____suicide.bodyAnim
+local revive = ____suicide.revive
 local suicide = ____suicide.suicide
 local forgottenFables = RegisterMod("Forgotten Fables", 1)
 forgottenFables:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, evalCache)
-forgottenFables:AddCallback(
-    ModCallbacks.MC_POST_NEW_ROOM,
-    function()
-        saveData(nil, forgottenFables)
-    end
-)
-forgottenFables:AddCallback(
-    ModCallbacks.MC_POST_PLAYER_INIT,
-    function(____, player)
-        loadData(nil, forgottenFables, player)
-    end
-)
 forgottenFables:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, newFloor)
 forgottenFables:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, costumes)
 forgottenFables:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, costumes)
 forgottenFables:AddCallback(ModCallbacks.MC_USE_ITEM, costumes)
 forgottenFables:AddCallback(ModCallbacks.MC_USE_CARD, costumes)
 forgottenFables:AddCallback(ModCallbacks.MC_USE_PILL, costumes)
-forgottenFables:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, costumes, EntityType.ENTITY_PLAYER)
 forgottenFables:AddCallback(ModCallbacks.MC_USE_ITEM, suicide, constants.ModItemTypes.SUICIDE)
+forgottenFables:AddCallback(ModCallbacks.MC_USE_ITEM, revive, constants.ModItemTypes.REVIVE)
 forgottenFables:AddCallback(ModCallbacks.MC_POST_EFFECT_RENDER, bodyAnim, constants.ModEffectVariants.TSARAHBODY)
 forgottenFables:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, sarahLostKill, EntityType.ENTITY_PLAYER)
 forgottenFables:AddCallback(ModCallbacks.MC_POST_PICKUP_UPDATE, razor, 10)

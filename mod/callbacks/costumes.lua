@@ -2,8 +2,8 @@
 local ____exports = {}
 local constants = require("constants")
 local ____playerdata = require("playerdata")
+local GetPlayerId = ____playerdata.GetPlayerId
 local modPlayerData = ____playerdata.modPlayerData
-local PlayerSeed = ____playerdata.PlayerSeed
 function ____exports.costumes(self)
     do
         local i = 0
@@ -16,7 +16,7 @@ function ____exports.costumes(self)
                     player:GetData().costumeEquipped = true
                 end
                 if player:GetPlayerType() == constants.ModPlayerTypes.TAINTED_SARAH then
-                    if modPlayerData[PlayerSeed(nil, player)].lost then
+                    if modPlayerData[GetPlayerId(nil, player) + 1].lost then
                         player:TryRemoveNullCostume(constants.ModCostumes.LOST_SARAH_HAIR)
                         player:AddNullCostume(constants.ModCostumes.LOST_SARAH_HAIR)
                     else

@@ -17,7 +17,7 @@ export enum ModEffectVariants {
  */
 export enum ModPlayerTypes {
   SARAH = Isaac.GetPlayerTypeByName("Sarah", false),
-  TAINTED_SARAH = Isaac.GetPlayerTypeByName("Tainted Sarah", true),
+  TAINTED_SARAH = Isaac.GetPlayerTypeByName("Sarah", true),
 }
 /**
  * Enum for new modded costumes (hair and item costumes)
