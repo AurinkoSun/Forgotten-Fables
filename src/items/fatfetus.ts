@@ -429,7 +429,6 @@ export function glitterdrops(
   amount: number,
   flags: DamageFlag,
   source: EntityRef,
-  _frames: number,
 ): void {
   if (amount >= entity.HitPoints && flags !== DamageFlag.DAMAGE_NOKILL) {
     if (

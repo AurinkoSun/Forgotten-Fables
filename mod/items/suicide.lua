@@ -11,8 +11,8 @@ function ____exports.suicide(self, modPlayerData, player)
         player:AddCacheFlags(CacheFlag.CACHE_ALL)
         player:EvaluateItems()
         local body = Isaac.Spawn(
-            EntityType.ENTITY_EFFECT,
-            200,
+            constants.ModEntityTypes.TSARAHBODY,
+            constants.ModEntityVariants.TSARAHBODY,
             0,
             player.Position,
             Vector(0, 0),
@@ -46,11 +46,11 @@ function ____exports.revive(self, modPlayerData, player)
         end
     end
 end
-function ____exports.bodyAnim(self, effect)
-    if effect:GetSprite():IsFinished("Revive") then
-        local player = effect:GetData().player
+function ____exports.bodyAnim(self, entity)
+    if entity:GetSprite():IsFinished("Revive") then
+        local player = entity:GetData().player
         player.Visible = true
-        effect:Remove()
+        entity:Remove()
     end
 end
 return ____exports

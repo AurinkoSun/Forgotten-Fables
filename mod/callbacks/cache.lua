@@ -6,6 +6,11 @@ local ModPlayerTypes = ____constants.ModPlayerTypes
 local ____playerdata = require("playerdata")
 local GetPlayerId = ____playerdata.GetPlayerId
 function ____exports.evalCache(self, modPlayerData, player, flags)
+    if flags == CacheFlag.CACHE_SHOTSPEED then
+        if player:GetPlayerType() == ModPlayerTypes.ALABASTER then
+            player.ShotSpeed = player.ShotSpeed - 0.15
+        end
+    end
     if flags == CacheFlag.CACHE_FIREDELAY then
         if player:HasCollectible(ModItemTypes.FAT_FETUS) then
             if (not player:HasCollectible(CollectibleType.COLLECTIBLE_LUDOVICO_TECHNIQUE)) and (not player:HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE)) then

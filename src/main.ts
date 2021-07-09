@@ -2,9 +2,9 @@ import * as json from "json";
 import { evalCache } from "./callbacks/cache";
 import { costumes } from "./callbacks/costumes";
 import { newFloor } from "./callbacks/floorinit";
-import { razor } from "./callbacks/razors";
-import { sarahLostKill } from "./callbacks/sarahlostdamage";
+import { pocketItems } from "./callbacks/pocketItems";
 import * as constants from "./constants";
+import { alabasterHearts, bloodDrive } from "./items/blooddrive";
 import {
   fatFetusTears,
   gigaBombReplace,
@@ -13,7 +13,10 @@ import {
   glitterdrops,
   rocks,
 } from "./items/fatfetus";
-import { bodyAnim, revive, suicide } from "./items/suicide";
+// import { razor } from "./callbacks/razors";
+// import { sarahLostKill } from "./callbacks/sarahlostdamage";
+import { ghostShot } from "./items/ghostshot";
+// import { bodyAnim, revive, suicide } from "./items/suicide";
 import { GetPlayerId, PlayerData } from "./playerdata";
 
 const modPlayerData: { data: PlayerData[] } = {
@@ -49,11 +52,9 @@ forgottenFables.AddCallback(
 );
 forgottenFables.AddCallback(ModCallbacks.MC_POST_NEW_ROOM, () => {
   costumes(modPlayerData);
+  pocketItems(modPlayerData);
 });
 forgottenFables.AddCallback(ModCallbacks.MC_USE_ITEM, () => {
-  costumes(modPlayerData);
-});
-forgottenFables.AddCallback(ModCallbacks.MC_USE_CARD, () => {
   costumes(modPlayerData);
 });
 forgottenFables.AddCallback(ModCallbacks.MC_USE_PILL, () => {
@@ -61,39 +62,57 @@ forgottenFables.AddCallback(ModCallbacks.MC_USE_PILL, () => {
 });
 forgottenFables.AddCallback(
   ModCallbacks.MC_USE_ITEM,
-  (_item: number, _rng: RNG, player: EntityPlayer) => {
-    suicide(modPlayerData, player);
+  (item: number, _rng: RNG, player: EntityPlayer) => {
+    switch (item) {
+      case constants.ModItemTypes.SUICIDE: {
+        // suicide(modPlayerData, player);
+        break;
+      }
+      case constants.ModItemTypes.REVIVE: {
+        // revive(modPlayerData, player);
+        break;
+      }
+      case constants.ModItemTypes.BLOODDRIVE: {
+        bloodDrive(player);
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+    costumes(modPlayerData);
   },
-  constants.ModItemTypes.SUICIDE,
 );
-forgottenFables.AddCallback(
-  ModCallbacks.MC_USE_ITEM,
-  (_item: number, _rng: RNG, player: EntityPlayer) => {
-    revive(modPlayerData, player);
-  },
-  constants.ModItemTypes.REVIVE,
-);
-forgottenFables.AddCallback(
-  ModCallbacks.MC_POST_EFFECT_RENDER,
+/* forgottenFables.AddCallback(
+  ModCallbacks.MC_POST_NPC_RENDER,
   bodyAnim,
-  constants.ModEffectVariants.TSARAHBODY,
-);
+  constants.ModEntityVariants.TSARAHBODY,
+); */
 forgottenFables.AddCallback(
   ModCallbacks.MC_ENTITY_TAKE_DMG,
-  (entity: Entity, amt: number, flags: DamageFlag) => {
-    sarahLostKill(modPlayerData, entity, amt, flags);
+  (entity: Entity, amt: number, flags: DamageFlag, src: EntityRef) => {
+    if (entity.Type === EntityType.ENTITY_PLAYER) {
+      // sarahLostKill(modPlayerData, entity, amt, flags);
+    }
+    glitterdrops(entity, amt, flags, src);
   },
-  EntityType.ENTITY_PLAYER,
 );
 forgottenFables.AddCallback(
   ModCallbacks.MC_POST_PICKUP_UPDATE,
   (pickup: EntityPickup) => {
-    razor(modPlayerData, pickup);
+    // razor(modPlayerData, pickup);
+    alabasterHearts(pickup);
   },
   10,
 );
 
-forgottenFables.AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, fatFetusTears);
+forgottenFables.AddCallback(
+  ModCallbacks.MC_POST_FIRE_TEAR,
+  (tear: EntityTear) => {
+    fatFetusTears(tear);
+    ghostShot(tear);
+  },
+);
 forgottenFables.AddCallback(ModCallbacks.MC_POST_BOMB_UPDATE, gigaUpdate, 21);
 forgottenFables.AddCallback(
   ModCallbacks.MC_POST_BOMB_INIT,
