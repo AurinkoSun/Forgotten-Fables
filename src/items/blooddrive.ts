@@ -3,7 +3,7 @@ import { PlayerData } from "../playerdata";
 
 export function bloodDrive(
   player: EntityPlayer,
-  modPlayerData: { data: PlayerData[] },
+  _modPlayerData: { data: PlayerData[] },
 ): void {
   if (player.GetPlayerType() === ModPlayerTypes.ALABASTER) {
     print("hi");
