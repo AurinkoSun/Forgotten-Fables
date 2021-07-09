@@ -382,10 +382,8 @@ export function gigaInit(bomb: EntityBomb): void {
       ) {
         bomb.GetSprite().Play("glitterpulse", true);
       } else if (
-        player.HasCollectible(
-          CollectibleType.COLLECTIBLE_HOT_BOMBS ||
-            player.HasCollectible(CollectibleType.COLLECTIBLE_FIRE_MIND),
-        )
+        player.HasCollectible(CollectibleType.COLLECTIBLE_HOT_BOMBS) ||
+        player.HasCollectible(CollectibleType.COLLECTIBLE_FIRE_MIND)
       ) {
         bomb.CollisionDamage = 32;
         bomb.AddTearFlags(TearFlags.TEAR_BURN);

@@ -7,46 +7,54 @@ local ____playerdata = require("playerdata")
 local GetPlayerId = ____playerdata.GetPlayerId
 local modPlayerData = ____playerdata.modPlayerData
 local PlayerData = ____playerdata.PlayerData
-local PlayerSeed = ____playerdata.PlayerSeed
 function ____exports.loadData(self, mod, player)
-    if player == nil then
-        player = nil
+    if player:GetPlayerType() == constants.ModPlayerTypes.TAINTED_SARAH then
+        player:SetPocketActiveItem(constants.ModItemTypes.SUICIDE)
     end
-    local olddata = json.decode(
-        mod:LoadData()
-    )
-    local seeds = {0, 0, 0, 0, 0, 0, 0, 0}
-    do
-        local i = 0
-        while i < constants.game:GetNumPlayers() do
-            local seed = PlayerSeed(
-                nil,
-                constants.game:GetPlayer(i)
-            )
-            if seed ~= -1 then
-                modPlayerData[seed].player = olddata[seed].player
-                modPlayerData[seed].lost = olddata[seed].lost
-                modPlayerData[seed].razors = olddata[seed].razors
-                modPlayerData[seed]:RegenerateID()
+    if mod:HasData() then
+        local olddata = json.decode(
+            mod:LoadData()
+        )
+        do
+            local i = 0
+            while i < constants.game:GetNumPlayers() do
+                local id = GetPlayerId(
+                    nil,
+                    constants.game:GetPlayer(i)
+                )
+                if id >= 0 then
+                    modPlayerData[id] = __TS__New(
+                        PlayerData,
+                        constants.game:GetPlayer(id),
+                        false,
+                        0
+                    )
+                    modPlayerData[id].lost = false
+                    modPlayerData[id].razors = olddata[id].razors
+                    modPlayerData[id]:RegenerateID()
+                end
+                i = i + 1
             end
-            i = i + 1
         end
-    end
-    if (player ~= nil) and (modPlayerData[GetPlayerId(nil, player)].player == nil) then
-        modPlayerData[GetPlayerId(nil, player)] = __TS__New(PlayerData, player)
+        if (player ~= nil) and (modPlayerData[GetPlayerId(nil, player)].player == nil) then
+            modPlayerData[GetPlayerId(nil, player)] = __TS__New(PlayerData, player)
+        end
+    else
+        do
+            local i = 0
+            while i < constants.game:GetNumPlayers() do
+                modPlayerData[i] = __TS__New(
+                    PlayerData,
+                    constants.game:GetPlayer(i),
+                    false,
+                    0
+                )
+                i = i + 1
+            end
+        end
     end
 end
 function ____exports.saveData(self, mod)
-    do
-        local i = 0
-        while i < constants.game:GetNumPlayers() do
-            local ____ = modPlayerData[PlayerSeed(
-                nil,
-                constants.game:GetPlayer(i)
-            )]
-            i = i + 1
-        end
-    end
     mod:SaveData(
         json.encode(modPlayerData)
     )

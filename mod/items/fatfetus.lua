@@ -334,9 +334,7 @@ function ____exports.gigaInit(self, bomb)
                 bomb:GetSprite():Play("sadpulse", true)
             elseif player:HasCollectible(CollectibleType.COLLECTIBLE_GLITTER_BOMBS) then
                 bomb:GetSprite():Play("glitterpulse", true)
-            elseif player:HasCollectible(
-                CollectibleType.COLLECTIBLE_HOT_BOMBS or player:HasCollectible(CollectibleType.COLLECTIBLE_FIRE_MIND)
-            ) then
+            elseif player:HasCollectible(CollectibleType.COLLECTIBLE_HOT_BOMBS) or player:HasCollectible(CollectibleType.COLLECTIBLE_FIRE_MIND) then
                 bomb.CollisionDamage = 32
                 bomb:AddTearFlags(TearFlags.TEAR_BURN)
                 bomb:GetSprite():Play("flamepulse", true)
