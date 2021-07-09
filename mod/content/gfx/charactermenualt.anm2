@@ -1,5 +1,5 @@
 <AnimatedActor>
-	<Info CreatedBy="Unknown" CreatedOn="7/9/2021 7:15:37 PM" Version="69" Fps="30"/>
+	<Info CreatedBy="Unknown" CreatedOn="7/10/2021 12:28:02 AM" Version="71" Fps="30"/>
 	<Content>
 		<Spritesheets>
 			<Spritesheet Path="CharacterMenuAlt.png" Id="0"/>
@@ -1287,7 +1287,7 @@
 			<NullAnimations/>
 			<Triggers/>
 		</Animation>
-		<Animation Name="Tainted Alabaster" FrameNum="1" Loop="false">
+		<Animation Name="Alabaster" FrameNum="1" Loop="false">
 			<RootAnimation>
 				<Frame XPosition="0" YPosition="0" XScale="100" YScale="100" Delay="1" Visible="true" RedTint="255" GreenTint="255" BlueTint="255" AlphaTint="255" RedOffset="0" GreenOffset="0" BlueOffset="0" Rotation="0" Interpolated="false"/>
 			</RootAnimation>
@@ -1302,7 +1302,7 @@
 					<Frame XPosition="291" YPosition="140" XPivot="0" YPivot="0" XCrop="32" YCrop="272" Width="32" Height="16" XScale="100" YScale="100" Delay="1" Visible="true" RedTint="255" GreenTint="255" BlueTint="255" AlphaTint="255" RedOffset="0" GreenOffset="0" BlueOffset="0" Rotation="0" Interpolated="false"/>
 				</LayerAnimation>
 				<LayerAnimation LayerId="3" Visible="true">
-					<Frame XPosition="219" YPosition="148" XPivot="18" YPivot="15" XCrop="441" YCrop="863" Width="80" Height="32" XScale="100" YScale="100" Delay="1" Visible="true" RedTint="255" GreenTint="255" BlueTint="255" AlphaTint="255" RedOffset="0" GreenOffset="0" BlueOffset="0" Rotation="0" Interpolated="false"/>
+					<Frame XPosition="219" YPosition="148" XPivot="28" YPivot="15" XCrop="444" YCrop="896" Width="97" Height="24" XScale="100" YScale="100" Delay="1" Visible="true" RedTint="255" GreenTint="255" BlueTint="255" AlphaTint="255" RedOffset="0" GreenOffset="0" BlueOffset="0" Rotation="0" Interpolated="false"/>
 				</LayerAnimation>
 				<LayerAnimation LayerId="4" Visible="true">
 					<Frame XPosition="167" YPosition="172" XPivot="12" YPivot="16" XCrop="272" YCrop="991" Width="25" Height="35" XScale="100" YScale="100" Delay="1" Visible="true" RedTint="255" GreenTint="255" BlueTint="255" AlphaTint="255" RedOffset="0" GreenOffset="0" BlueOffset="0" Rotation="0" Interpolated="false"/>
