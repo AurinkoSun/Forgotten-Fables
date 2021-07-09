@@ -14,5 +14,17 @@
           skinColor="-1"
           pocketActive="105"
           bSkinParent="Sarah"/>
+      <player name="Alabaster" skin="character_Alabaster.png" hp="0" black="4" coins="1" bombs="0"
+          nameimage="playername_Alabaster.png"
+          portrait="playerportrait_Alabaster.png"
+          bigportrait="playerportrait_Alabaster.png"
+          skinColor="-1"
+          pocketActive="105"/>
+      <player name="Alabaster" skin="character_Alabaster.png" hp="0" black="4" coins="1" bombs="0"
+          nameimage="playername_Alabaster.png"
+          portrait="playerportrait_Alabaster.png"
+          bigportrait="playerportrait_Alabaster.png"
+          skinColor="-1"
+          bSkinParent="Alabaster"/>
 </players>
 

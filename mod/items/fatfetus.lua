@@ -371,7 +371,7 @@ function ____exports.rocks(self, projectile)
         end
     end
 end
-function ____exports.glitterdrops(self, entity, amount, flags, source, _frames)
+function ____exports.glitterdrops(self, entity, amount, flags, source)
     if (amount >= entity.HitPoints) and (flags ~= DamageFlag.DAMAGE_NOKILL) then
         if (((((source.Entity ~= nil) and (source.Entity:ToBomb() ~= nil)) and (source.Entity.Type == EntityType.ENTITY_BOMBDROP)) and (source.Entity.Variant == BombVariant.BOMB_GIGA)) and (source.Entity.SpawnerEntity ~= nil)) and (source.Entity.SpawnerEntity.SpawnerEntity ~= nil) then
             local player = source.Entity.SpawnerEntity.SpawnerEntity:ToPlayer()

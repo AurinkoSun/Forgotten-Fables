@@ -9,21 +9,54 @@ function ____exports.costumes(self, modPlayerData)
         while i < constants.game:GetNumPlayers() do
             local player = Isaac.GetPlayer(i)
             if player ~= nil then
-                if player:GetPlayerType() == constants.ModPlayerTypes.SARAH then
-                    player:TryRemoveNullCostume(constants.ModCostumes.SARAH_HAIR)
-                    player:AddNullCostume(constants.ModCostumes.SARAH_HAIR)
-                    player:GetData().costumeEquipped = true
+                local ____switch5 = player:GetPlayerType()
+                if ____switch5 == constants.ModPlayerTypes.SARAH then
+                    goto ____switch5_case_0
+                elseif ____switch5 == constants.ModPlayerTypes.TAINTED_SARAH then
+                    goto ____switch5_case_1
+                elseif ____switch5 == constants.ModPlayerTypes.ALABASTER then
+                    goto ____switch5_case_2
                 end
-                if player:GetPlayerType() == constants.ModPlayerTypes.TAINTED_SARAH then
-                    if modPlayerData.data[GetPlayerId(nil, player) + 1].lost then
-                        player:TryRemoveNullCostume(constants.ModCostumes.LOST_SARAH_HAIR)
-                        player:AddNullCostume(constants.ModCostumes.LOST_SARAH_HAIR)
-                    else
-                        player:TryRemoveNullCostume(constants.ModCostumes.LOST_SARAH_HAIR)
-                        player:AddNullCostume(constants.ModCostumes.LOST_SARAH_HAIR)
+                goto ____switch5_case_default
+                ::____switch5_case_0::
+                do
+                    do
+                        player:TryRemoveNullCostume(constants.ModCostumes.SARAH_HAIR)
+                        player:AddNullCostume(constants.ModCostumes.SARAH_HAIR)
+                        player:GetData().costumeEquipped = true
+                        goto ____switch5_end
                     end
-                    player:GetData().costumeEquipped = true
                 end
+                ::____switch5_case_1::
+                do
+                    do
+                        if modPlayerData.data[GetPlayerId(nil, player) + 1].lost then
+                            player:TryRemoveNullCostume(constants.ModCostumes.LOST_SARAH_HAIR)
+                            player:AddNullCostume(constants.ModCostumes.LOST_SARAH_HAIR)
+                        else
+                            player:TryRemoveNullCostume(constants.ModCostumes.LOST_SARAH_HAIR)
+                            player:AddNullCostume(constants.ModCostumes.LOST_SARAH_HAIR)
+                        end
+                        player:GetData().costumeEquipped = true
+                        goto ____switch5_end
+                    end
+                end
+                ::____switch5_case_2::
+                do
+                    do
+                        player:TryRemoveNullCostume(constants.ModCostumes.ALABASTER_HAIR)
+                        player:AddNullCostume(constants.ModCostumes.ALABASTER_HAIR)
+                        player:GetData().costumeEquipped = true
+                        goto ____switch5_end
+                    end
+                end
+                ::____switch5_case_default::
+                do
+                    do
+                        goto ____switch5_end
+                    end
+                end
+                ::____switch5_end::
             end
             i = i + 1
         end

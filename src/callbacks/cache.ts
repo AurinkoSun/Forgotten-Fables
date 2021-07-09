@@ -6,6 +6,11 @@ export function evalCache(
   player: EntityPlayer,
   flags: CacheFlag,
 ): void {
+  if (flags === CacheFlag.CACHE_SHOTSPEED) {
+    if (player.GetPlayerType() === ModPlayerTypes.ALABASTER) {
+      player.ShotSpeed -= 0.15;
+    }
+  }
   if (flags === CacheFlag.CACHE_FIREDELAY) {
     if (player.HasCollectible(ModItemTypes.FAT_FETUS)) {
       if (

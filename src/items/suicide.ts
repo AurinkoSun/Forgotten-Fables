@@ -15,8 +15,8 @@ export function suicide(
     player.AddCacheFlags(CacheFlag.CACHE_ALL);
     player.EvaluateItems();
     const body = Isaac.Spawn(
-      EntityType.ENTITY_EFFECT,
-      200,
+      constants.ModEntityTypes.TSARAHBODY,
+      constants.ModEntityVariants.TSARAHBODY,
       0,
       player.Position,
       Vector(0, 0),
@@ -62,10 +62,10 @@ export function revive(
     }
   }
 }
-export function bodyAnim(effect: EntityEffect): void {
-  if (effect.GetSprite().IsFinished("Revive")) {
-    const player = effect.GetData().player as EntityPlayer;
+export function bodyAnim(entity: EntityNPC): void {
+  if (entity.GetSprite().IsFinished("Revive")) {
+    const player = entity.GetData().player as EntityPlayer;
     player.Visible = true;
-    effect.Remove();
+    entity.Remove();
   }
 }
