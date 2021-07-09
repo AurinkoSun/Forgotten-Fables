@@ -1,7 +1,10 @@
 import * as constants from "../constants";
-import { GetPlayerId, modPlayerData } from "../playerdata";
+import { GetPlayerId, PlayerData } from "../playerdata";
 
-export function razor(pickup: EntityPickup): void {
+export function razor(
+  modPlayerData: { data: PlayerData[] },
+  pickup: EntityPickup,
+): void {
   if (pickup.SubType === 13) {
     for (let i = 0; i < constants.game.GetNumPlayers(); i++) {
       const player = constants.game.GetPlayer(i);
@@ -11,7 +14,7 @@ export function razor(pickup: EntityPickup): void {
       ) {
         if (
           player.Position.Distance(pickup.Position) < 15 &&
-          modPlayerData[GetPlayerId(player)].razors < 5
+          modPlayerData.data[GetPlayerId(player)].razors < 5
         ) {
           player.TakeDamage(
             1,
@@ -20,7 +23,7 @@ export function razor(pickup: EntityPickup): void {
             0,
           );
           pickup.Remove();
-          modPlayerData[GetPlayerId(player)].razors += 1;
+          modPlayerData.data[GetPlayerId(player)].razors += 1;
           player.AddCacheFlags(CacheFlag.CACHE_DAMAGE);
           player.EvaluateItems();
         }

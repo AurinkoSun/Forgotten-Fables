@@ -3,15 +3,14 @@ local ____exports = {}
 local constants = require("constants")
 local ____playerdata = require("playerdata")
 local GetPlayerId = ____playerdata.GetPlayerId
-local modPlayerData = ____playerdata.modPlayerData
-function ____exports.razor(self, pickup)
+function ____exports.razor(self, modPlayerData, pickup)
     if pickup.SubType == 13 then
         do
             local i = 0
             while i < constants.game:GetNumPlayers() do
                 local player = constants.game:GetPlayer(i)
                 if (player ~= nil) and (player:GetPlayerType() == constants.ModPlayerTypes.TAINTED_SARAH) then
-                    if (player.Position:Distance(pickup.Position) < 15) and (modPlayerData[GetPlayerId(nil, player) + 1].razors < 5) then
+                    if (player.Position:Distance(pickup.Position) < 15) and (modPlayerData.data[GetPlayerId(nil, player) + 1].razors < 5) then
                         player:TakeDamage(
                             1,
                             DamageFlag.DAMAGE_RED_HEARTS,
@@ -19,7 +18,7 @@ function ____exports.razor(self, pickup)
                             0
                         )
                         pickup:Remove()
-                        local ____obj, ____index = modPlayerData[GetPlayerId(nil, player) + 1], "razors"
+                        local ____obj, ____index = modPlayerData.data[GetPlayerId(nil, player) + 1], "razors"
                         ____obj[____index] = ____obj[____index] + 1
                         player:AddCacheFlags(CacheFlag.CACHE_DAMAGE)
                         player:EvaluateItems()

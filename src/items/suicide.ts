@@ -1,18 +1,17 @@
 import * as constants from "../constants";
-import { GetPlayerId, modPlayerData } from "../playerdata";
+import { GetPlayerId, PlayerData } from "../playerdata";
 
 export function suicide(
-  _item: CollectibleType,
-  _rng: RNG,
+  modPlayerData: { data: PlayerData[] },
   player: EntityPlayer,
 ): boolean {
   if (
     player.GetPlayerType() === constants.ModPlayerTypes.TAINTED_SARAH &&
-    !modPlayerData[GetPlayerId(player)].lost
+    !modPlayerData.data[GetPlayerId(player)].lost
   ) {
     print("tsarah killed herself");
     player.AddBrokenHearts(1);
-    modPlayerData[GetPlayerId(player)].lost = true;
+    modPlayerData.data[GetPlayerId(player)].lost = true;
     player.AddCacheFlags(CacheFlag.CACHE_ALL);
     player.EvaluateItems();
     const body = Isaac.Spawn(
@@ -34,13 +33,12 @@ export function suicide(
   return false;
 }
 export function revive(
-  _item: CollectibleType,
-  _rng: RNG,
+  modPlayerData: { data: PlayerData[] },
   player: EntityPlayer,
 ): void {
   if (
     player.GetPlayerType() === constants.ModPlayerTypes.TAINTED_SARAH &&
-    modPlayerData[GetPlayerId(player)].lost
+    modPlayerData.data[GetPlayerId(player)].lost
   ) {
     let body = false;
     const entities = Isaac.GetRoomEntities();
@@ -58,7 +56,7 @@ export function revive(
       player.SetPocketActiveItem(
         constants.ModItemTypes.SUICIDE as unknown as CollectibleType,
       );
-      modPlayerData[GetPlayerId(player)].lost = false;
+      modPlayerData.data[GetPlayerId(player)].lost = false;
       player.AddCacheFlags(CacheFlag.CACHE_ALL);
       player.EvaluateItems();
     }

@@ -3,12 +3,11 @@ local ____exports = {}
 local constants = require("constants")
 local ____playerdata = require("playerdata")
 local GetPlayerId = ____playerdata.GetPlayerId
-local modPlayerData = ____playerdata.modPlayerData
-function ____exports.suicide(self, _item, _rng, player)
-    if (player:GetPlayerType() == constants.ModPlayerTypes.TAINTED_SARAH) and (not modPlayerData[GetPlayerId(nil, player) + 1].lost) then
+function ____exports.suicide(self, modPlayerData, player)
+    if (player:GetPlayerType() == constants.ModPlayerTypes.TAINTED_SARAH) and (not modPlayerData.data[GetPlayerId(nil, player) + 1].lost) then
         print("tsarah killed herself")
         player:AddBrokenHearts(1)
-        modPlayerData[GetPlayerId(nil, player) + 1].lost = true
+        modPlayerData.data[GetPlayerId(nil, player) + 1].lost = true
         player:AddCacheFlags(CacheFlag.CACHE_ALL)
         player:EvaluateItems()
         local body = Isaac.Spawn(
@@ -26,8 +25,8 @@ function ____exports.suicide(self, _item, _rng, player)
     end
     return false
 end
-function ____exports.revive(self, _item, _rng, player)
-    if (player:GetPlayerType() == constants.ModPlayerTypes.TAINTED_SARAH) and modPlayerData[GetPlayerId(nil, player) + 1].lost then
+function ____exports.revive(self, modPlayerData, player)
+    if (player:GetPlayerType() == constants.ModPlayerTypes.TAINTED_SARAH) and modPlayerData.data[GetPlayerId(nil, player) + 1].lost then
         local body = false
         local entities = Isaac.GetRoomEntities()
         for ____, entity in ipairs(entities) do
@@ -41,7 +40,7 @@ function ____exports.revive(self, _item, _rng, player)
         end
         if body then
             player:SetPocketActiveItem(constants.ModItemTypes.SUICIDE)
-            modPlayerData[GetPlayerId(nil, player) + 1].lost = false
+            modPlayerData.data[GetPlayerId(nil, player) + 1].lost = false
             player:AddCacheFlags(CacheFlag.CACHE_ALL)
             player:EvaluateItems()
         end

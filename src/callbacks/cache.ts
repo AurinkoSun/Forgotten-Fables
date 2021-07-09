@@ -1,12 +1,11 @@
-import { game, ModItemTypes, ModPlayerTypes } from "../constants";
-import { GetPlayerId, modPlayerData, PlayerData } from "../playerdata";
+import { ModItemTypes, ModPlayerTypes } from "../constants";
+import { GetPlayerId, PlayerData } from "../playerdata";
 
-export function evalCache(player: EntityPlayer, flags: CacheFlag): void {
-  if (modPlayerData[0] === null) {
-    for (let i = 0; i < 8; i++) {
-      modPlayerData[i] = new PlayerData(game.GetPlayer(i), false, 0);
-    }
-  }
+export function evalCache(
+  modPlayerData: { data: PlayerData[] },
+  player: EntityPlayer,
+  flags: CacheFlag,
+): void {
   if (flags === CacheFlag.CACHE_FIREDELAY) {
     if (player.HasCollectible(ModItemTypes.FAT_FETUS)) {
       if (
@@ -19,7 +18,7 @@ export function evalCache(player: EntityPlayer, flags: CacheFlag): void {
       }
     }
     if (player.GetPlayerType() === ModPlayerTypes.TAINTED_SARAH) {
-      if (modPlayerData[GetPlayerId(player)].lost) {
+      if (modPlayerData.data[GetPlayerId(player)].lost) {
         player.MaxFireDelay -= 3; // tears are complicated...
       } else {
         player.MaxFireDelay -= 1; // ...sometimes
@@ -28,7 +27,7 @@ export function evalCache(player: EntityPlayer, flags: CacheFlag): void {
   }
   if (flags === CacheFlag.CACHE_DAMAGE) {
     if (player.GetPlayerType() === ModPlayerTypes.TAINTED_SARAH) {
-      player.Damage += 0.5 * modPlayerData[GetPlayerId(player)].razors;
+      player.Damage += 0.5 * modPlayerData.data[GetPlayerId(player)].razors;
     }
     if (
       player.HasCollectible(ModItemTypes.FAT_FETUS) &&
@@ -43,14 +42,14 @@ export function evalCache(player: EntityPlayer, flags: CacheFlag): void {
   if (flags === CacheFlag.CACHE_LUCK) {
     if (
       player.GetPlayerType() === ModPlayerTypes.TAINTED_SARAH &&
-      modPlayerData[GetPlayerId(player)].lost
+      modPlayerData.data[GetPlayerId(player)].lost
     ) {
       player.Luck -= 2;
     }
   }
   if (flags === CacheFlag.CACHE_SPEED) {
     if (player.GetPlayerType() === ModPlayerTypes.TAINTED_SARAH) {
-      if (modPlayerData[GetPlayerId(player)].lost) {
+      if (modPlayerData.data[GetPlayerId(player)].lost) {
         player.MoveSpeed -= 0.1;
       } else {
         player.MoveSpeed += 0.2;
@@ -60,7 +59,7 @@ export function evalCache(player: EntityPlayer, flags: CacheFlag): void {
   if (flags === CacheFlag.CACHE_FLYING) {
     if (
       player.GetPlayerType() === ModPlayerTypes.TAINTED_SARAH &&
-      modPlayerData[GetPlayerId(player)].lost
+      modPlayerData.data[GetPlayerId(player)].lost
     ) {
       player.CanFly = true;
     }

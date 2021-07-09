@@ -1,3 +1,4 @@
+import * as json from "json";
 import { evalCache } from "./callbacks/cache";
 import { costumes } from "./callbacks/costumes";
 import { newFloor } from "./callbacks/floorinit";
@@ -13,23 +14,63 @@ import {
   rocks,
 } from "./items/fatfetus";
 import { bodyAnim, revive, suicide } from "./items/suicide";
+import { GetPlayerId, PlayerData } from "./playerdata";
 
+const modPlayerData: { data: PlayerData[] } = {
+  data: [
+    new PlayerData(null, false, 0),
+    new PlayerData(null, false, 0),
+    new PlayerData(null, false, 0),
+    new PlayerData(null, false, 0),
+    new PlayerData(null, false, 0),
+    new PlayerData(null, false, 0),
+    new PlayerData(null, false, 0),
+    new PlayerData(null, false, 0),
+  ],
+};
 const forgottenFables = RegisterMod("Forgotten Fables", 1);
-forgottenFables.AddCallback(ModCallbacks.MC_EVALUATE_CACHE, evalCache);
+forgottenFables.AddCallback(ModCallbacks.MC_PRE_GAME_EXIT, () => {
+  forgottenFables.SaveData(json.encode(modPlayerData));
+});
+forgottenFables.AddCallback(
+  ModCallbacks.MC_EVALUATE_CACHE,
+  (player: EntityPlayer, flag: CacheFlag) => {
+    evalCache(modPlayerData, player, flag);
+  },
+);
 forgottenFables.AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, newFloor);
-forgottenFables.AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, costumes);
-forgottenFables.AddCallback(ModCallbacks.MC_POST_NEW_ROOM, costumes);
-forgottenFables.AddCallback(ModCallbacks.MC_USE_ITEM, costumes);
-forgottenFables.AddCallback(ModCallbacks.MC_USE_CARD, costumes);
-forgottenFables.AddCallback(ModCallbacks.MC_USE_PILL, costumes);
+forgottenFables.AddCallback(
+  ModCallbacks.MC_POST_PLAYER_INIT,
+  (player: EntityPlayer) => {
+    costumes(modPlayerData);
+    modPlayerData.data[GetPlayerId(player)].player = player;
+    modPlayerData.data[GetPlayerId(player)].RegenerateID();
+  },
+);
+forgottenFables.AddCallback(ModCallbacks.MC_POST_NEW_ROOM, () => {
+  costumes(modPlayerData);
+});
+forgottenFables.AddCallback(ModCallbacks.MC_USE_ITEM, () => {
+  costumes(modPlayerData);
+});
+forgottenFables.AddCallback(ModCallbacks.MC_USE_CARD, () => {
+  costumes(modPlayerData);
+});
+forgottenFables.AddCallback(ModCallbacks.MC_USE_PILL, () => {
+  costumes(modPlayerData);
+});
 forgottenFables.AddCallback(
   ModCallbacks.MC_USE_ITEM,
-  suicide,
+  (_item: number, _rng: RNG, player: EntityPlayer) => {
+    suicide(modPlayerData, player);
+  },
   constants.ModItemTypes.SUICIDE,
 );
 forgottenFables.AddCallback(
   ModCallbacks.MC_USE_ITEM,
-  revive,
+  (_item: number, _rng: RNG, player: EntityPlayer) => {
+    revive(modPlayerData, player);
+  },
   constants.ModItemTypes.REVIVE,
 );
 forgottenFables.AddCallback(
@@ -39,10 +80,18 @@ forgottenFables.AddCallback(
 );
 forgottenFables.AddCallback(
   ModCallbacks.MC_ENTITY_TAKE_DMG,
-  sarahLostKill,
+  (entity: Entity, amt: number, flags: DamageFlag) => {
+    sarahLostKill(modPlayerData, entity, amt, flags);
+  },
   EntityType.ENTITY_PLAYER,
 );
-forgottenFables.AddCallback(ModCallbacks.MC_POST_PICKUP_UPDATE, razor, 10);
+forgottenFables.AddCallback(
+  ModCallbacks.MC_POST_PICKUP_UPDATE,
+  (pickup: EntityPickup) => {
+    razor(modPlayerData, pickup);
+  },
+  10,
+);
 
 forgottenFables.AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, fatFetusTears);
 forgottenFables.AddCallback(ModCallbacks.MC_POST_BOMB_UPDATE, gigaUpdate, 21);

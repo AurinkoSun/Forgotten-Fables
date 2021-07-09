@@ -2,61 +2,19 @@
 require("lualib_bundle");
 local ____exports = {}
 local json = require("json")
-local constants = require("constants")
 local ____playerdata = require("playerdata")
 local GetPlayerId = ____playerdata.GetPlayerId
-local modPlayerData = ____playerdata.modPlayerData
 local PlayerData = ____playerdata.PlayerData
-function ____exports.loadData(self, mod, player)
-    if player:GetPlayerType() == constants.ModPlayerTypes.TAINTED_SARAH then
-        player:SetPocketActiveItem(constants.ModItemTypes.SUICIDE)
+function ____exports.loadData(self, mod, modPlayerData, player)
+    if player == nil then
+        player = nil
     end
-    if mod:HasData() then
-        local olddata = json.decode(
-            mod:LoadData()
-        )
-        do
-            local i = 0
-            while i < constants.game:GetNumPlayers() do
-                local id = GetPlayerId(
-                    nil,
-                    constants.game:GetPlayer(i)
-                )
-                if id >= 0 then
-                    modPlayerData[id] = __TS__New(
-                        PlayerData,
-                        constants.game:GetPlayer(id),
-                        false,
-                        0
-                    )
-                    modPlayerData[id].lost = false
-                    modPlayerData[id].razors = olddata[id].razors
-                    modPlayerData[id]:RegenerateID()
-                end
-                i = i + 1
-            end
-        end
-        if (player ~= nil) and (modPlayerData[GetPlayerId(nil, player)].player == nil) then
-            modPlayerData[GetPlayerId(nil, player)] = __TS__New(PlayerData, player)
-        end
-    else
-        do
-            local i = 0
-            while i < constants.game:GetNumPlayers() do
-                modPlayerData[i] = __TS__New(
-                    PlayerData,
-                    constants.game:GetPlayer(i),
-                    false,
-                    0
-                )
-                i = i + 1
-            end
-        end
-    end
-end
-function ____exports.saveData(self, mod)
-    mod:SaveData(
-        json.encode(modPlayerData)
+    local olddata = json.decode(
+        mod:LoadData()
     )
+    __TS__ObjectAssign(modPlayerData, olddata)
+    if (player ~= nil) and (modPlayerData.data[GetPlayerId(nil, player) + 1].player == nil) then
+        modPlayerData.data[GetPlayerId(nil, player) + 1] = __TS__New(PlayerData, player)
+    end
 end
 return ____exports

@@ -62,14 +62,3 @@ export function PlayerSeed(player: EntityPlayer | null, CollID = 1): number {
    */
   return player !== null ? player.GetCollectibleRNG(CollID).GetSeed() : -1;
 }
-// eslint-disable-next-line prefer-const
-export let modPlayerData: PlayerData[] = [
-  new PlayerData(constants.game.GetPlayer(0), false, 0),
-  new PlayerData(constants.game.GetPlayer(1), false, 0),
-  new PlayerData(constants.game.GetPlayer(2), false, 0),
-  new PlayerData(constants.game.GetPlayer(3), false, 0),
-  new PlayerData(constants.game.GetPlayer(4), false, 0),
-  new PlayerData(constants.game.GetPlayer(5), false, 0),
-  new PlayerData(constants.game.GetPlayer(6), false, 0),
-  new PlayerData(constants.game.GetPlayer(7), false, 0),
-];
