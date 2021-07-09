@@ -1,4 +1,4 @@
-import * as constants from "../constants";
+/* import * as constants from "../constants";
 import { GetPlayerId, PlayerData } from "../playerdata";
 
 export function sarahLostKill(
@@ -20,3 +20,4 @@ export function sarahLostKill(
   }
   return true;
 }
+*/

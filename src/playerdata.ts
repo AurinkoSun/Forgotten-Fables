@@ -9,6 +9,7 @@ export class PlayerData {
   razors: number;
   player: EntityPlayer | null = null;
   id: number;
+  bdcharge: number;
   /**
    * @param player
    * the player to attach to the PlayerData
@@ -16,12 +17,20 @@ export class PlayerData {
    * Whether or not the player is in their 'lost' form through the Suicide item. Default is 0.
    * @param razors
    * The number of razors the player has. Used to calculate T.Sarah's damage.
+   * @param bdcharge
+   * Alabaster's Blood Drive charge.
    * @returns a new PlayerData object
    */
-  constructor(player: EntityPlayer | null = null, lost = false, razors = 0) {
+  constructor(
+    player: EntityPlayer | null = null,
+    bdcharge = 0,
+    lost = false,
+    razors = 0,
+  ) {
     this.player = player;
     this.lost = lost;
     this.razors = razors;
+    this.bdcharge = bdcharge;
     this.id = player !== null ? GetPlayerId(player) : -1;
   }
 

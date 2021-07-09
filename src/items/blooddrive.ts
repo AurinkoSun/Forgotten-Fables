@@ -1,6 +1,10 @@
 import { ModPlayerTypes } from "../constants";
+import { PlayerData } from "../playerdata";
 
-export function bloodDrive(player: EntityPlayer): void {
+export function bloodDrive(
+  player: EntityPlayer,
+  modPlayerData: { data: PlayerData[] },
+): void {
   if (player.GetPlayerType() === ModPlayerTypes.ALABASTER) {
     print("hi");
   }

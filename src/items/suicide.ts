@@ -1,4 +1,4 @@
-import * as constants from "../constants";
+/* import * as constants from "../constants";
 import { GetPlayerId, PlayerData } from "../playerdata";
 
 export function suicide(
@@ -69,3 +69,4 @@ export function bodyAnim(entity: EntityNPC): void {
     entity.Remove();
   }
 }
+*/

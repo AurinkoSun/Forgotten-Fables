@@ -2,7 +2,7 @@
 local ____exports = {}
 local ____constants = require("constants")
 local ModPlayerTypes = ____constants.ModPlayerTypes
-function ____exports.bloodDrive(self, player)
+function ____exports.bloodDrive(self, player, modPlayerData)
     if player:GetPlayerType() == ModPlayerTypes.ALABASTER then
         print("hi")
     end

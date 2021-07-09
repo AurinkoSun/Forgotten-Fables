@@ -6,8 +6,6 @@ local ____cache = require("callbacks.cache")
 local evalCache = ____cache.evalCache
 local ____costumes = require("callbacks.costumes")
 local costumes = ____costumes.costumes
-local ____floorinit = require("callbacks.floorinit")
-local newFloor = ____floorinit.newFloor
 local ____pocketItems = require("callbacks.pocketItems")
 local pocketItems = ____pocketItems.pocketItems
 local constants = require("constants")
@@ -24,18 +22,17 @@ local rocks = ____fatfetus.rocks
 local ____ghostshot = require("items.ghostshot")
 local ghostShot = ____ghostshot.ghostShot
 local ____playerdata = require("playerdata")
-local GetPlayerId = ____playerdata.GetPlayerId
 local PlayerData = ____playerdata.PlayerData
 local modPlayerData = {
     data = {
-        __TS__New(PlayerData, nil, false, 0),
-        __TS__New(PlayerData, nil, false, 0),
-        __TS__New(PlayerData, nil, false, 0),
-        __TS__New(PlayerData, nil, false, 0),
-        __TS__New(PlayerData, nil, false, 0),
-        __TS__New(PlayerData, nil, false, 0),
-        __TS__New(PlayerData, nil, false, 0),
-        __TS__New(PlayerData, nil, false, 0)
+        __TS__New(PlayerData, nil, 0, false, 0),
+        __TS__New(PlayerData, nil, 0, false, 0),
+        __TS__New(PlayerData, nil, 0, false, 0),
+        __TS__New(PlayerData, nil, 0, false, 0),
+        __TS__New(PlayerData, nil, 0, false, 0),
+        __TS__New(PlayerData, nil, 0, false, 0),
+        __TS__New(PlayerData, nil, 0, false, 0),
+        __TS__New(PlayerData, nil, 0, false, 0)
     }
 }
 local forgottenFables = RegisterMod("Forgotten Fables", 1)
@@ -53,13 +50,10 @@ forgottenFables:AddCallback(
         evalCache(nil, modPlayerData, player, flag)
     end
 )
-forgottenFables:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, newFloor)
 forgottenFables:AddCallback(
     ModCallbacks.MC_POST_PLAYER_INIT,
-    function(____, player)
+    function()
         costumes(nil, modPlayerData)
-        modPlayerData.data[GetPlayerId(nil, player) + 1].player = player
-        modPlayerData.data[GetPlayerId(nil, player) + 1]:RegenerateID()
     end
 )
 forgottenFables:AddCallback(
@@ -85,30 +79,14 @@ forgottenFables:AddCallback(
     ModCallbacks.MC_USE_ITEM,
     function(____, item, _rng, player)
         local ____switch9 = item
-        if ____switch9 == constants.ModItemTypes.SUICIDE then
+        if ____switch9 == constants.ModItemTypes.BLOODDRIVE then
             goto ____switch9_case_0
-        elseif ____switch9 == constants.ModItemTypes.REVIVE then
-            goto ____switch9_case_1
-        elseif ____switch9 == constants.ModItemTypes.BLOODDRIVE then
-            goto ____switch9_case_2
         end
         goto ____switch9_case_default
         ::____switch9_case_0::
         do
             do
-                goto ____switch9_end
-            end
-        end
-        ::____switch9_case_1::
-        do
-            do
-                goto ____switch9_end
-            end
-        end
-        ::____switch9_case_2::
-        do
-            do
-                bloodDrive(nil, player)
+                bloodDrive(nil, player, modPlayerData)
                 goto ____switch9_end
             end
         end

@@ -19,9 +19,12 @@ end
 ____exports.PlayerData = __TS__Class()
 local PlayerData = ____exports.PlayerData
 PlayerData.name = "PlayerData"
-function PlayerData.prototype.____constructor(self, player, lost, razors)
+function PlayerData.prototype.____constructor(self, player, bdcharge, lost, razors)
     if player == nil then
         player = nil
+    end
+    if bdcharge == nil then
+        bdcharge = 0
     end
     if lost == nil then
         lost = false
@@ -33,6 +36,7 @@ function PlayerData.prototype.____constructor(self, player, lost, razors)
     self.player = player
     self.lost = lost
     self.razors = razors
+    self.bdcharge = bdcharge
     self.id = ((player ~= nil) and ____exports.GetPlayerId(nil, player)) or -1
 end
 function PlayerData.prototype.RegenerateID(self)

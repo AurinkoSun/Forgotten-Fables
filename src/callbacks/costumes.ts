@@ -1,12 +1,12 @@
 import * as constants from "../constants";
-import { GetPlayerId, PlayerData } from "../playerdata";
+import { PlayerData } from "../playerdata";
 
-export function costumes(modPlayerData: { data: PlayerData[] }): void {
+export function costumes(_modPlayerData: { data: PlayerData[] }): void {
   for (let i = 0; i < constants.game.GetNumPlayers(); i++) {
     const player = Isaac.GetPlayer(i);
     if (player !== null) {
       switch (player.GetPlayerType()) {
-        case constants.ModPlayerTypes.SARAH: {
+        /* case constants.ModPlayerTypes.SARAH: {
           player.TryRemoveNullCostume(constants.ModCostumes.SARAH_HAIR);
           player.AddNullCostume(constants.ModCostumes.SARAH_HAIR);
           player.GetData().costumeEquipped = true;
@@ -22,7 +22,7 @@ export function costumes(modPlayerData: { data: PlayerData[] }): void {
           }
           player.GetData().costumeEquipped = true;
           break;
-        }
+        } */
         case constants.ModPlayerTypes.ALABASTER: {
           player.TryRemoveNullCostume(constants.ModCostumes.ALABASTER_HAIR);
           player.AddNullCostume(constants.ModCostumes.ALABASTER_HAIR);

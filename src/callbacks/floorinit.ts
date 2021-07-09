@@ -1,4 +1,4 @@
-import * as constants from "../constants";
+/* import * as constants from "../constants";
 
 export function newFloor(): void {
   const stage = constants.game.GetLevel().GetAbsoluteStage();
@@ -14,3 +14,4 @@ export function newFloor(): void {
     }
   }
 }
+*/
