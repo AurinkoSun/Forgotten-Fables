@@ -43,6 +43,12 @@ export function evalCache(
     /* if (player.GetPlayerType() === ModPlayerTypes.TAINTED_SARAH) {
       player.Damage -= 1.5; // Tainted Sarah and her lost form have the same damage stat (basically none)
     } */
+    if (
+      player.HasCollectible(ModItemTypes.BBGHOST_SHOT) ||
+      player.HasCollectible(ModItemTypes.GHOST_SHOT)
+    ) {
+      player.Damage *= 0.8;
+    }
   }
   if (flags === CacheFlag.CACHE_LUCK) {
     /* if (
@@ -68,6 +74,9 @@ export function evalCache(
     ) {
       player.CanFly = true;
     } */
+    if (player.GetPlayerType() === ModPlayerTypes.ALABASTER) {
+      player.CanFly = true;
+    }
   }
   if (flags === CacheFlag.CACHE_RANGE) {
     /* if (player.GetPlayerType() === ModPlayerTypes.TAINTED_SARAH) {
