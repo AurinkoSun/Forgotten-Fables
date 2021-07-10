@@ -1,7 +1,6 @@
 import * as json from "json";
 import { evalCache } from "./callbacks/cache";
 import { costumes } from "./callbacks/costumes";
-// import { newFloor } from "./callbacks/floorinit";
 import { pocketItems } from "./callbacks/pocketItems";
 import * as constants from "./constants";
 import { alabasterHearts, bloodDrive } from "./items/blooddrive";
@@ -42,9 +41,7 @@ forgottenFables.AddCallback(
   },
 );
 // forgottenFables.AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, newFloor);
-forgottenFables.AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, () => {
-  costumes(modPlayerData);
-});
+
 forgottenFables.AddCallback(ModCallbacks.MC_POST_NEW_ROOM, () => {
   costumes(modPlayerData);
   pocketItems(modPlayerData);

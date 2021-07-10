@@ -7,9 +7,21 @@ export function pocketItems(_modPlayerData: { data: PlayerData[] }): void {
     if (player !== null) {
       switch (player.GetPlayerType()) {
         case ModPlayerTypes.ALABASTER: {
-          player.SetPocketActiveItem(
-            ModItemTypes.BLOODDRIVE as unknown as CollectibleType,
-          );
+          if (!player.HasCollectible(ModItemTypes.GHOST_SHOT)) {
+            player.AddCollectible(ModItemTypes.GHOST_SHOT);
+          }
+          if (
+            player.GetActiveItem(ActiveSlot.SLOT_POCKET) !==
+            ModItemTypes.BLOODDRIVE
+          ) {
+            print("blood drive added!");
+            player.AddCollectible(
+              ModItemTypes.BLOODDRIVE,
+              undefined,
+              undefined,
+              ActiveSlot.SLOT_POCKET,
+            );
+          }
           break;
         }
         /* case ModPlayerTypes.TAINTED_SARAH: {

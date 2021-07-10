@@ -20,7 +20,7 @@ function ghostReplace(tear: EntityTear, player: EntityPlayer): Entity {
     tear.Position,
     tear.Velocity.div(0 - player.TearHeight)
       .mul(23.75)
-      .div(2),
+      .div(1.5),
     player,
   );
   ghost.GetSprite().PlaybackSpeed *= 2;

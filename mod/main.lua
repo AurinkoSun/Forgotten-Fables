@@ -51,12 +51,6 @@ forgottenFables:AddCallback(
     end
 )
 forgottenFables:AddCallback(
-    ModCallbacks.MC_POST_PLAYER_INIT,
-    function()
-        costumes(nil, modPlayerData)
-    end
-)
-forgottenFables:AddCallback(
     ModCallbacks.MC_POST_NEW_ROOM,
     function()
         costumes(nil, modPlayerData)
@@ -78,25 +72,25 @@ forgottenFables:AddCallback(
 forgottenFables:AddCallback(
     ModCallbacks.MC_USE_ITEM,
     function(____, item, _rng, player)
-        local ____switch9 = item
-        if ____switch9 == constants.ModItemTypes.BLOODDRIVE then
-            goto ____switch9_case_0
+        local ____switch8 = item
+        if ____switch8 == constants.ModItemTypes.BLOODDRIVE then
+            goto ____switch8_case_0
         end
-        goto ____switch9_case_default
-        ::____switch9_case_0::
+        goto ____switch8_case_default
+        ::____switch8_case_0::
         do
             do
                 bloodDrive(nil, player, modPlayerData)
-                goto ____switch9_end
+                goto ____switch8_end
             end
         end
-        ::____switch9_case_default::
+        ::____switch8_case_default::
         do
             do
-                goto ____switch9_end
+                goto ____switch8_end
             end
         end
-        ::____switch9_end::
+        ::____switch8_end::
         costumes(nil, modPlayerData)
     end
 )

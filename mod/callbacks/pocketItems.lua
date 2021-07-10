@@ -18,7 +18,13 @@ function ____exports.pocketItems(self, _modPlayerData)
                 ::____switch5_case_0::
                 do
                     do
-                        player:SetPocketActiveItem(ModItemTypes.BLOODDRIVE)
+                        if not player:HasCollectible(ModItemTypes.GHOST_SHOT) then
+                            player:AddCollectible(ModItemTypes.GHOST_SHOT)
+                        end
+                        if player:GetActiveItem(ActiveSlot.SLOT_POCKET) ~= ModItemTypes.BLOODDRIVE then
+                            print("blood drive added!")
+                            player:AddCollectible(ModItemTypes.BLOODDRIVE, nil, nil, ActiveSlot.SLOT_POCKET)
+                        end
                         goto ____switch5_end
                     end
                 end

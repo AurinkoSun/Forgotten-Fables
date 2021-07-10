@@ -21,7 +21,7 @@ export enum ModEntityVariants {}
 export enum ModPlayerTypes {
   // SARAH = Isaac.GetPlayerTypeByName("Sarah", false),
   // TAINTED_SARAH = Isaac.GetPlayerTypeByName("Sarah", true),
-  ALABASTER = Isaac.GetPlayerTypeByName("Alabaster", false),
+  ALABASTER = Isaac.GetPlayerTypeByName("Alabaster"),
   //  TAINTED_ALABASTER = Isaac.GetPlayerTypeByName("Alabaster", true),
 }
 /**
