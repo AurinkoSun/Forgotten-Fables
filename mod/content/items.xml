@@ -4,5 +4,5 @@
  <active description="Revive" maxcharges="0" name="Revive" gfx="collectible_revive.png"/>
  <passive cache="damage" description="Spectral buddies" gfx="ghost_shot.png" name="Ghost Shot" tags="dead"/>
  <passive cache="damage" description="Spectral buddies?" gfx="big_boy_ghost_shot.png" name="Big Boy Ghost Shot" tags="dead"/>
- <active description="Blood Collector" maxcharges="0" name="Blood Drive"/>
+ <active description="Blood Collector" maxcharges="0" name="Blood Drive" gfx="Blood_Drive.png"/>
 </items>
