@@ -19,11 +19,5 @@ module.exports = {
   // (listed in alphabetical order)
   rules: {
     // Insert changed or disabled rules here, if necessary
-    "prettier/prettier": [
-      "error",
-      {
-        endOfLine: "auto",
-      },
-    ],
   },
 };

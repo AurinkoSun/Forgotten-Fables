@@ -41,7 +41,9 @@ forgottenFables.AddCallback(
   },
 );
 // forgottenFables.AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, newFloor);
-
+forgottenFables.AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, () => {
+  pocketItems(modPlayerData);
+});
 forgottenFables.AddCallback(ModCallbacks.MC_POST_NEW_ROOM, () => {
   costumes(modPlayerData);
   pocketItems(modPlayerData);

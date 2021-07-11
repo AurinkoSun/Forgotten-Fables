@@ -47,7 +47,7 @@ function ghostReplace(tear: EntityTear, player: EntityPlayer): Entity {
   );
   ghost.GetSprite().Scale.div(3);
   ghost.GetSprite().Play("Charge", true);
-  ghost.MultiplyFriction(2);
+  ghost.MultiplyFriction(20);
   ghost.CollisionDamage = player.Damage;
   tear.Remove();
   return ghost;
