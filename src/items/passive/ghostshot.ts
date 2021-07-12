@@ -1,4 +1,4 @@
-import { ModItemTypes, ModTearVariants } from "../constants";
+import { ModItemTypes, ModTearVariants } from "../../constants";
 
 export function ghostShot(tear: EntityTear): void {
   if (
@@ -44,8 +44,10 @@ function ghostReplace(tear: EntityTear, player: EntityPlayer): EntityTear {
   ).ToTear();
   if (newtear !== null) {
     newtear.TearFlags = tear.TearFlags;
+    newtear.Rotation = tear.Rotation;
     newtear.AddTearFlags(TearFlags.TEAR_HOMING);
     newtear.AddTearFlags(TearFlags.TEAR_SPECTRAL);
+    newtear.AddTearFlags(TearFlags.TEAR_PIERCING);
     newtear.GetData().ghost = true;
     newtear.GetData().player = player;
     tear.Remove();
@@ -60,7 +62,7 @@ export function ghostUpdate(tear: EntityTear, _collider: Entity): EntityTear {
       const player: EntityPlayer = tear.GetData().player as EntityPlayer;
       const explosionEffect = Isaac.Spawn(
         EntityType.ENTITY_EFFECT,
-        EffectVariant.BLOOD_EXPLOSION,
+        EffectVariant.LARGE_BLOOD_EXPLOSION,
         0,
         tear.Position,
         Vector(0, 0),
@@ -69,7 +71,7 @@ export function ghostUpdate(tear: EntityTear, _collider: Entity): EntityTear {
       if (explosionEffect !== null) {
         explosionEffect.SetDamageSource(EntityType.ENTITY_PLAYER);
         explosionEffect.CollisionDamage = player.Damage * 0.8;
-        const playeradjrange = (player.TearHeight * -1) / 24;
+        const playeradjrange = (player.TearHeight * -1) / 23.75; // The player's range divided by the default
         explosionEffect.Scale *= playeradjrange;
       }
     } else {
@@ -77,4 +79,14 @@ export function ghostUpdate(tear: EntityTear, _collider: Entity): EntityTear {
     }
   }
   return tear;
+}
+export function ghostShotStats(player: EntityPlayer, flags: CacheFlag): void {
+  if (flags === CacheFlag.CACHE_DAMAGE) {
+    if (
+      player.HasCollectible(ModItemTypes.BBGHOST_SHOT) ||
+      player.HasCollectible(ModItemTypes.GHOST_SHOT)
+    ) {
+      player.Damage *= 0.8;
+    }
+  }
 }

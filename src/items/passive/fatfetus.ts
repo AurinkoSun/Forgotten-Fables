@@ -1,4 +1,4 @@
-import * as constants from "../constants";
+import * as constants from "../../constants";
 
 export function fatFetusTears(tear: EntityTear): void {
   let bomb: EntityBomb | null;
@@ -468,6 +468,28 @@ export function glitterdrops(
           }
         }
       }
+    }
+  }
+}
+export function ffstats(player: EntityPlayer, flags: CacheFlag): void {
+  if (flags === CacheFlag.CACHE_FIREDELAY) {
+    if (player.HasCollectible(constants.ModItemTypes.FAT_FETUS)) {
+      if (
+        !player.HasCollectible(
+          CollectibleType.COLLECTIBLE_LUDOVICO_TECHNIQUE,
+        ) &&
+        !player.HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE)
+      ) {
+        player.MaxFireDelay *= 15;
+      }
+    }
+  }
+  if (flags === CacheFlag.CACHE_DAMAGE) {
+    if (
+      player.HasCollectible(constants.ModItemTypes.FAT_FETUS) &&
+      player.HasCollectible(CollectibleType.COLLECTIBLE_MR_MEGA)
+    ) {
+      player.Damage *= 2;
     }
   }
 }

@@ -1,11 +1,12 @@
-/* import * as constants from "../constants";
-import { GetPlayerId, PlayerData } from "../playerdata";
+// import * as constants from "../../constants";
+// import { GetPlayerId, PlayerData } from "../../playerdata";
+import { PlayerData } from "../../playerdata";
 
 export function suicide(
-  modPlayerData: { data: PlayerData[] },
-  player: EntityPlayer,
+  _modPlayerData: { data: PlayerData[] },
+  _player: EntityPlayer,
 ): boolean {
-  if (
+  /* if (
     player.GetPlayerType() === constants.ModPlayerTypes.TAINTED_SARAH &&
     !modPlayerData.data[GetPlayerId(player)].lost
   ) {
@@ -29,14 +30,14 @@ export function suicide(
     );
     print(body.Position.X, body.Position.Y);
     return true;
-  }
+  } */
   return false;
 }
 export function revive(
-  modPlayerData: { data: PlayerData[] },
-  player: EntityPlayer,
-): void {
-  if (
+  _modPlayerData: { data: PlayerData[] },
+  _player: EntityPlayer,
+): boolean {
+  /* if (
     player.GetPlayerType() === constants.ModPlayerTypes.TAINTED_SARAH &&
     modPlayerData.data[GetPlayerId(player)].lost
   ) {
@@ -59,14 +60,16 @@ export function revive(
       modPlayerData.data[GetPlayerId(player)].lost = false;
       player.AddCacheFlags(CacheFlag.CACHE_ALL);
       player.EvaluateItems();
+      return true;
     }
-  }
+    return false;
+  } */
+  return false;
 }
-export function bodyAnim(entity: EntityNPC): void {
-  if (entity.GetSprite().IsFinished("Revive")) {
+export function bodyAnim(_entity: EntityNPC): void {
+  /* if (entity.GetSprite().IsFinished("Revive")) {
     const player = entity.GetData().player as EntityPlayer;
     player.Visible = true;
     entity.Remove();
-  }
+  } */
 }
-*/

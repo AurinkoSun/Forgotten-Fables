@@ -1,11 +1,12 @@
-/* import * as constants from "../constants";
-import { GetPlayerId, PlayerData } from "../playerdata";
+// import * as constants from "../constants";
+// import { GetPlayerId, PlayerData } from "../playerdata";
+import { PlayerData } from "../playerdata";
 
 export function razor(
-  modPlayerData: { data: PlayerData[] },
-  pickup: EntityPickup,
+  _modPlayerData: { data: PlayerData[] },
+  _pickup: EntityPickup,
 ): void {
-  if (pickup.SubType === 13) {
+  /* if (pickup.SubType === 13) {
     for (let i = 0; i < constants.game.GetNumPlayers(); i++) {
       const player = constants.game.GetPlayer(i);
       if (
@@ -41,6 +42,5 @@ export function razor(
         }
       }
     }
-  }
+  } */
 }
-*/

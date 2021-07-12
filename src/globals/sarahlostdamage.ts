@@ -1,13 +1,14 @@
-/* import * as constants from "../constants";
-import { GetPlayerId, PlayerData } from "../playerdata";
+// import * as constants from "../constants";
+// import { GetPlayerId, PlayerData } from "../playerdata";
+import { PlayerData } from "../playerdata";
 
 export function sarahLostKill(
-  modPlayerData: { data: PlayerData[] },
-  tookDamage: Entity,
-  amount: number,
-  flags: DamageFlag,
+  _modPlayerData: { data: PlayerData[] },
+  _tookDamage: Entity,
+  _amount: number,
+  _flags: DamageFlag,
 ): boolean {
-  const player = tookDamage.ToPlayer();
+  /* const player = tookDamage.ToPlayer();
   if (
     player !== null &&
     player.GetPlayerType() === constants.ModPlayerTypes.TAINTED_SARAH &&
@@ -17,7 +18,6 @@ export function sarahLostKill(
   ) {
     player.Kill();
     return false;
-  }
+  } */
   return true;
 }
-*/

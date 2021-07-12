@@ -1,13 +1,14 @@
-import { ModPlayerTypes } from "../constants";
-import { PlayerData } from "../playerdata";
+import { ModPlayerTypes } from "../../constants";
+import { PlayerData } from "../../playerdata";
 
 export function bloodDrive(
   player: EntityPlayer,
   _modPlayerData: { data: PlayerData[] },
-): void {
+): boolean | null {
   if (player.GetPlayerType() === ModPlayerTypes.ALABASTER) {
     print("hi");
   }
+  return null;
 }
 export function alabasterHearts(pickup: EntityPickup): void {
   if (

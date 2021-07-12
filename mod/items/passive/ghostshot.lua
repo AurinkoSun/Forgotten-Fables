@@ -63,4 +63,11 @@ function ____exports.ghostUpdate(self, tear, _collider)
     end
     return tear
 end
+function ____exports.ghostShotStats(self, player, flags)
+    if flags == CacheFlag.CACHE_DAMAGE then
+        if player:HasCollectible(ModItemTypes.BBGHOST_SHOT) or player:HasCollectible(ModItemTypes.GHOST_SHOT) then
+            player.Damage = player.Damage * 0.8
+        end
+    end
+end
 return ____exports

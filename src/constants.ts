@@ -12,13 +12,16 @@ export enum ModItemTypes {
 export enum ModTearVariants {
   GHOST = 50,
 }
-export enum ModEntityTypes {}
-// TSARAHBODY = 799,
+/* export enum ModEntityTypes {
+  TSARAHBODY = 799,
+} */
 /**
  * Enum for custom Entity variants
  */
-export enum ModEntityVariants {}
-// TSARAHBODY = 200,
+export enum ModEntityVariants {
+  // TSARAHBODY = 200,
+  GHOST_TEAR = 50,
+}
 /**
  * Enum for new PlayerTypes
  */
@@ -26,19 +29,19 @@ export enum ModPlayerTypes {
   // SARAH = Isaac.GetPlayerTypeByName("Sarah", false),
   // TAINTED_SARAH = Isaac.GetPlayerTypeByName("Sarah", true),
   ALABASTER = Isaac.GetPlayerTypeByName("Alabaster"),
-  //  TAINTED_ALABASTER = Isaac.GetPlayerTypeByName("Alabaster", true),
+  // TAINTED_ALABASTER = Isaac.GetPlayerTypeByName("Alabaster", true),
 }
 /**
  * Enum for new modded costumes (hair and item costumes)
  */
 export enum ModCostumes {
-  // SARAH_HAIR = Isaac.GetCostumeIdByPath("gfx/characters/sarahhair.anm2"),
-  // TAINTED_SARAH_HAIR = Isaac.GetCostumeIdByPath(
-  //   "gfx/characters/SaraAlthair.anm2",
-  // ),
-  // LOST_SARAH_HAIR = Isaac.GetCostumeIdByPath(
-  //   "gfx/characters/sarahLosthair.anm2",
-  // ),
+  /* SARAH_HAIR = Isaac.GetCostumeIdByPath("gfx/characters/sarahhair.anm2"),
+  TAINTED_SARAH_HAIR = Isaac.GetCostumeIdByPath(
+    "gfx/characters/SaraAlthair.anm2",
+  ),
+  LOST_SARAH_HAIR = Isaac.GetCostumeIdByPath(
+    "gfx/characters/sarahLosthair.anm2",
+  ), */
   ALABASTER_HAIR = Isaac.GetCostumeIdByPath(
     "gfx/characters/Character_Alabaster_Hair.anm2",
   ),
