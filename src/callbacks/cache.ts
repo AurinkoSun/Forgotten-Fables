@@ -12,6 +12,9 @@ export function evalCache(
     }
   }
   if (flags === CacheFlag.CACHE_FIREDELAY) {
+    if (player.HasCollectible(ModItemTypes.GHOST_SHOT)) {
+      player.MaxFireDelay *= 3;
+    }
     if (player.HasCollectible(ModItemTypes.FAT_FETUS)) {
       if (
         !player.HasCollectible(
