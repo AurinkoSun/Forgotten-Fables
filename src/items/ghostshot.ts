@@ -33,10 +33,7 @@ function bbghostReplace(tear: EntityTear, player: EntityPlayer): Entity {
   tear.Remove();
   return ghost;
 }
-function ghostReplace(
-  tear: EntityTear,
-  player: EntityPlayer,
-): EntityTear | null {
+function ghostReplace(tear: EntityTear, player: EntityPlayer): EntityTear {
   const newtear = Isaac.Spawn(
     EntityType.ENTITY_TEAR,
     ModTearVariants.GHOST,
@@ -55,7 +52,7 @@ function ghostReplace(
     return newtear;
   }
   error("Ghost tear spawn failed", 2);
-  return null;
+  return tear;
 }
 export function ghostUpdate(tear: EntityTear, _collider: Entity): EntityTear {
   if (tear.GetData().ghost === true) {

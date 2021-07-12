@@ -25,7 +25,7 @@ function ghostReplace(self, tear, player)
         return newtear
     end
     error("Ghost tear spawn failed", 2)
-    return nil
+    return tear
 end
 function ____exports.ghostShot(self, tear)
     if (tear.SpawnerEntity ~= nil) and (tear.SpawnerEntity.Type == EntityType.ENTITY_PLAYER) then

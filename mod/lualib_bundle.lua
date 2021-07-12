@@ -1247,6 +1247,34 @@ function __TS__ObjectValues(obj)
     return result
 end
 
+function __TS__OptionalChainAccess(____table, key)
+    if ____table then
+        return ____table[key]
+    end
+    return nil
+end
+
+function __TS__OptionalFunctionCall(f, ...)
+    if f then
+        return f(...)
+    end
+    return nil
+end
+
+function __TS__OptionalMethodCall(____table, methodName, ...)
+    local args = {...}
+    if ____table then
+        local method = ____table[methodName]
+        if method then
+            return method(
+                ____table,
+                __TS__Unpack(args)
+            )
+        end
+    end
+    return nil
+end
+
 function __TS__ParseFloat(numberString)
     local infinityMatch = string.match(numberString, "^%s*(-?Infinity)")
     if infinityMatch then
