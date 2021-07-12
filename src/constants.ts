@@ -9,6 +9,9 @@ export enum ModItemTypes {
   GHOST_SHOT = Isaac.GetItemIdByName("Ghost Shot"),
   BBGHOST_SHOT = Isaac.GetItemIdByName("Big Boy Ghost Shot"),
 }
+export enum ModTearVariants {
+  GHOST = 50,
+}
 export enum ModEntityTypes {}
 // TSARAHBODY = 799,
 /**

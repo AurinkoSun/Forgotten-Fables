@@ -21,6 +21,7 @@ local glitterdrops = ____fatfetus.glitterdrops
 local rocks = ____fatfetus.rocks
 local ____ghostshot = require("items.ghostshot")
 local ghostShot = ____ghostshot.ghostShot
+local ghostUpdate = ____ghostshot.ghostUpdate
 local ____playerdata = require("playerdata")
 local PlayerData = ____playerdata.PlayerData
 local modPlayerData = {
@@ -51,6 +52,12 @@ forgottenFables:AddCallback(
     end
 )
 forgottenFables:AddCallback(
+    ModCallbacks.MC_PRE_TEAR_COLLISION,
+    function(____, tear, collider)
+        ghostUpdate(nil, tear, collider)
+    end
+)
+forgottenFables:AddCallback(
     ModCallbacks.MC_POST_PLAYER_INIT,
     function()
         pocketItems(nil, modPlayerData)
@@ -78,25 +85,25 @@ forgottenFables:AddCallback(
 forgottenFables:AddCallback(
     ModCallbacks.MC_USE_ITEM,
     function(____, item, _rng, player)
-        local ____switch9 = item
-        if ____switch9 == constants.ModItemTypes.BLOODDRIVE then
-            goto ____switch9_case_0
+        local ____switch10 = item
+        if ____switch10 == constants.ModItemTypes.BLOODDRIVE then
+            goto ____switch10_case_0
         end
-        goto ____switch9_case_default
-        ::____switch9_case_0::
+        goto ____switch10_case_default
+        ::____switch10_case_0::
         do
             do
                 bloodDrive(nil, player, modPlayerData)
-                goto ____switch9_end
+                goto ____switch10_end
             end
         end
-        ::____switch9_case_default::
+        ::____switch10_case_default::
         do
             do
-                goto ____switch9_end
+                goto ____switch10_end
             end
         end
-        ::____switch9_end::
+        ::____switch10_end::
         costumes(nil, modPlayerData)
     end
 )

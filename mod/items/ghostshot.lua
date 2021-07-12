@@ -2,6 +2,7 @@
 local ____exports = {}
 local ____constants = require("constants")
 local ModItemTypes = ____constants.ModItemTypes
+local ModTearVariants = ____constants.ModTearVariants
 local bbghostReplace, ghostReplace
 function bbghostReplace(self, tear, player)
     tear.Visible = false
@@ -13,14 +14,15 @@ function bbghostReplace(self, tear, player)
     return ghost
 end
 function ghostReplace(self, tear, player)
-    tear.Visible = false
-    local ghost = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.PURGATORY, 1, tear.Position, ((tear.Velocity / (0 - player.TearHeight)) * 23.75) / 1.5, player)
-    local ____ = ghost:GetSprite().Scale / 3
-    ghost:GetSprite():Play("Charge", true)
-    ghost:MultiplyFriction(20)
-    ghost.CollisionDamage = player.Damage
-    tear:Remove()
-    return ghost
+    local newtear = Isaac.Spawn(EntityType.ENTITY_TEAR, ModTearVariants.GHOST, 0, tear.Position, tear.Velocity, player):ToTear()
+    if newtear ~= nil then
+        newtear.TearFlags = tear.TearFlags
+        newtear:AddTearFlags(TearFlags.TEAR_HOMING)
+    end
+    tear:AddTearFlags(TearFlags.TEAR_HOMING)
+    tear:GetData().ghost = true
+    tear:GetData().player = player
+    return tear
 end
 function ____exports.ghostShot(self, tear)
     if (tear.SpawnerEntity ~= nil) and (tear.SpawnerEntity.Type == EntityType.ENTITY_PLAYER) then
@@ -31,5 +33,29 @@ function ____exports.ghostShot(self, tear)
             ghostReplace(nil, tear, player)
         end
     end
+end
+function ____exports.ghostUpdate(self, tear, _collider)
+    if tear:GetData().ghost == true then
+        if tear:GetData().player ~= nil then
+            local player = tear:GetData().player
+            local explosionEffect = Isaac.Spawn(
+                EntityType.ENTITY_EFFECT,
+                EffectVariant.BLOOD_EXPLOSION,
+                0,
+                tear.Position,
+                Vector(0, 0),
+                player
+            ):ToEffect()
+            if explosionEffect ~= nil then
+                explosionEffect:SetDamageSource(EntityType.ENTITY_PLAYER)
+                explosionEffect.CollisionDamage = player.Damage * 0.8
+                local playeradjrange = (player.TearHeight * -1) / 24
+                explosionEffect.Scale = explosionEffect.Scale * playeradjrange
+            end
+        else
+            print("no player associated with tear")
+        end
+    end
+    return tear
 end
 return ____exports

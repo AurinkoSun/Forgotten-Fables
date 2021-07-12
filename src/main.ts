@@ -14,7 +14,7 @@ import {
 } from "./items/fatfetus";
 // import { razor } from "./callbacks/razors";
 // import { sarahLostKill } from "./callbacks/sarahlostdamage";
-import { ghostShot } from "./items/ghostshot";
+import { ghostShot, ghostUpdate } from "./items/ghostshot";
 // import { bodyAnim, revive, suicide } from "./items/suicide";
 import { PlayerData } from "./playerdata";
 
@@ -38,6 +38,12 @@ forgottenFables.AddCallback(
   ModCallbacks.MC_EVALUATE_CACHE,
   (player: EntityPlayer, flag: CacheFlag) => {
     evalCache(modPlayerData, player, flag);
+  },
+);
+forgottenFables.AddCallback(
+  ModCallbacks.MC_PRE_TEAR_COLLISION,
+  (tear: EntityTear, collider: Entity) => {
+    ghostUpdate(tear, collider);
   },
 );
 // forgottenFables.AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, newFloor);
