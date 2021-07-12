@@ -18,11 +18,14 @@ function ghostReplace(self, tear, player)
     if newtear ~= nil then
         newtear.TearFlags = tear.TearFlags
         newtear:AddTearFlags(TearFlags.TEAR_HOMING)
+        newtear:AddTearFlags(TearFlags.TEAR_SPECTRAL)
+        newtear:GetData().ghost = true
+        newtear:GetData().player = player
+        tear:Remove()
+        return newtear
     end
-    tear:AddTearFlags(TearFlags.TEAR_HOMING)
-    tear:GetData().ghost = true
-    tear:GetData().player = player
-    return tear
+    error("Ghost tear spawn failed", 2)
+    return nil
 end
 function ____exports.ghostShot(self, tear)
     if (tear.SpawnerEntity ~= nil) and (tear.SpawnerEntity.Type == EntityType.ENTITY_PLAYER) then
