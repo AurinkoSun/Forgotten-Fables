@@ -59,6 +59,7 @@ function ____exports.ghostCollide(self, tear, _collider)
                 explosionEffect.CollisionDamage = player.Damage * 0.8
                 local playeradjrange = (player.TearHeight * -1) / 23.75
                 explosionEffect.Scale = explosionEffect.Scale * playeradjrange
+                tear:Remove()
             end
         else
             print("no player associated with tear")

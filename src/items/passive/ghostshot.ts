@@ -76,6 +76,7 @@ export function ghostCollide(tear: EntityTear, _collider: Entity): EntityTear {
         explosionEffect.CollisionDamage = player.Damage * 0.8;
         const playeradjrange = (player.TearHeight * -1) / 23.75; // The player's range divided by the default
         explosionEffect.Scale *= playeradjrange;
+        tear.Remove();
       }
     } else {
       print("no player associated with tear");
