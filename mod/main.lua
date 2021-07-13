@@ -2,6 +2,8 @@
 require("lualib_bundle");
 local ____exports = {}
 local callbacks = require("callbacks.callbacks")
+local ____MC_POST_TEAR_UPDATE = require("callbacks.MC_POST_TEAR_UPDATE")
+local tearUpdate = ____MC_POST_TEAR_UPDATE.tearUpdate
 local ____playerdata = require("playerdata")
 local PlayerData = ____playerdata.PlayerData
 local modPlayerData = {
@@ -23,6 +25,7 @@ forgottenFables:AddCallback(
         callbacks:preGameExit(forgottenFables, modPlayerData)
     end
 )
+forgottenFables:AddCallback(ModCallbacks.MC_POST_TEAR_UPDATE, tearUpdate)
 forgottenFables:AddCallback(
     ModCallbacks.MC_EVALUATE_CACHE,
     function(____, player, flag)

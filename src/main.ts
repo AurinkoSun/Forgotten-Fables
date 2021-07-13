@@ -1,4 +1,5 @@
 import * as callbacks from "./callbacks/callbacks";
+import { tearUpdate } from "./callbacks/MC_POST_TEAR_UPDATE";
 import { PlayerData } from "./playerdata";
 
 const modPlayerData: { data: PlayerData[] } = {
@@ -17,6 +18,7 @@ const forgottenFables = RegisterMod("Forgotten Fables", 1);
 forgottenFables.AddCallback(ModCallbacks.MC_PRE_GAME_EXIT, () => {
   callbacks.preGameExit(forgottenFables, modPlayerData);
 });
+forgottenFables.AddCallback(ModCallbacks.MC_POST_TEAR_UPDATE, tearUpdate);
 forgottenFables.AddCallback(
   ModCallbacks.MC_EVALUATE_CACHE,
   (player: EntityPlayer, flag: CacheFlag) => {

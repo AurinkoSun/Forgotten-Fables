@@ -39,7 +39,10 @@ function ____exports.ghostShot(self, tear)
         end
     end
 end
-function ____exports.ghostUpdate(self, tear, _collider)
+function ____exports.ghostUpdate(self, tear)
+    tear.SpriteRotation = tear.Velocity:GetAngleDegrees()
+end
+function ____exports.ghostCollide(self, tear, _collider)
     if tear:GetData().ghost == true then
         if tear:GetData().player ~= nil then
             local player = tear:GetData().player

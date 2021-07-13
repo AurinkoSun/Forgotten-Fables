@@ -56,7 +56,10 @@ function ghostReplace(tear: EntityTear, player: EntityPlayer): EntityTear {
   error("Ghost tear spawn failed", 2);
   return tear;
 }
-export function ghostUpdate(tear: EntityTear, _collider: Entity): EntityTear {
+export function ghostUpdate(tear: EntityTear): void {
+  tear.SpriteRotation = tear.Velocity.GetAngleDegrees();
+}
+export function ghostCollide(tear: EntityTear, _collider: Entity): EntityTear {
   if (tear.GetData().ghost === true) {
     if (tear.GetData().player !== null) {
       const player: EntityPlayer = tear.GetData().player as EntityPlayer;
