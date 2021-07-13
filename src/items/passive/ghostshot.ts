@@ -65,7 +65,7 @@ export function ghostCollide(tear: EntityTear, _collider: Entity): EntityTear {
       const player: EntityPlayer = tear.GetData().player as EntityPlayer;
       const explosionEffect = Isaac.Spawn(
         EntityType.ENTITY_EFFECT,
-        EffectVariant.LARGE_BLOOD_EXPLOSION,
+        EffectVariant.BLOOD_EXPLOSION,
         0,
         tear.Position,
         Vector(0, 0),

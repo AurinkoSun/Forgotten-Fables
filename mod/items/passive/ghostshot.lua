@@ -48,7 +48,7 @@ function ____exports.ghostCollide(self, tear, _collider)
             local player = tear:GetData().player
             local explosionEffect = Isaac.Spawn(
                 EntityType.ENTITY_EFFECT,
-                EffectVariant.LARGE_BLOOD_EXPLOSION,
+                EffectVariant.BLOOD_EXPLOSION,
                 0,
                 tear.Position,
                 Vector(0, 0),
