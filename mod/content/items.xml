@@ -5,5 +5,5 @@
  <passive cache="damage" description="Spectral buddies" gfx="i_GhostShot.png" name="Ghost Shot"/>
  <passive cache="damage" description="Spectral buddies?" gfx="i_BigBoyGhostShot.png" name="Big Boy Ghost Shot" tags="dead"/>
  <active description="Blood Collector" maxcharges="0" name="Blood Drive" gfx="i_BloodDrive.png"/>
- <passive name="Blue Heart" description=""/>
+ <passive name="Blue Heart" description="Rest a bit?" gfx="i_blueheart.png"/>
 </items>

@@ -4,7 +4,7 @@
 		<Spritesheets>
 			<Spritesheet Path="..\p_bomb2.png" Id="0"/>
 			<Spritesheet Path="..\p_bomb_spark.png" Id="1"/>
-			<Spritesheet Path="..\p_gigabomb_variants.png" Id="2"/>
+			<Spritesheet Path="..\i_gigabomb_variants.png" Id="2"/>
 		</Spritesheets>
 		<Layers>
 			<Layer Name="base" Id="0" SpritesheetId="0"/>
