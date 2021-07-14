@@ -9,6 +9,7 @@ export enum ModItemTypes {
   GHOST_SHOT = Isaac.GetItemIdByName("Ghost Shot"),
   BBGHOST_SHOT = Isaac.GetItemIdByName("Big Boy Ghost Shot"),
   BLUE_HEART = Isaac.GetItemIdByName("Blue Heart"),
+  RUSSIANROULETTE = Isaac.GetItemIdByName("Russian Roulette"),
   // STONE_D6 = Isaac.GetItemIdByName("Stone D6"),
 }
 export enum ModTearVariants {
@@ -49,3 +50,4 @@ export enum ModCostumes {
   ),
 }
 export const game = Game();
+export const sfxManager = SFXManager();

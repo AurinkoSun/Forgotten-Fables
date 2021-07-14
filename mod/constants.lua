@@ -11,6 +11,8 @@ ____exports.ModItemTypes.BBGHOST_SHOT = Isaac.GetItemIdByName("Big Boy Ghost Sho
 ____exports.ModItemTypes[____exports.ModItemTypes.BBGHOST_SHOT] = "BBGHOST_SHOT"
 ____exports.ModItemTypes.BLUE_HEART = Isaac.GetItemIdByName("Blue Heart")
 ____exports.ModItemTypes[____exports.ModItemTypes.BLUE_HEART] = "BLUE_HEART"
+____exports.ModItemTypes.RUSSIANROULETTE = Isaac.GetItemIdByName("Russian Roulette")
+____exports.ModItemTypes[____exports.ModItemTypes.RUSSIANROULETTE] = "RUSSIANROULETTE"
 ____exports.ModTearVariants = ModTearVariants or ({})
 ____exports.ModTearVariants.GHOST = 50
 ____exports.ModTearVariants[____exports.ModTearVariants.GHOST] = "GHOST"
@@ -24,4 +26,5 @@ ____exports.ModCostumes = ModCostumes or ({})
 ____exports.ModCostumes.ALABASTER_HAIR = Isaac.GetCostumeIdByPath("gfx/characters/c_Alabaster_Hair.anm2")
 ____exports.ModCostumes[____exports.ModCostumes.ALABASTER_HAIR] = "ALABASTER_HAIR"
 ____exports.game = Game()
+____exports.sfxManager = SFXManager()
 return ____exports

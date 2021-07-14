@@ -1,13 +1,14 @@
 import { ModItemTypes } from "../constants";
 import { costumes } from "../globals/costumes";
 import { bloodDrive } from "../items/active/blooddrive";
+import { rRoulette } from "../items/active/russianroulette";
 // import { revive, suicide } from "../items/active/suicide";
 import { PlayerData } from "../playerdata";
 
 // eslint-disable-next-line consistent-return
 export function useItem(
   item: number,
-  _rng: RNG,
+  rng: RNG,
   player: EntityPlayer,
   _slot: ActiveSlot,
   modPlayerData: { data: PlayerData[] },
@@ -22,6 +23,10 @@ export function useItem(
       returnVal = revive(modPlayerData, player);
       break;
     } */
+    case ModItemTypes.RUSSIANROULETTE: {
+      returnVal = rRoulette(rng, player);
+      break;
+    }
     case ModItemTypes.BLOODDRIVE: {
       returnVal = bloodDrive(player, modPlayerData);
       break;
