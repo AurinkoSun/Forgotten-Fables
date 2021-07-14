@@ -2,5 +2,5 @@
 	<costume anm2path="c_sarahLosthair.anm2" type="none" priority="99" />
   <costume anm2path="c_sarahhair.anm2" type="none" priority="99" />
   <costume anm2path="c_SaraAlthair.anm2" type="none" priority="99" />
-  <costume anm2path="c_Character_Alabaster_Hair.anm2" type="none" priority="99" />
+  <costume anm2path="c_Alabaster_Hair.anm2" type="none" priority="99" />
 </costumes>

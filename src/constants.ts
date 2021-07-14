@@ -9,7 +9,7 @@ export enum ModItemTypes {
   GHOST_SHOT = Isaac.GetItemIdByName("Ghost Shot"),
   BBGHOST_SHOT = Isaac.GetItemIdByName("Big Boy Ghost Shot"),
   BLUE_HEART = Isaac.GetItemIdByName("Blue Heart"),
-  STONE_D6 = Isaac.GetItemIdByName("Stone D6"),
+  // STONE_D6 = Isaac.GetItemIdByName("Stone D6"),
 }
 export enum ModTearVariants {
   GHOST = 50,
@@ -45,7 +45,7 @@ export enum ModCostumes {
     "gfx/characters/sarahLosthair.anm2",
   ), */
   ALABASTER_HAIR = Isaac.GetCostumeIdByPath(
-    "gfx/characters/Character_Alabaster_Hair.anm2",
+    "gfx/characters/c_Alabaster_Hair.anm2",
   ),
 }
 export const game = Game();
