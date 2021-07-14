@@ -12,4 +12,11 @@ function ____exports.alabasterStats(self, player, flags)
         end
     end
 end
+function ____exports.alabasterHealth(self, player)
+    local playerHealth = player:GetMaxHearts()
+    if playerHealth > 0 then
+        player:AddMaxHearts(0 - playerHealth, false)
+        player:AddBlackHearts(playerHealth)
+    end
+end
 return ____exports

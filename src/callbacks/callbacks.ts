@@ -7,6 +7,7 @@ import { postNewRoom } from "./MC_POST_NEW_ROOM";
 import { npcRender } from "./MC_POST_NPC_RENDER";
 import { postPickupUpdate } from "./MC_POST_PICKUP_UPDATE";
 import { postPlayerInit } from "./MC_POST_PLAYER_INIT";
+import { playerUpdate } from "./MC_POST_PLAYER_UPDATE";
 import { projectileInit } from "./MC_POST_PROJECTILE_INIT";
 import { tearUpdate } from "./MC_POST_TEAR_UPDATE";
 import { preGameExit } from "./MC_PRE_GAME_EXIT";
@@ -15,6 +16,7 @@ import { preTearCollision } from "./MC_PRE_TEAR_COLLISION";
 import { useItem } from "./MC_USE_ITEM";
 import { usePill } from "./MC_USE_PILL";
 
+export { playerUpdate };
 export { tearUpdate };
 export { useItem };
 export { roomClearAward };

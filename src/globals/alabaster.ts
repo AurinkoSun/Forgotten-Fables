@@ -10,3 +10,10 @@ export function alabasterStats(player: EntityPlayer, flags: CacheFlag): void {
     }
   }
 }
+export function alabasterHealth(player: EntityPlayer): void {
+  const playerHealth = player.GetMaxHearts();
+  if (playerHealth > 0) {
+    player.AddMaxHearts(0 - playerHealth, false);
+    player.AddBlackHearts(playerHealth);
+  }
+}
