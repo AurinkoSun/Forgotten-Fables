@@ -47,7 +47,6 @@ function ghostReplace(tear: EntityTear, player: EntityPlayer): EntityTear {
     newtear.Rotation = tear.Rotation;
     newtear.AddTearFlags(TearFlags.TEAR_HOMING);
     newtear.AddTearFlags(TearFlags.TEAR_SPECTRAL);
-    newtear.AddTearFlags(TearFlags.TEAR_PIERCING);
     newtear.GetData().ghost = true;
     newtear.GetData().player = player;
     tear.Remove();
