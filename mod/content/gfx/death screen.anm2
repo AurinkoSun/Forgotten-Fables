@@ -1,8 +1,8 @@
 <AnimatedActor>
-	<Info CreatedBy="Unknown" CreatedOn="7/9/2021 7:41:03 PM" Version="45" Fps="30"/>
+	<Info CreatedBy="Unknown" CreatedOn="7/15/2021 1:19:16 AM" Version="46" Fps="30"/>
 	<Content>
 		<Spritesheets>
-			<Spritesheet Path="death_portraits.png" Id="0"/>
+			<Spritesheet Path="death portraits.png" Id="0"/>
 			<Spritesheet Path="death bosses.png" Id="1"/>
 			<Spritesheet Path="death enemies.png" Id="2"/>
 			<Spritesheet Path="death items.png" Id="3"/>
