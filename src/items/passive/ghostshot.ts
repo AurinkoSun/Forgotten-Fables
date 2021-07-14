@@ -57,7 +57,11 @@ function ghostReplace(tear: EntityTear, player: EntityPlayer): EntityTear {
   return tear;
 }
 export function ghostUpdate(tear: EntityTear): void {
-  tear.SpriteRotation = tear.Velocity.GetAngleDegrees();
+  if (tear.Velocity.GetAngleDegrees() < 180) {
+    tear.SpriteRotation = tear.Velocity.GetAngleDegrees() + 180;
+  } else {
+    tear.SpriteRotation = tear.Velocity.GetAngleDegrees() - 180;
+  }
 }
 export function ghostCollide(tear: EntityTear, _collider: Entity): EntityTear {
   if (tear.GetData().ghost === true) {

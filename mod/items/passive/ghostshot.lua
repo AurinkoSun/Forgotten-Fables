@@ -40,7 +40,11 @@ function ____exports.ghostShot(self, tear)
     end
 end
 function ____exports.ghostUpdate(self, tear)
-    tear.SpriteRotation = tear.Velocity:GetAngleDegrees()
+    if tear.Velocity:GetAngleDegrees() < 180 then
+        tear.SpriteRotation = tear.Velocity:GetAngleDegrees() + 180
+    else
+        tear.SpriteRotation = tear.Velocity:GetAngleDegrees() - 180
+    end
 end
 function ____exports.ghostCollide(self, tear, _collider)
     if tear:GetData().ghost == true then
