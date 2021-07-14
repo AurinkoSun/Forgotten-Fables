@@ -13,6 +13,7 @@ module.exports = {
     // We do not point this at "./tsconfig.json" because certain files (such at this file) should be
     // linted but not included in the actual project output
     project: "./tsconfig.eslint.json",
+    endOfLine: "auto",
   },
 
   // We modify the linting rules from the base for some specific things
