@@ -133,3 +133,4 @@ isaacscript.json
 tsconfig.eslint.json
 tsconfig.json
 .prettierrc.js
+.cspell.json
