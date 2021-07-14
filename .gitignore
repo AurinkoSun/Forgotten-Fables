@@ -128,3 +128,8 @@ dist
 .pnp.*
 
 isaacscript.json
+.vscode
+.eslintrc.js
+tsconfig.eslint.json
+tsconfig.json
+.prettierrc.js
