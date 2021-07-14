@@ -2,9 +2,9 @@
 	<Info CreatedBy="Unknown" CreatedOn="7/9/2021 9:23:37 PM" Version="17" Fps="30"/>
 	<Content>
 		<Spritesheets>
-			<Spritesheet Path="costumes\sarah\sarahAltHanged.PNG" Id="0"/>
-			<Spritesheet Path="costumes\Sprite_sheet_.PNG" Id="1"/>
-			<Spritesheet Path="character_SarahAlt.png" Id="2"/>
+			<Spritesheet Path="costumes\c_Sarah_Alt_Hanged.png" Id="0"/>
+			<Spritesheet Path="costumes\c_Sarah_Something.png" Id="1"/>
+			<Spritesheet Path="costumes\c_Sarah_Alt.png" Id="2"/>
 			<Spritesheet Path="Respiro.png" Id="3"/>
 		</Spritesheets>
 		<Layers>

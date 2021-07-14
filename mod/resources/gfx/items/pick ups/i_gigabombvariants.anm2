@@ -2,9 +2,9 @@
 	<Info CreatedBy="Kyojo" CreatedOn="6/14/2021 9:01:16 AM" Version="20" Fps="30"/>
 	<Content>
 		<Spritesheets>
-			<Spritesheet Path="..\pickup_016_bomb2.png" Id="0"/>
-			<Spritesheet Path="..\bomb_spark.png" Id="1"/>
-			<Spritesheet Path="..\gigabombvariantsfinal.png" Id="2"/>
+			<Spritesheet Path="..\p_bomb2.png" Id="0"/>
+			<Spritesheet Path="..\p_bomb_spark.png" Id="1"/>
+			<Spritesheet Path="..\p_gigabomb_variants.png" Id="2"/>
 		</Spritesheets>
 		<Layers>
 			<Layer Name="base" Id="0" SpritesheetId="0"/>
