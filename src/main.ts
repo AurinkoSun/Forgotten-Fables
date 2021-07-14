@@ -32,10 +32,6 @@ forgottenFables.AddCallback(
   },
 );
 forgottenFables.AddCallback(
-  ModCallbacks.MC_PRE_SPAWN_CLEAN_AWARD,
-  callbacks.roomClearAward,
-);
-forgottenFables.AddCallback(
   ModCallbacks.MC_PRE_TEAR_COLLISION,
   callbacks.preTearCollision,
 );

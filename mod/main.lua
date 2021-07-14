@@ -31,7 +31,6 @@ forgottenFables:AddCallback(
         callbacks:evalCache(modPlayerData, player, flag)
     end
 )
-forgottenFables:AddCallback(ModCallbacks.MC_PRE_SPAWN_CLEAN_AWARD, callbacks.roomClearAward)
 forgottenFables:AddCallback(ModCallbacks.MC_PRE_TEAR_COLLISION, callbacks.preTearCollision)
 forgottenFables:AddCallback(
     ModCallbacks.MC_POST_PLAYER_INIT,
