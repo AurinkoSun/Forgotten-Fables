@@ -2,10 +2,6 @@
 require("lualib_bundle");
 local ____exports = {}
 local callbacks = require("callbacks.callbacks")
-local ____MC_POST_TEAR_UPDATE = require("callbacks.MC_POST_TEAR_UPDATE")
-local tearUpdate = ____MC_POST_TEAR_UPDATE.tearUpdate
-local ____MC_USE_ITEM = require("callbacks.MC_USE_ITEM")
-local useItem = ____MC_USE_ITEM.useItem
 local ____playerdata = require("playerdata")
 local PlayerData = ____playerdata.PlayerData
 local modPlayerData = {
@@ -27,13 +23,14 @@ forgottenFables:AddCallback(
         callbacks:preGameExit(forgottenFables, modPlayerData)
     end
 )
-forgottenFables:AddCallback(ModCallbacks.MC_POST_TEAR_UPDATE, tearUpdate)
+forgottenFables:AddCallback(ModCallbacks.MC_POST_TEAR_UPDATE, callbacks.tearUpdate)
 forgottenFables:AddCallback(
     ModCallbacks.MC_EVALUATE_CACHE,
     function(____, player, flag)
         callbacks:evalCache(modPlayerData, player, flag)
     end
 )
+forgottenFables:AddCallback(ModCallbacks.MC_PRE_SPAWN_CLEAN_AWARD, callbacks.roomClearAward)
 forgottenFables:AddCallback(ModCallbacks.MC_PRE_TEAR_COLLISION, callbacks.preTearCollision)
 forgottenFables:AddCallback(
     ModCallbacks.MC_POST_PLAYER_INIT,
@@ -55,11 +52,8 @@ forgottenFables:AddCallback(
 )
 forgottenFables:AddCallback(
     ModCallbacks.MC_USE_ITEM,
-    function(____, collectibleType, rng, player, _flags, activeSlot)
-        local x = useItem(nil, collectibleType, rng, player, activeSlot, modPlayerData)
-        if x ~= nil then
-            return x
-        end
+    function(____, item, rng, player, _flag, slot)
+        callbacks:useItem(item, rng, player, slot, modPlayerData)
     end
 )
 forgottenFables:AddCallback(ModCallbacks.MC_POST_NPC_RENDER, callbacks.npcRender)
