@@ -4,6 +4,8 @@ local ____exports = {}
 local callbacks = require("callbacks.callbacks")
 local ____MC_POST_TEAR_UPDATE = require("callbacks.MC_POST_TEAR_UPDATE")
 local tearUpdate = ____MC_POST_TEAR_UPDATE.tearUpdate
+local ____MC_USE_ITEM = require("callbacks.MC_USE_ITEM")
+local useItem = ____MC_USE_ITEM.useItem
 local ____playerdata = require("playerdata")
 local PlayerData = ____playerdata.PlayerData
 local modPlayerData = {
@@ -49,6 +51,15 @@ forgottenFables:AddCallback(
     ModCallbacks.MC_USE_PILL,
     function(____, pillEffect, player, flags)
         callbacks:usePill(pillEffect, player, flags, modPlayerData)
+    end
+)
+forgottenFables:AddCallback(
+    ModCallbacks.MC_USE_ITEM,
+    function(____, collectibleType, rng, player, _flags, activeSlot)
+        local x = useItem(nil, collectibleType, rng, player, activeSlot, modPlayerData)
+        if x ~= nil then
+            return x
+        end
     end
 )
 forgottenFables:AddCallback(ModCallbacks.MC_POST_NPC_RENDER, callbacks.npcRender)

@@ -8,6 +8,8 @@ export enum ModItemTypes {
   BLOODDRIVE = Isaac.GetItemIdByName("Blood Drive"),
   GHOST_SHOT = Isaac.GetItemIdByName("Ghost Shot"),
   BBGHOST_SHOT = Isaac.GetItemIdByName("Big Boy Ghost Shot"),
+  D50 = Isaac.GetItemIdByName("D50"),
+  STONE_D6 = Isaac.GetItemIdByName("Stone D6"),
 }
 export enum ModTearVariants {
   GHOST = 50,

@@ -1,5 +1,6 @@
 import * as callbacks from "./callbacks/callbacks";
 import { tearUpdate } from "./callbacks/MC_POST_TEAR_UPDATE";
+import { useItem } from "./callbacks/MC_USE_ITEM";
 import { PlayerData } from "./playerdata";
 
 const modPlayerData: { data: PlayerData[] } = {
@@ -46,7 +47,28 @@ forgottenFables.AddCallback(
     callbacks.usePill(pillEffect, player, flags, modPlayerData);
   },
 );
-
+forgottenFables.AddCallback(
+  ModCallbacks.MC_USE_ITEM,
+  (
+    collectibleType: number,
+    rng: RNG,
+    player: EntityPlayer,
+    _flags,
+    activeSlot: number,
+    // eslint-disable-next-line consistent-return
+  ): boolean | void => {
+    const x = useItem(
+      collectibleType,
+      rng,
+      player,
+      activeSlot as ActiveSlot,
+      modPlayerData,
+    );
+    if (x !== null) {
+      return x;
+    }
+  },
+);
 forgottenFables.AddCallback(
   ModCallbacks.MC_POST_NPC_RENDER,
   callbacks.npcRender,
