@@ -1,17 +1,17 @@
 import { ModItemTypes } from "../constants";
 import { costumes } from "../globals/costumes";
 import { bloodDrive } from "../items/active/blooddrive";
-import { d50 } from "../items/active/d50";
 // import { revive, suicide } from "../items/active/suicide";
 import { PlayerData } from "../playerdata";
 
+// eslint-disable-next-line consistent-return
 export function useItem(
   item: number,
-  rng: RNG,
+  _rng: RNG,
   player: EntityPlayer,
-  slot: ActiveSlot,
+  _slot: ActiveSlot,
   modPlayerData: { data: PlayerData[] },
-): boolean | null {
+): boolean | void {
   let returnVal: boolean | null = null;
   switch (item) {
     /* case ModItemTypes.SUICIDE: {
@@ -26,13 +26,11 @@ export function useItem(
       returnVal = bloodDrive(player, modPlayerData);
       break;
     }
-    case ModItemTypes.D50: {
-      returnVal = d50(item, rng, player, slot, modPlayerData);
-      break;
-    }
     default:
       break;
   }
   costumes(modPlayerData);
-  return returnVal;
+  if (returnVal !== null) {
+    return returnVal;
+  }
 }

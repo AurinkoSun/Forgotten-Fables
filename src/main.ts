@@ -1,6 +1,4 @@
 import * as callbacks from "./callbacks/callbacks";
-import { tearUpdate } from "./callbacks/MC_POST_TEAR_UPDATE";
-import { useItem } from "./callbacks/MC_USE_ITEM";
 import { PlayerData } from "./playerdata";
 
 const modPlayerData: { data: PlayerData[] } = {
@@ -19,12 +17,19 @@ const forgottenFables = RegisterMod("Forgotten Fables", 1);
 forgottenFables.AddCallback(ModCallbacks.MC_PRE_GAME_EXIT, () => {
   callbacks.preGameExit(forgottenFables, modPlayerData);
 });
-forgottenFables.AddCallback(ModCallbacks.MC_POST_TEAR_UPDATE, tearUpdate);
+forgottenFables.AddCallback(
+  ModCallbacks.MC_POST_TEAR_UPDATE,
+  callbacks.tearUpdate,
+);
 forgottenFables.AddCallback(
   ModCallbacks.MC_EVALUATE_CACHE,
   (player: EntityPlayer, flag: CacheFlag) => {
     callbacks.evalCache(modPlayerData, player, flag);
   },
+);
+forgottenFables.AddCallback(
+  ModCallbacks.MC_PRE_SPAWN_CLEAN_AWARD,
+  callbacks.roomClearAward,
 );
 forgottenFables.AddCallback(
   ModCallbacks.MC_PRE_TEAR_COLLISION,
@@ -49,24 +54,8 @@ forgottenFables.AddCallback(
 );
 forgottenFables.AddCallback(
   ModCallbacks.MC_USE_ITEM,
-  (
-    collectibleType: number,
-    rng: RNG,
-    player: EntityPlayer,
-    _flags,
-    activeSlot: number,
-    // eslint-disable-next-line consistent-return
-  ): boolean | void => {
-    const x = useItem(
-      collectibleType,
-      rng,
-      player,
-      activeSlot as ActiveSlot,
-      modPlayerData,
-    );
-    if (x !== null) {
-      return x;
-    }
+  (item: number, rng: RNG, player: EntityPlayer, _flag, slot) => {
+    callbacks.useItem(item, rng, player, slot, modPlayerData);
   },
 );
 forgottenFables.AddCallback(
