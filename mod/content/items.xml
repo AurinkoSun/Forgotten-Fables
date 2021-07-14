@@ -6,5 +6,5 @@
  <passive cache="damage" description="Spectral buddies?" gfx="i_BigBoyGhostShot.png" name="Big Boy Ghost Shot" tags="dead"/>
  <active description="Blood Collector" maxcharges="0" name="Blood Drive" gfx="i_BloodDrive.png"/>
  <passive name="Blue Heart" description="Rest a bit?" gfx="i_blueheart.png"/>
- <active name="Russian Roulette" maxcharges="1" gfx="i_Russian_Roulette.png" description="Dare you test your luck?" />
+ <active name="Russian Roulette" maxcharges="1" gfx="i_RussianRoulette.png" description="Dare you test your luck?" />
 </items>
