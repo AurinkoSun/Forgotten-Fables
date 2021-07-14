@@ -22,6 +22,10 @@ forgottenFables.AddCallback(
   callbacks.tearUpdate,
 );
 forgottenFables.AddCallback(
+  ModCallbacks.MC_POST_PLAYER_UPDATE,
+  callbacks.playerUpdate,
+);
+forgottenFables.AddCallback(
   ModCallbacks.MC_EVALUATE_CACHE,
   (player: EntityPlayer, flag: CacheFlag) => {
     callbacks.evalCache(modPlayerData, player, flag);
