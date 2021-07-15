@@ -62,13 +62,17 @@ export function ghostUpdate(tear: EntityTear): void {
     tear.SpriteRotation = tear.Velocity.GetAngleDegrees() - 180;
   }
 }
-export function ghostCollide(tear: EntityTear, _collider: Entity): EntityTear {
+export function ghostCollide(tear: EntityTear, collider: Entity): EntityTear {
   if (tear.GetData().ghost === true) {
-    if (tear.GetData().player !== null) {
+    if (
+      tear.GetData().player !== null &&
+      collider.GetDropRNG().GetSeed() !== (tear.GetData().seed as number)
+    ) {
+      tear.GetData().seed = collider.GetDropRNG().GetSeed();
       const player: EntityPlayer = tear.GetData().player as EntityPlayer;
       const explosionEffect = Isaac.Spawn(
         EntityType.ENTITY_EFFECT,
-        EffectVariant.BLOOD_EXPLOSION,
+        EffectVariant.BOMB_EXPLOSION,
         0,
         tear.Position,
         Vector(0, 0),
@@ -80,8 +84,6 @@ export function ghostCollide(tear: EntityTear, _collider: Entity): EntityTear {
         const playeradjrange = (player.TearHeight * -1) / 23.75; // The player's range divided by the default
         explosionEffect.Scale *= playeradjrange;
       }
-    } else {
-      print("no player associated with tear");
     }
   }
   return tear;

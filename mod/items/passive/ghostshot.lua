@@ -45,13 +45,14 @@ function ____exports.ghostUpdate(self, tear)
         tear.SpriteRotation = tear.Velocity:GetAngleDegrees() - 180
     end
 end
-function ____exports.ghostCollide(self, tear, _collider)
+function ____exports.ghostCollide(self, tear, collider)
     if tear:GetData().ghost == true then
-        if tear:GetData().player ~= nil then
+        if (tear:GetData().player ~= nil) and (collider:GetDropRNG():GetSeed() ~= tear:GetData().seed) then
+            tear:GetData().seed = collider:GetDropRNG():GetSeed()
             local player = tear:GetData().player
             local explosionEffect = Isaac.Spawn(
                 EntityType.ENTITY_EFFECT,
-                EffectVariant.BLOOD_EXPLOSION,
+                EffectVariant.BOMB_EXPLOSION,
                 0,
                 tear.Position,
                 Vector(0, 0),
@@ -63,8 +64,6 @@ function ____exports.ghostCollide(self, tear, _collider)
                 local playeradjrange = (player.TearHeight * -1) / 23.75
                 explosionEffect.Scale = explosionEffect.Scale * playeradjrange
             end
-        else
-            print("no player associated with tear")
         end
     end
     return tear
