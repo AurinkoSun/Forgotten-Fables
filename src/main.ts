@@ -14,6 +14,20 @@ const modPlayerData: { data: PlayerData[] } = {
   ],
 };
 const forgottenFables = RegisterMod("Forgotten Fables", 1);
+function GetShaderParams(shaderName: string) {
+  if (shaderName === "dogmatest") {
+    const params: Record<string, unknown> = {
+      ColorizeIn: [0, 0, 0, 0], // vec4
+      ColorOffsetIn: [0, 0, 0], // vec3
+      TextureSize: Vector(0, 0), // vec2
+      PixelationAmount: 0.0, // float
+      ClipPlane: [0, 0, 0], // vec3
+    };
+    return params;
+  }
+  return undefined;
+}
+forgottenFables.AddCallback(ModCallbacks.MC_GET_SHADER_PARAMS, GetShaderParams);
 forgottenFables.AddCallback(ModCallbacks.MC_PRE_GAME_EXIT, () => {
   callbacks.preGameExit(forgottenFables, modPlayerData);
 });

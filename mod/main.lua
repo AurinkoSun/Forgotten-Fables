@@ -17,6 +17,20 @@ local modPlayerData = {
     }
 }
 local forgottenFables = RegisterMod("Forgotten Fables", 1)
+local function GetShaderParams(self, shaderName)
+    if shaderName == "dogmatest" then
+        local params = {
+            ColorizeIn = {0, 0, 0, 0},
+            ColorOffsetIn = {0, 0, 0},
+            TextureSize = Vector(0, 0),
+            PixelationAmount = 0,
+            ClipPlane = {0, 0, 0}
+        }
+        return params
+    end
+    return nil
+end
+forgottenFables:AddCallback(ModCallbacks.MC_GET_SHADER_PARAMS, GetShaderParams)
 forgottenFables:AddCallback(
     ModCallbacks.MC_PRE_GAME_EXIT,
     function()
