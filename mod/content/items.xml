@@ -1,11 +1,11 @@
 <items gfxroot="gfx/items/" version="1">
- <passive cache="firedelay damage" description="Use with caution..." gfx="i_FatFetus.png" name="Fat Fetus" />
- <active description="Kill Yourself" maxcharges="0" name="Suicide" gfx="i_Suicide.png"/>
- <active description="Revive" maxcharges="0" name="Revive" gfx="i_Revive.png"/>
- <passive cache="damage" description="Spectral buddies" gfx="i_GhostShot.png" name="Ghost Shot"/>
- <passive cache="damage" description="Spectral buddies?" gfx="i_BigBoyGhostShot.png" name="Big Boy Ghost Shot" tags="dead"/>
- <active description="Blood Collector" maxcharges="0" name="Blood Drive" gfx="i_BloodDrive.png"/>
- <passive name="Blue Heart" description="Protect your soul" gfx="i_blueheart.png" soulhearts="3"/>
- <active name="Russian Roulette" maxcharges="1" gfx="i_RussianRoulette.png" description="Dare you test your luck?" />
- <active name="Stone D6" maxcharges="5" gfx="i_StoneD6.png" description="Roll Over"/>
+ <passive cache="firedelay damage" description="Use with caution..." gfx="i_FatFetus.png" name="Fat Fetus" quality="4" />
+ <active description="Kill Yourself" maxcharges="0" name="Suicide" gfx="i_Suicide.png" />
+ <active description="Revive" maxcharges="0" name="Revive" gfx="i_Revive.png" />
+ <passive cache="damage" description="Spectral buddies" gfx="i_GhostShot.png" name="Ghost Shot" quality="3"/>
+ <passive cache="damage" description="Spectral buddies?" gfx="i_BigBoyGhostShot.png" name="Big Boy Ghost Shot" tags="dead" quality="4" />
+ <active description="Blood Collector" maxcharges="0" name="Blood Drive" gfx="i_BloodDrive.png" quality="3" />
+ <passive name="Blue Heart" description="Protect your soul" gfx="i_blueheart.png" soulhearts="3" quality="1"/>
+ <active name="Russian Roulette" maxcharges="1" gfx="i_RussianRoulette.png" description="Dare you test your luck?" quality="3" />
+ <active name="Stone D6" maxcharges="5" gfx="i_StoneD6.png" description="Roll Over" quality="2" />
 </items>
