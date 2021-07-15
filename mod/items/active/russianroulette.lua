@@ -3,7 +3,13 @@ local ____exports = {}
 local ____constants = require("constants")
 local sfxManager = ____constants.sfxManager
 function ____exports.rRoulette(self, rng, player)
-    if rng:RandomInt(6) == 3 then
+    if math.abs(
+        rng:RandomInt(
+            math.floor(
+                Isaac.GetPlayer().Luck + 0.5
+            ) + 6
+        )
+    ) == 0 then
         player:TakeDamage(
             255,
             DamageFlag.DAMAGE_NO_MODIFIERS,
@@ -20,6 +26,9 @@ function ____exports.rRoulette(self, rng, player)
             end
         end
         sfxManager:Play(SoundEffect.SOUND_EXPLOSION_STRONG)
+        print(
+            rng:RandomInt(1)
+        )
     end
     return true
 end

@@ -1,7 +1,7 @@
 import { sfxManager } from "../../constants";
 
 export function rRoulette(rng: RNG, player: EntityPlayer): boolean {
-  if (rng.RandomInt(6) === 3) {
+  if (Math.abs(rng.RandomInt(Math.round(Isaac.GetPlayer().Luck) + 6)) === 0) {
     player.TakeDamage(
       255,
       DamageFlag.DAMAGE_NO_MODIFIERS,
@@ -16,6 +16,7 @@ export function rRoulette(rng: RNG, player: EntityPlayer): boolean {
       }
     }
     sfxManager.Play(SoundEffect.SOUND_EXPLOSION_STRONG);
+    print(rng.RandomInt(1));
   }
   return true;
 }
