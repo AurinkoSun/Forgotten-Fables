@@ -24,6 +24,8 @@ local ____MC_POST_PROJECTILE_INIT = require("callbacks.MC_POST_PROJECTILE_INIT")
 local projectileInit = ____MC_POST_PROJECTILE_INIT.projectileInit
 local ____MC_POST_TEAR_UPDATE = require("callbacks.MC_POST_TEAR_UPDATE")
 local tearUpdate = ____MC_POST_TEAR_UPDATE.tearUpdate
+local ____MC_POST_UPDATE = require("callbacks.MC_POST_UPDATE")
+local postUpdate = ____MC_POST_UPDATE.postUpdate
 local ____MC_PRE_GAME_EXIT = require("callbacks.MC_PRE_GAME_EXIT")
 local preGameExit = ____MC_PRE_GAME_EXIT.preGameExit
 local ____MC_PRE_TEAR_COLLISION = require("callbacks.MC_PRE_TEAR_COLLISION")
@@ -48,4 +50,5 @@ ____exports.preGameExit = preGameExit
 ____exports.preTearCollision = preTearCollision
 ____exports.usePill = usePill
 ____exports.bombUpdate = bombUpdate
+____exports.postUpdate = postUpdate
 return ____exports

@@ -88,3 +88,4 @@ forgottenFables.AddCallback(
   ModCallbacks.MC_POST_PROJECTILE_INIT,
   callbacks.projectileInit,
 );
+forgottenFables.AddCallback(ModCallbacks.MC_POST_UPDATE, callbacks.postUpdate);
