@@ -8,6 +8,8 @@ local ____blooddrive = require("items.active.blooddrive")
 local bloodDrive = ____blooddrive.bloodDrive
 local ____russianroulette = require("items.active.russianroulette")
 local rRoulette = ____russianroulette.rRoulette
+local ____stoned6 = require("items.active.stoned6")
+local stoneD6 = ____stoned6.stoneD6
 function ____exports.useItem(self, item, rng, player, _slot, modPlayerData)
     local returnVal = nil
     local ____switch3 = item
@@ -15,6 +17,8 @@ function ____exports.useItem(self, item, rng, player, _slot, modPlayerData)
         goto ____switch3_case_0
     elseif ____switch3 == ModItemTypes.BLOODDRIVE then
         goto ____switch3_case_1
+    elseif ____switch3 == ModItemTypes.STONE_D6 then
+        goto ____switch3_case_2
     end
     goto ____switch3_case_default
     ::____switch3_case_0::
@@ -28,6 +32,13 @@ function ____exports.useItem(self, item, rng, player, _slot, modPlayerData)
     do
         do
             returnVal = bloodDrive(nil, player, modPlayerData)
+            goto ____switch3_end
+        end
+    end
+    ::____switch3_case_2::
+    do
+        do
+            returnVal = stoneD6(nil)
             goto ____switch3_end
         end
     end

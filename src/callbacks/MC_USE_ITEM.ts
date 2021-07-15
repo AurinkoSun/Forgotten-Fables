@@ -2,6 +2,7 @@ import { ModItemTypes } from "../constants";
 import { costumes } from "../globals/costumes";
 import { bloodDrive } from "../items/active/blooddrive";
 import { rRoulette } from "../items/active/russianroulette";
+import { stoneD6 } from "../items/active/stoned6";
 // import { revive, suicide } from "../items/active/suicide";
 import { PlayerData } from "../playerdata";
 
@@ -29,6 +30,10 @@ export function useItem(
     }
     case ModItemTypes.BLOODDRIVE: {
       returnVal = bloodDrive(player, modPlayerData);
+      break;
+    }
+    case ModItemTypes.STONE_D6: {
+      returnVal = stoneD6();
       break;
     }
     default:

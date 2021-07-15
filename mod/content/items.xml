@@ -7,4 +7,5 @@
  <active description="Blood Collector" maxcharges="0" name="Blood Drive" gfx="i_BloodDrive.png"/>
  <passive name="Blue Heart" description="Protect your soul" gfx="i_blueheart.png" soulhearts="3"/>
  <active name="Russian Roulette" maxcharges="1" gfx="i_RussianRoulette.png" description="Dare you test your luck?" />
+ <active name="Stone D6" maxcharges="5" gfx="i_StoneD6.png" description="Roll Over"/>
 </items>
