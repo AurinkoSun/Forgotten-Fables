@@ -14,6 +14,12 @@ function bbghostReplace(self, tear, player)
     return ghost
 end
 function ghostReplace(self, tear, player)
+    if player:HasCollectible(CollectibleType.COLLECTIBLE_MOMS_KNIFE) then
+        tear:AddTearFlags(TearFlags.TEAR_HOMING)
+        tear:AddTearFlags(TearFlags.TEAR_SPECTRAL)
+        tear:AddTearFlags(TearFlags.TEAR_EXPLOSIVE)
+        return tear
+    end
     local newtear = Isaac.Spawn(EntityType.ENTITY_TEAR, ModTearVariants.GHOST, 0, tear.Position, tear.Velocity, player):ToTear()
     if newtear ~= nil then
         newtear.TearFlags = tear.TearFlags

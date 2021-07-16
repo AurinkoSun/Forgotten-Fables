@@ -34,6 +34,12 @@ function bbghostReplace(tear: EntityTear, player: EntityPlayer): Entity {
   return ghost;
 }
 function ghostReplace(tear: EntityTear, player: EntityPlayer): EntityTear {
+  if (player.HasCollectible(CollectibleType.COLLECTIBLE_MOMS_KNIFE)) {
+    tear.AddTearFlags(TearFlags.TEAR_HOMING);
+    tear.AddTearFlags(TearFlags.TEAR_SPECTRAL);
+    tear.AddTearFlags(TearFlags.TEAR_EXPLOSIVE);
+    return tear;
+  }
   const newtear = Isaac.Spawn(
     EntityType.ENTITY_TEAR,
     ModTearVariants.GHOST,

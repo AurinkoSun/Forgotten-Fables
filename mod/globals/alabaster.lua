@@ -11,7 +11,6 @@ function ____exports.alabasterStats(self, player, flags)
         if flags == CacheFlag.CACHE_FLYING then
             player.CanFly = true
         end
-        game:GetLevel():AddAngelRoomChance(-100)
     end
 end
 function ____exports.alabasterHealth(self, player)
@@ -24,6 +23,35 @@ function ____exports.alabasterHealth(self, player)
         local redHealth = player:GetHearts()
         if redHealth > 0 then
             player:AddHearts(0 - redHealth)
+        end
+    end
+end
+function ____exports.alabasterRooms(self)
+    if game:GetRoom():IsCurrentRoomLastBoss() then
+        game:GetLevel():AddAngelRoomChance(-100)
+        do
+            local i = 0
+            while i <= DoorSlot.NUM_DOOR_SLOTS do
+                local door = game:GetRoom():GetDoor(i)
+                if door == nil then
+                    return
+                end
+                if door:IsRoomType(RoomType.ROOM_ANGEL) then
+                    print(
+                        "angel type: " .. tostring(
+                            door:GetVariant()
+                        )
+                    )
+                    door:SetRoomTypes(RoomType.ROOM_DEVIL, RoomType.ROOM_DEVIL)
+                elseif door:IsRoomType(RoomType.ROOM_DEVIL) then
+                    print(
+                        "devil type: " .. tostring(
+                            door:GetVariant()
+                        )
+                    )
+                end
+                i = i + 1
+            end
         end
     end
 end
