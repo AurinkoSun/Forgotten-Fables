@@ -1,6 +1,7 @@
 --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
 local ____exports = {}
 local ____constants = require("constants")
+local game = ____constants.game
 local ModPlayerTypes = ____constants.ModPlayerTypes
 function ____exports.alabasterStats(self, player, flags)
     if player:GetPlayerType() == ModPlayerTypes.ALABASTER then
