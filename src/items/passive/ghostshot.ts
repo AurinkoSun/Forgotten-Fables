@@ -49,6 +49,7 @@ function ghostReplace(tear: EntityTear, player: EntityPlayer): EntityTear {
     newtear.AddTearFlags(TearFlags.TEAR_SPECTRAL);
     newtear.GetData().ghost = true;
     newtear.GetData().player = player;
+    newtear.Scale = tear.Size / 7;
     tear.Remove();
     return newtear;
   }
@@ -56,11 +57,30 @@ function ghostReplace(tear: EntityTear, player: EntityPlayer): EntityTear {
   return tear;
 }
 export function ghostUpdate(tear: EntityTear): void {
-  if (tear.Velocity.GetAngleDegrees() < 180) {
-    tear.SpriteRotation = tear.Velocity.GetAngleDegrees() + 180;
-  } else {
-    tear.SpriteRotation = tear.Velocity.GetAngleDegrees() - 180;
+  // quick and dirty fix.
+  // probably bad.
+  if (
+    tear.Velocity.GetAngleDegrees() >= 0 &&
+    tear.Velocity.GetAngleDegrees() <= 30
+  ) {
+    tear.SpriteRotation = tear.Velocity.GetAngleDegrees();
+  } else if (
+    tear.Velocity.GetAngleDegrees() > 30 &&
+    tear.Velocity.GetAngleDegrees() <= 150
+  ) {
+    tear.SpriteRotation = tear.Velocity.GetAngleDegrees() - 90;
+  } else if (
+    tear.Velocity.GetAngleDegrees() <= -30 &&
+    tear.Velocity.GetAngleDegrees() >= -150
+  ) {
+    tear.SpriteRotation = tear.Velocity.GetAngleDegrees() + 90;
+  } else if (
+    tear.Velocity.GetAngleDegrees() < -90 ||
+    tear.Velocity.GetAngleDegrees() > 90
+  ) {
+    tear.SpriteRotation += tear.Velocity.GetAngleDegrees() + 180;
   }
+  // TODO: make sprite use scaled tears from spritesheet
 }
 export function ghostCollide(tear: EntityTear, collider: Entity): EntityTear {
   if (tear.GetData().ghost === true) {

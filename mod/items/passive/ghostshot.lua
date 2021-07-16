@@ -22,6 +22,7 @@ function ghostReplace(self, tear, player)
         newtear:AddTearFlags(TearFlags.TEAR_SPECTRAL)
         newtear:GetData().ghost = true
         newtear:GetData().player = player
+        newtear.Scale = tear.Size / 7
         tear:Remove()
         return newtear
     end
@@ -39,10 +40,14 @@ function ____exports.ghostShot(self, tear)
     end
 end
 function ____exports.ghostUpdate(self, tear)
-    if tear.Velocity:GetAngleDegrees() < 180 then
-        tear.SpriteRotation = tear.Velocity:GetAngleDegrees() + 180
-    else
-        tear.SpriteRotation = tear.Velocity:GetAngleDegrees() - 180
+    if (tear.Velocity:GetAngleDegrees() >= 0) and (tear.Velocity:GetAngleDegrees() <= 30) then
+        tear.SpriteRotation = tear.Velocity:GetAngleDegrees()
+    elseif (tear.Velocity:GetAngleDegrees() > 30) and (tear.Velocity:GetAngleDegrees() <= 150) then
+        tear.SpriteRotation = tear.Velocity:GetAngleDegrees() - 90
+    elseif (tear.Velocity:GetAngleDegrees() <= -30) and (tear.Velocity:GetAngleDegrees() >= -150) then
+        tear.SpriteRotation = tear.Velocity:GetAngleDegrees() + 90
+    elseif (tear.Velocity:GetAngleDegrees() < -90) or (tear.Velocity:GetAngleDegrees() > 90) then
+        tear.SpriteRotation = tear.SpriteRotation + (tear.Velocity:GetAngleDegrees() + 180)
     end
 end
 function ____exports.ghostCollide(self, tear, collider)
