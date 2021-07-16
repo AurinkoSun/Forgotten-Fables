@@ -31,7 +31,13 @@ function ____exports.ghostShot(self, tear)
         if (player ~= nil) and player:HasCollectible(ModItemTypes.BBGHOST_SHOT) then
             bbghostReplace(nil, tear, player)
         elseif (player ~= nil) and player:HasCollectible(ModItemTypes.GHOST_SHOT) then
-            ghostReplace(nil, tear, player)
+            if player:HasWeaponType(WeaponType.WEAPON_TEARS) then
+                ghostReplace(nil, tear, player)
+            else
+                tear:AddTearFlags(TearFlags.TEAR_HOMING)
+                tear:AddTearFlags(TearFlags.TEAR_SPECTRAL)
+                tear:AddTearFlags(TearFlags.TEAR_EXPLOSIVE)
+            end
         end
     end
 end

@@ -12,7 +12,13 @@ export function ghostShot(tear: EntityTear): void {
       player !== null &&
       player.HasCollectible(ModItemTypes.GHOST_SHOT)
     ) {
-      ghostReplace(tear, player);
+      if (player.HasWeaponType(WeaponType.WEAPON_TEARS)) {
+        ghostReplace(tear, player);
+      } else {
+        tear.AddTearFlags(TearFlags.TEAR_HOMING);
+        tear.AddTearFlags(TearFlags.TEAR_SPECTRAL);
+        tear.AddTearFlags(TearFlags.TEAR_EXPLOSIVE);
+      }
     }
   }
 }
