@@ -18,10 +18,6 @@ forgottenFables.AddCallback(ModCallbacks.MC_PRE_GAME_EXIT, () => {
   callbacks.preGameExit(forgottenFables, modPlayerData);
 });
 forgottenFables.AddCallback(
-  ModCallbacks.MC_POST_TEAR_UPDATE,
-  callbacks.tearUpdate,
-);
-forgottenFables.AddCallback(
   ModCallbacks.MC_POST_PLAYER_UPDATE,
   callbacks.playerUpdate,
 );
