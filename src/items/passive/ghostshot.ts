@@ -34,26 +34,15 @@ function bbghostReplace(tear: EntityTear, player: EntityPlayer): Entity {
   return ghost;
 }
 function ghostReplace(tear: EntityTear, player: EntityPlayer): EntityTear {
-  const newtear = Isaac.Spawn(
-    EntityType.ENTITY_TEAR,
-    ModTearVariants.GHOST,
-    0,
-    tear.Position,
-    tear.Velocity,
-    player,
-  ).ToTear();
-  if (newtear !== null) {
-    newtear.TearFlags = tear.TearFlags;
-    newtear.Rotation = tear.Rotation;
-    newtear.AddTearFlags(TearFlags.TEAR_HOMING);
-    newtear.AddTearFlags(TearFlags.TEAR_SPECTRAL);
-    newtear.GetData().ghost = true;
-    newtear.GetData().player = player;
-    newtear.Scale = tear.Size / 7;
-    tear.Remove();
-    return newtear;
-  }
-  error("Ghost tear spawn failed", 2);
+  tear.ChangeVariant(ModTearVariants.GHOST);
+  tear.GetSprite().ReplaceSpritesheet(0, "gfx/t_spooky.png");
+  tear.GetSprite().LoadGraphics();
+  tear.ResetSpriteScale();
+  tear.AddTearFlags(TearFlags.TEAR_HOMING);
+  tear.AddTearFlags(TearFlags.TEAR_SPECTRAL);
+  tear.GetData().ghost = true;
+  tear.GetData().player = player;
+  tear.Remove();
   return tear;
 }
 export function ghostUpdate(tear: EntityTear): void {
@@ -80,7 +69,6 @@ export function ghostUpdate(tear: EntityTear): void {
   ) {
     tear.SpriteRotation += tear.Velocity.GetAngleDegrees() + 180;
   }
-  // TODO: make sprite use scaled tears from spritesheet
 }
 export function ghostCollide(tear: EntityTear, collider: Entity): EntityTear {
   if (tear.GetData().ghost === true) {

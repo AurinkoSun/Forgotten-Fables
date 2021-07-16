@@ -14,19 +14,15 @@ function bbghostReplace(self, tear, player)
     return ghost
 end
 function ghostReplace(self, tear, player)
-    local newtear = Isaac.Spawn(EntityType.ENTITY_TEAR, ModTearVariants.GHOST, 0, tear.Position, tear.Velocity, player):ToTear()
-    if newtear ~= nil then
-        newtear.TearFlags = tear.TearFlags
-        newtear.Rotation = tear.Rotation
-        newtear:AddTearFlags(TearFlags.TEAR_HOMING)
-        newtear:AddTearFlags(TearFlags.TEAR_SPECTRAL)
-        newtear:GetData().ghost = true
-        newtear:GetData().player = player
-        newtear.Scale = tear.Size / 7
-        tear:Remove()
-        return newtear
-    end
-    error("Ghost tear spawn failed", 2)
+    tear:ChangeVariant(ModTearVariants.GHOST)
+    tear:GetSprite():ReplaceSpritesheet(0, "gfx/t_spooky.png")
+    tear:GetSprite():LoadGraphics()
+    tear:ResetSpriteScale()
+    tear:AddTearFlags(TearFlags.TEAR_HOMING)
+    tear:AddTearFlags(TearFlags.TEAR_SPECTRAL)
+    tear:GetData().ghost = true
+    tear:GetData().player = player
+    tear:Remove()
     return tear
 end
 function ____exports.ghostShot(self, tear)
