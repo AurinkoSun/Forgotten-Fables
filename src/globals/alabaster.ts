@@ -17,5 +17,9 @@ export function alabasterHealth(player: EntityPlayer): void {
       player.AddMaxHearts(0 - playerHealth, false);
       player.AddBlackHearts(playerHealth);
     }
+    const redHealth = player.GetHearts();
+    if (redHealth > 0) {
+      player.AddHearts(0 - redHealth);
+    }
   }
 }

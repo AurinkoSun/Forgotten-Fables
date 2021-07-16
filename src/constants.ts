@@ -13,7 +13,7 @@ export enum ModItemTypes {
   STONE_D6 = Isaac.GetItemIdByName("Stone D6"),
 }
 export enum ModTearVariants {
-  GHOST = 50,
+  GHOST = Isaac.GetEntityVariantByName("Ghost Tear"),
 }
 /* export enum ModEntityTypes {
   TSARAHBODY = 799,

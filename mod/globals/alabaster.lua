@@ -19,6 +19,10 @@ function ____exports.alabasterHealth(self, player)
             player:AddMaxHearts(0 - playerHealth, false)
             player:AddBlackHearts(playerHealth)
         end
+        local redHealth = player:GetHearts()
+        if redHealth > 0 then
+            player:AddHearts(0 - redHealth)
+        end
     end
 end
 return ____exports
