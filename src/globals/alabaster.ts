@@ -1,4 +1,4 @@
-import { game, ModPlayerTypes } from "../constants";
+import { ModPlayerTypes } from "../constants";
 
 export function alabasterStats(player: EntityPlayer, flags: CacheFlag): void {
   if (player.GetPlayerType() === ModPlayerTypes.ALABASTER) {

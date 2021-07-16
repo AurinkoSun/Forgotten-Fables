@@ -14,25 +14,14 @@ function bbghostReplace(self, tear, player)
     return ghost
 end
 function ghostReplace(self, tear, player)
-    if player:HasCollectible(CollectibleType.COLLECTIBLE_MOMS_KNIFE) then
-        tear:AddTearFlags(TearFlags.TEAR_HOMING)
-        tear:AddTearFlags(TearFlags.TEAR_SPECTRAL)
-        tear:AddTearFlags(TearFlags.TEAR_EXPLOSIVE)
-        return tear
-    end
-    local newtear = Isaac.Spawn(EntityType.ENTITY_TEAR, ModTearVariants.GHOST, 0, tear.Position, tear.Velocity, player):ToTear()
-    if newtear ~= nil then
-        newtear.TearFlags = tear.TearFlags
-        newtear.Rotation = tear.Rotation
-        newtear:AddTearFlags(TearFlags.TEAR_HOMING)
-        newtear:AddTearFlags(TearFlags.TEAR_SPECTRAL)
-        newtear:GetData().ghost = true
-        newtear:GetData().player = player
-        newtear.Scale = tear.Size / 7
-        tear:Remove()
-        return newtear
-    end
-    error("Ghost tear spawn failed", 2)
+    tear:ChangeVariant(ModTearVariants.GHOST)
+    tear:GetSprite():Load("gfx/Ghost_Tear.anm2", true)
+    tear:GetSprite():Play("Idle", true)
+    tear.CollisionDamage = player.Damage
+    tear:AddTearFlags(TearFlags.TEAR_HOMING)
+    tear:AddTearFlags(TearFlags.TEAR_SPECTRAL)
+    tear:GetData().ghost = true
+    tear:GetData().player = player
     return tear
 end
 function ____exports.ghostShot(self, tear)
@@ -43,17 +32,6 @@ function ____exports.ghostShot(self, tear)
         elseif (player ~= nil) and player:HasCollectible(ModItemTypes.GHOST_SHOT) then
             ghostReplace(nil, tear, player)
         end
-    end
-end
-function ____exports.ghostUpdate(self, tear)
-    if (tear.Velocity:GetAngleDegrees() >= 0) and (tear.Velocity:GetAngleDegrees() <= 30) then
-        tear.SpriteRotation = tear.Velocity:GetAngleDegrees()
-    elseif (tear.Velocity:GetAngleDegrees() > 30) and (tear.Velocity:GetAngleDegrees() <= 150) then
-        tear.SpriteRotation = tear.Velocity:GetAngleDegrees() - 90
-    elseif (tear.Velocity:GetAngleDegrees() <= -30) and (tear.Velocity:GetAngleDegrees() >= -150) then
-        tear.SpriteRotation = tear.Velocity:GetAngleDegrees() + 90
-    elseif (tear.Velocity:GetAngleDegrees() < -90) or (tear.Velocity:GetAngleDegrees() > 90) then
-        tear.SpriteRotation = tear.SpriteRotation + (tear.Velocity:GetAngleDegrees() + 180)
     end
 end
 function ____exports.ghostCollide(self, tear, collider)

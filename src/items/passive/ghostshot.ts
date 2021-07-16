@@ -34,59 +34,15 @@ function bbghostReplace(tear: EntityTear, player: EntityPlayer): Entity {
   return ghost;
 }
 function ghostReplace(tear: EntityTear, player: EntityPlayer): EntityTear {
-  if (player.HasCollectible(CollectibleType.COLLECTIBLE_MOMS_KNIFE)) {
-    tear.AddTearFlags(TearFlags.TEAR_HOMING);
-    tear.AddTearFlags(TearFlags.TEAR_SPECTRAL);
-    tear.AddTearFlags(TearFlags.TEAR_EXPLOSIVE);
-    return tear;
-  }
-  const newtear = Isaac.Spawn(
-    EntityType.ENTITY_TEAR,
-    ModTearVariants.GHOST,
-    0,
-    tear.Position,
-    tear.Velocity,
-    player,
-  ).ToTear();
-  if (newtear !== null) {
-    newtear.TearFlags = tear.TearFlags;
-    newtear.Rotation = tear.Rotation;
-    newtear.AddTearFlags(TearFlags.TEAR_HOMING);
-    newtear.AddTearFlags(TearFlags.TEAR_SPECTRAL);
-    newtear.GetData().ghost = true;
-    newtear.GetData().player = player;
-    newtear.Scale = tear.Size / 7;
-    tear.Remove();
-    return newtear;
-  }
-  error("Ghost tear spawn failed", 2);
+  tear.ChangeVariant(ModTearVariants.GHOST);
+  tear.GetSprite().Load("gfx/Ghost_Tear.anm2", true);
+  tear.GetSprite().Play("Idle", true);
+  tear.CollisionDamage = player.Damage;
+  tear.AddTearFlags(TearFlags.TEAR_HOMING);
+  tear.AddTearFlags(TearFlags.TEAR_SPECTRAL);
+  tear.GetData().ghost = true;
+  tear.GetData().player = player;
   return tear;
-}
-export function ghostUpdate(tear: EntityTear): void {
-  // quick and dirty fix.
-  // probably bad.
-  if (
-    tear.Velocity.GetAngleDegrees() >= 0 &&
-    tear.Velocity.GetAngleDegrees() <= 30
-  ) {
-    tear.SpriteRotation = tear.Velocity.GetAngleDegrees();
-  } else if (
-    tear.Velocity.GetAngleDegrees() > 30 &&
-    tear.Velocity.GetAngleDegrees() <= 150
-  ) {
-    tear.SpriteRotation = tear.Velocity.GetAngleDegrees() - 90;
-  } else if (
-    tear.Velocity.GetAngleDegrees() <= -30 &&
-    tear.Velocity.GetAngleDegrees() >= -150
-  ) {
-    tear.SpriteRotation = tear.Velocity.GetAngleDegrees() + 90;
-  } else if (
-    tear.Velocity.GetAngleDegrees() < -90 ||
-    tear.Velocity.GetAngleDegrees() > 90
-  ) {
-    tear.SpriteRotation += tear.Velocity.GetAngleDegrees() + 180;
-  }
-  // TODO: make sprite use scaled tears from spritesheet
 }
 export function ghostCollide(tear: EntityTear, collider: Entity): EntityTear {
   if (tear.GetData().ghost === true) {
