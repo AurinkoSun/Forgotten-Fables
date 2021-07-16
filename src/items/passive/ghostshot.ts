@@ -34,9 +34,10 @@ function bbghostReplace(tear: EntityTear, player: EntityPlayer): Entity {
   return ghost;
 }
 function ghostReplace(tear: EntityTear, player: EntityPlayer): EntityTear {
+  const animName = tear.GetSprite().GetAnimation();
   tear.ChangeVariant(ModTearVariants.GHOST);
   tear.GetSprite().Load("gfx/Ghost_Tear.anm2", true);
-  tear.GetSprite().Play("Idle", true);
+  tear.GetSprite().Play(animName, true);
   tear.CollisionDamage = player.Damage;
   tear.AddTearFlags(TearFlags.TEAR_HOMING);
   tear.AddTearFlags(TearFlags.TEAR_SPECTRAL);

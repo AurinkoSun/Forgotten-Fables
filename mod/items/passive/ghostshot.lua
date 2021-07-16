@@ -14,9 +14,10 @@ function bbghostReplace(self, tear, player)
     return ghost
 end
 function ghostReplace(self, tear, player)
+    local animName = tear:GetSprite():GetAnimation()
     tear:ChangeVariant(ModTearVariants.GHOST)
     tear:GetSprite():Load("gfx/Ghost_Tear.anm2", true)
-    tear:GetSprite():Play("Idle", true)
+    tear:GetSprite():Play(animName, true)
     tear.CollisionDamage = player.Damage
     tear:AddTearFlags(TearFlags.TEAR_HOMING)
     tear:AddTearFlags(TearFlags.TEAR_SPECTRAL)
