@@ -1,7 +1,6 @@
 --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
 local ____exports = {}
 local ____constants = require("constants")
-local game = ____constants.game
 local ModPlayerTypes = ____constants.ModPlayerTypes
 function ____exports.alabasterStats(self, player, flags)
     if player:GetPlayerType() == ModPlayerTypes.ALABASTER then
@@ -11,7 +10,6 @@ function ____exports.alabasterStats(self, player, flags)
         if flags == CacheFlag.CACHE_FLYING then
             player.CanFly = true
         end
-        game:GetLevel():AddAngelRoomChance(-100)
     end
 end
 function ____exports.alabasterHealth(self, player)
