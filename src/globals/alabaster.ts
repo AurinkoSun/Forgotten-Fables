@@ -8,7 +8,7 @@ export function alabasterStats(player: EntityPlayer, flags: CacheFlag): void {
     if (flags === CacheFlag.CACHE_FLYING) {
       player.CanFly = true;
     }
-    game.GetLevel().AddAngelRoomChance(-100);
+    game.GetLevel().InitializeDevilAngelRoom(false, true);
   }
 }
 export function alabasterHealth(player: EntityPlayer): void {
