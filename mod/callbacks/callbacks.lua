@@ -26,6 +26,8 @@ local ____MC_POST_UPDATE = require("callbacks.MC_POST_UPDATE")
 local postUpdate = ____MC_POST_UPDATE.postUpdate
 local ____MC_PRE_GAME_EXIT = require("callbacks.MC_PRE_GAME_EXIT")
 local preGameExit = ____MC_PRE_GAME_EXIT.preGameExit
+local ____MC_PRE_SPAWN_CLEAR_AWARD = require("callbacks.MC_PRE_SPAWN_CLEAR_AWARD")
+local clearaward = ____MC_PRE_SPAWN_CLEAR_AWARD.clearaward
 local ____MC_PRE_TEAR_COLLISION = require("callbacks.MC_PRE_TEAR_COLLISION")
 local preTearCollision = ____MC_PRE_TEAR_COLLISION.preTearCollision
 local ____MC_USE_ITEM = require("callbacks.MC_USE_ITEM")
@@ -48,4 +50,5 @@ ____exports.preTearCollision = preTearCollision
 ____exports.usePill = usePill
 ____exports.bombUpdate = bombUpdate
 ____exports.postUpdate = postUpdate
+____exports.clearaward = clearaward
 return ____exports
