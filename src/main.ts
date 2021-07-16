@@ -85,7 +85,3 @@ forgottenFables.AddCallback(
   callbacks.projectileInit,
 );
 forgottenFables.AddCallback(ModCallbacks.MC_POST_UPDATE, callbacks.postUpdate);
-forgottenFables.AddCallback(
-  ModCallbacks.MC_PRE_SPAWN_CLEAN_AWARD,
-  callbacks.clearaward,
-);

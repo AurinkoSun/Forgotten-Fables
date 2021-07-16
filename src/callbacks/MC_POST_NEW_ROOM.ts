@@ -5,5 +5,4 @@ import { PlayerData } from "../playerdata";
 export function postNewRoom(modPlayerData: { data: PlayerData[] }): void {
   costumes(modPlayerData);
   pocketItems(modPlayerData);
-  // alabasterRooms();
 }
