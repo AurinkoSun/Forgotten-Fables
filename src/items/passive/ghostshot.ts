@@ -35,42 +35,14 @@ function bbghostReplace(tear: EntityTear, player: EntityPlayer): Entity {
 }
 function ghostReplace(tear: EntityTear, player: EntityPlayer): EntityTear {
   tear.ChangeVariant(ModTearVariants.GHOST);
-  tear.GetSprite().Load("gfx/002.051_ghost_tear.anm2", true);
+  tear.GetSprite().Load("gfx/Ghost_Tear.anm2", true);
   tear.GetSprite().Play("Idle", true);
-  print(tear.GetSprite().GetAnimation());
   tear.CollisionDamage = player.Damage;
-  tear.ResetSpriteScale();
   tear.AddTearFlags(TearFlags.TEAR_HOMING);
   tear.AddTearFlags(TearFlags.TEAR_SPECTRAL);
   tear.GetData().ghost = true;
   tear.GetData().player = player;
-  tear.Remove();
   return tear;
-}
-export function ghostUpdate(tear: EntityTear): void {
-  // quick and dirty fix.
-  // probably bad.
-  if (
-    tear.Velocity.GetAngleDegrees() >= 0 &&
-    tear.Velocity.GetAngleDegrees() <= 30
-  ) {
-    tear.SpriteRotation = tear.Velocity.GetAngleDegrees();
-  } else if (
-    tear.Velocity.GetAngleDegrees() > 30 &&
-    tear.Velocity.GetAngleDegrees() <= 150
-  ) {
-    tear.SpriteRotation = tear.Velocity.GetAngleDegrees() - 90;
-  } else if (
-    tear.Velocity.GetAngleDegrees() <= -30 &&
-    tear.Velocity.GetAngleDegrees() >= -150
-  ) {
-    tear.SpriteRotation = tear.Velocity.GetAngleDegrees() + 90;
-  } else if (
-    tear.Velocity.GetAngleDegrees() < -90 ||
-    tear.Velocity.GetAngleDegrees() > 90
-  ) {
-    tear.SpriteRotation += tear.Velocity.GetAngleDegrees() + 180;
-  }
 }
 export function ghostCollide(tear: EntityTear, collider: Entity): EntityTear {
   if (tear.GetData().ghost === true) {

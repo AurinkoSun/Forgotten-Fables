@@ -15,18 +15,13 @@ function bbghostReplace(self, tear, player)
 end
 function ghostReplace(self, tear, player)
     tear:ChangeVariant(ModTearVariants.GHOST)
-    tear:GetSprite():Load("gfx/002.051_ghost_tear.anm2", true)
+    tear:GetSprite():Load("gfx/Ghost_Tear.anm2", true)
     tear:GetSprite():Play("Idle", true)
-    print(
-        tear:GetSprite():GetAnimation()
-    )
     tear.CollisionDamage = player.Damage
-    tear:ResetSpriteScale()
     tear:AddTearFlags(TearFlags.TEAR_HOMING)
     tear:AddTearFlags(TearFlags.TEAR_SPECTRAL)
     tear:GetData().ghost = true
     tear:GetData().player = player
-    tear:Remove()
     return tear
 end
 function ____exports.ghostShot(self, tear)
@@ -37,17 +32,6 @@ function ____exports.ghostShot(self, tear)
         elseif (player ~= nil) and player:HasCollectible(ModItemTypes.GHOST_SHOT) then
             ghostReplace(nil, tear, player)
         end
-    end
-end
-function ____exports.ghostUpdate(self, tear)
-    if (tear.Velocity:GetAngleDegrees() >= 0) and (tear.Velocity:GetAngleDegrees() <= 30) then
-        tear.SpriteRotation = tear.Velocity:GetAngleDegrees()
-    elseif (tear.Velocity:GetAngleDegrees() > 30) and (tear.Velocity:GetAngleDegrees() <= 150) then
-        tear.SpriteRotation = tear.Velocity:GetAngleDegrees() - 90
-    elseif (tear.Velocity:GetAngleDegrees() <= -30) and (tear.Velocity:GetAngleDegrees() >= -150) then
-        tear.SpriteRotation = tear.Velocity:GetAngleDegrees() + 90
-    elseif (tear.Velocity:GetAngleDegrees() < -90) or (tear.Velocity:GetAngleDegrees() > 90) then
-        tear.SpriteRotation = tear.SpriteRotation + (tear.Velocity:GetAngleDegrees() + 180)
     end
 end
 function ____exports.ghostCollide(self, tear, collider)
