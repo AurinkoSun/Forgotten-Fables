@@ -15,8 +15,12 @@ function bbghostReplace(self, tear, player)
 end
 function ghostReplace(self, tear, player)
     tear:ChangeVariant(ModTearVariants.GHOST)
-    tear:GetSprite():ReplaceSpritesheet(0, "gfx/t_spooky.png")
-    tear:GetSprite():LoadGraphics()
+    tear:GetSprite():Load("gfx/002.051_ghost_tear.anm2", true)
+    tear:GetSprite():Play("Idle", true)
+    print(
+        tear:GetSprite():GetAnimation()
+    )
+    tear.CollisionDamage = player.Damage
     tear:ResetSpriteScale()
     tear:AddTearFlags(TearFlags.TEAR_HOMING)
     tear:AddTearFlags(TearFlags.TEAR_SPECTRAL)
