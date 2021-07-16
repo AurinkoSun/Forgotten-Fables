@@ -301,7 +301,7 @@ function ____exports.gigaInit(self, bomb)
         local player = bomb.SpawnerEntity:ToPlayer()
         if player ~= nil then
             bomb:SetExplosionCountdown(100)
-            if (player:HasCollectible(CollectibleType.COLLECTIBLE_SPOON_BENDER) or player:HasCollectible(CollectibleType.COLLECTIBLE_SACRED_HEART)) or player:HasCollectible(CollectibleType.COLLECTIBLE_GODHEAD) then
+            if ((player:HasCollectible(CollectibleType.COLLECTIBLE_SPOON_BENDER) or player:HasCollectible(CollectibleType.COLLECTIBLE_SACRED_HEART)) or player:HasCollectible(CollectibleType.COLLECTIBLE_GODHEAD)) or player:HasCollectible(constants.ModItemTypes.GHOST_SHOT) then
                 bomb:AddTearFlags(TearFlags.TEAR_HOMING)
             end
             if player:HasCollectible(CollectibleType.COLLECTIBLE_SOY_MILK) or player:HasCollectible(CollectibleType.COLLECTIBLE_ALMOND_MILK) then
@@ -327,7 +327,7 @@ function ____exports.gigaInit(self, bomb)
             elseif player:HasCollectible(CollectibleType.COLLECTIBLE_SCATTER_BOMBS) then
                 bomb:AddTearFlags(TearFlags.TEAR_SCATTER_BOMB)
                 bomb:GetSprite():Play("scatterpulse", true)
-            elseif player:HasCollectible(CollectibleType.COLLECTIBLE_GHOST_BOMBS) then
+            elseif player:HasCollectible(CollectibleType.COLLECTIBLE_GHOST_BOMBS) or player:HasCollectible(constants.ModItemTypes.GHOST_SHOT) then
                 bomb:AddTearFlags(TearFlags.TEAR_GHOST_BOMB)
                 bomb:GetSprite():Play("ghostpulse", true)
             elseif player:HasCollectible(CollectibleType.COLLECTIBLE_SAD_BOMBS) then

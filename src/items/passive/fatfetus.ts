@@ -327,7 +327,8 @@ export function gigaInit(bomb: EntityBomb): void {
       if (
         player.HasCollectible(CollectibleType.COLLECTIBLE_SPOON_BENDER) ||
         player.HasCollectible(CollectibleType.COLLECTIBLE_SACRED_HEART) ||
-        player.HasCollectible(CollectibleType.COLLECTIBLE_GODHEAD)
+        player.HasCollectible(CollectibleType.COLLECTIBLE_GODHEAD) ||
+        player.HasCollectible(constants.ModItemTypes.GHOST_SHOT)
       ) {
         bomb.AddTearFlags(TearFlags.TEAR_HOMING);
       }
@@ -371,7 +372,8 @@ export function gigaInit(bomb: EntityBomb): void {
         bomb.AddTearFlags(TearFlags.TEAR_SCATTER_BOMB);
         bomb.GetSprite().Play("scatterpulse", true);
       } else if (
-        player.HasCollectible(CollectibleType.COLLECTIBLE_GHOST_BOMBS)
+        player.HasCollectible(CollectibleType.COLLECTIBLE_GHOST_BOMBS) ||
+        player.HasCollectible(constants.ModItemTypes.GHOST_SHOT)
       ) {
         bomb.AddTearFlags(TearFlags.TEAR_GHOST_BOMB);
         bomb.GetSprite().Play("ghostpulse", true);
