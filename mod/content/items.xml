@@ -8,4 +8,5 @@
  <passive name="Blue Heart" description="Protect your soul" gfx="i_blueheart.png" soulhearts="3" quality="1"/>
  <active name="Russian Roulette" maxcharges="1" gfx="i_RussianRoulette.png" description="Dare you test your luck?" quality="3" />
  <active name="Stone D6" maxcharges="5" gfx="i_StoneD6.png" description="Roll Over" quality="2" />
+ <passive name="Holidays Orange" gfx="i_HolidaysOrange.png" description="HP up + You feel merry" maxhearts="2" hearts="4" quality="2" />
 </items>
