@@ -18,7 +18,8 @@
           nameimage="pn_Alabaster.png"
           portrait="pp_Alabaster.png"
           bigportrait="pp_Alabaster.png"
-          skinColor="-1"
+          skinColor="3"
+          items="215"
           pocketActive="105"/>
       <!--<player name="Alabaster" skin="c_Alabaster.png" hp="0" black="4" coins="1" bombs="0"
           nameimage="pn_Alabaster.png"

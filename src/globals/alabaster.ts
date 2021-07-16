@@ -1,4 +1,4 @@
-import { ModPlayerTypes } from "../constants";
+import { game, ModPlayerTypes } from "../constants";
 
 export function alabasterStats(player: EntityPlayer, flags: CacheFlag): void {
   if (player.GetPlayerType() === ModPlayerTypes.ALABASTER) {
@@ -8,6 +8,7 @@ export function alabasterStats(player: EntityPlayer, flags: CacheFlag): void {
     if (flags === CacheFlag.CACHE_FLYING) {
       player.CanFly = true;
     }
+    game.GetLevel().AddAngelRoomChance(-100);
   }
 }
 export function alabasterHealth(player: EntityPlayer): void {
