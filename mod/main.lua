@@ -3190,26 +3190,31 @@ function ____exports.stoneD6(self)
         Isaac.GetRoomEntities()
     ) do
         if (entity.Type == EntityType.ENTITY_PICKUP) and (entity.Variant == PickupVariant.PICKUP_COLLECTIBLE) then
-            local prevID = entity.SubType
             local totalItems = (#__TS__ObjectKeys(CollectibleType) - 1) + #__TS__ObjectKeys(ModItemTypes)
-            local entityPos = entity.Position
             if entity.SubType == CollectibleType.COLLECTIBLE_NULL then
                 entity:Remove()
                 entity:Update()
-                Isaac.Explode(entityPos, nil, 0)
-                Isaac.GridSpawn(GridEntityType.GRID_ROCKT, 0, entityPos, true)
+                Isaac.Explode(entity.Position, nil, 0)
+                Isaac.GridSpawn(GridEntityType.GRID_ROCKT, 0, entity.Position, true)
                 return true
             end
-            entity:Remove()
-            entity:Update()
+            __TS__OptionalMethodCall(
+                entity:ToPickup(),
+                "Morph",
+                entity.Type,
+                entity.Variant,
+                math.abs(entity.SubType - (totalItems - 1)),
+                true
+            )
             Isaac.Spawn(
-                EntityType.ENTITY_PICKUP,
-                PickupVariant.PICKUP_COLLECTIBLE,
-                math.abs(prevID - (totalItems - 1)),
-                entityPos,
+                EntityType.ENTITY_EFFECT,
+                EffectVariant.POOF01,
+                0,
+                entity.Position,
                 Vector(0, 0),
                 nil
-            )
+            ):Kill()
+            entity:Update()
         end
     end
     return true
