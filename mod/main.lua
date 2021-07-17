@@ -2876,144 +2876,140 @@ local GetPlayerId = ____playerdata.GetPlayerId
 function ____exports.bloodDrive(self, player, modPlayerData, rng)
     if (player:GetPlayerType() == ModPlayerTypes.ALABASTER) and ((game:GetRoom():GetType() == RoomType.ROOM_ANGEL) or (game:GetRoom():GetType() == RoomType.ROOM_DEVIL)) then
         if modPlayerData.data[GetPlayerId(nil, player) + 1].bdcharge >= 0 then
-            do
-                local i = 0
-                while i < modPlayerData.data[GetPlayerId(nil, player) + 1].bdcharge do
-                    local spawned = true
-                    local rand = rng:RandomInt(100)
-                    local pos = game:GetRoom():FindFreePickupSpawnPosition(player.Position)
-                    local runes = {Card.RUNE_ALGIZ, Card.RUNE_ANSUZ, Card.RUNE_BERKANO, Card.RUNE_BLACK, Card.RUNE_BLANK, Card.RUNE_DAGAZ, Card.RUNE_EHWAZ, Card.RUNE_HAGALAZ, Card.RUNE_JERA, Card.RUNE_PERTHRO, Card.CARD_SOUL_APOLLYON, Card.CARD_SOUL_AZAZEL, Card.CARD_SOUL_BETHANY, Card.CARD_SOUL_BLUEBABY, Card.CARD_SOUL_CAIN, Card.CARD_SOUL_EDEN, Card.CARD_SOUL_EVE, Card.CARD_SOUL_FORGOTTEN, Card.CARD_SOUL_ISAAC, Card.CARD_SOUL_JACOB, Card.CARD_SOUL_JUDAS, Card.CARD_SOUL_KEEPER, Card.CARD_SOUL_LAZARUS, Card.CARD_SOUL_LILITH, Card.CARD_SOUL_LOST, Card.CARD_SOUL_MAGDALENE, Card.CARD_SOUL_SAMSON}
-                    local chests = {PickupVariant.PICKUP_OLDCHEST, PickupVariant.PICKUP_LOCKEDCHEST, PickupVariant.PICKUP_REDCHEST, PickupVariant.PICKUP_CHEST, PickupVariant.PICKUP_WOODENCHEST}
-                    local cards = {Card.CARD_ACE_OF_CLUBS, Card.CARD_ACE_OF_DIAMONDS, Card.CARD_ACE_OF_HEARTS, Card.CARD_ACE_OF_SPADES, Card.CARD_ANCIENT_RECALL, Card.CARD_CHAOS, Card.CARD_CHARIOT, Card.CARD_CLUBS_2, Card.CARD_CREDIT, Card.CARD_DEATH, Card.CARD_DEVIL, Card.CARD_DIAMONDS_2, Card.CARD_DICE_SHARD, Card.CARD_EMERGENCY_CONTACT, Card.CARD_EMPEROR, Card.CARD_EMPRESS, Card.CARD_ERA_WALK, Card.CARD_FOOL, Card.CARD_GET_OUT_OF_JAIL, Card.CARD_HANGED_MAN, Card.CARD_HEARTS_2, Card.CARD_HERMIT, Card.CARD_HIEROPHANT, Card.CARD_HIGH_PRIESTESS, Card.CARD_HOLY, Card.CARD_HUGE_GROWTH, Card.CARD_HUMANITY, Card.CARD_JOKER, Card.CARD_JUDGEMENT, Card.CARD_JUSTICE, Card.CARD_LOVERS, Card.CARD_MAGICIAN, Card.CARD_MOON, Card.CARD_QUEEN_OF_HEARTS, Card.CARD_QUESTIONMARK, Card.CARD_REVERSE_CHARIOT, Card.CARD_REVERSE_DEATH, Card.CARD_REVERSE_DEVIL, Card.CARD_REVERSE_EMPEROR, Card.CARD_REVERSE_EMPRESS, Card.CARD_REVERSE_FOOL, Card.CARD_REVERSE_HANGED_MAN, Card.CARD_REVERSE_HERMIT, Card.CARD_REVERSE_HIEROPHANT, Card.CARD_REVERSE_HIGH_PRIESTESS, Card.CARD_REVERSE_JUDGEMENT, Card.CARD_REVERSE_JUSTICE, Card.CARD_REVERSE_LOVERS, Card.CARD_REVERSE_MAGICIAN, Card.CARD_REVERSE_MOON, Card.CARD_REVERSE_STARS, Card.CARD_REVERSE_STRENGTH, Card.CARD_REVERSE_SUN, Card.CARD_REVERSE_TEMPERANCE, Card.CARD_REVERSE_TOWER, Card.CARD_REVERSE_WHEEL_OF_FORTUNE, Card.CARD_REVERSE_WORLD, Card.CARD_RULES}
-                    if rand == 100 then
-                        Isaac.Spawn(
-                            EntityType.ENTITY_PICKUP,
-                            PickupVariant.PICKUP_COLLECTIBLE,
-                            0,
-                            pos,
-                            Vector(0, 0),
-                            nil
-                        )
-                    elseif rand > 95 then
-                        Isaac.Spawn(
-                            EntityType.ENTITY_PICKUP,
-                            chests[rng:RandomInt(#chests - 1) + 1],
-                            0,
-                            pos,
-                            Vector(0, 0),
-                            nil
-                        )
-                    elseif rand > 90 then
-                        Isaac.Spawn(
-                            EntityType.ENTITY_PICKUP,
-                            PickupVariant.PICKUP_TAROTCARD,
-                            runes[rng:RandomInt(#runes - 1) + 1],
-                            pos,
-                            Vector(0, 0),
-                            nil
-                        )
-                    elseif rand > 87 then
-                        Isaac.Spawn(
-                            EntityType.ENTITY_PICKUP,
-                            PickupVariant.PICKUP_TRINKET,
-                            0,
-                            pos,
-                            Vector(0, 0),
-                            nil
-                        )
-                    elseif rand > 82 then
-                        Isaac.Spawn(
-                            EntityType.ENTITY_PICKUP,
-                            PickupVariant.PICKUP_PILL,
-                            0,
-                            pos,
-                            Vector(0, 0),
-                            nil
-                        )
-                    elseif rand > 77 then
-                        Isaac.Spawn(
-                            EntityType.ENTITY_PICKUP,
-                            PickupVariant.PICKUP_TAROTCARD,
-                            cards[rng:RandomInt(#cards - 1) + 1],
-                            pos,
-                            Vector(0, 0),
-                            nil
-                        )
-                    elseif rand > 62 then
-                        Isaac.Spawn(
-                            EntityType.ENTITY_PICKUP,
-                            PickupVariant.PICKUP_COIN,
-                            0,
-                            pos,
-                            Vector(0, 0),
-                            nil
-                        )
-                        Isaac.Spawn(
-                            EntityType.ENTITY_PICKUP,
-                            PickupVariant.PICKUP_COIN,
-                            0,
-                            game:GetRoom():FindFreePickupSpawnPosition(player.Position),
-                            Vector(0, 0),
-                            nil
-                        )
-                        Isaac.Spawn(
-                            EntityType.ENTITY_PICKUP,
-                            PickupVariant.PICKUP_COIN,
-                            0,
-                            game:GetRoom():FindFreePickupSpawnPosition(player.Position),
-                            Vector(0, 0),
-                            nil
-                        )
-                    elseif rand > 47 then
-                        Isaac.Spawn(
-                            EntityType.ENTITY_PICKUP,
-                            PickupVariant.PICKUP_BOMB,
-                            0,
-                            pos,
-                            Vector(0, 0),
-                            nil
-                        )
-                    elseif rand > 32 then
-                        Isaac.Spawn(
-                            EntityType.ENTITY_PICKUP,
-                            PickupVariant.PICKUP_KEY,
-                            0,
-                            pos,
-                            Vector(0, 0),
-                            nil
-                        )
-                    elseif rand > 5 then
-                        if game:GetRoom():GetType() == RoomType.ROOM_ANGEL then
-                            Isaac.Spawn(
-                                EntityType.ENTITY_PICKUP,
-                                PickupVariant.PICKUP_HEART,
-                                HeartSubType.HEART_SOUL,
-                                pos,
-                                Vector(0, 0),
-                                nil
-                            )
-                        else
-                            Isaac.Spawn(
-                                EntityType.ENTITY_PICKUP,
-                                PickupVariant.PICKUP_HEART,
-                                HeartSubType.HEART_BLACK,
-                                pos,
-                                Vector(0, 0),
-                                nil
-                            )
-                        end
-                    else
-                        spawned = false
-                    end
-                    if spawned then
-                        player:AnimateHappy()
-                        sfxManager:Play(SoundEffect.SOUND_THUMBSUP)
-                    else
-                        player:AnimateSad()
-                        sfxManager:Play(SoundEffect.SOUND_THUMBS_DOWN)
-                    end
-                    i = i + 1
+            local ____obj, ____index = modPlayerData.data[GetPlayerId(nil, player) + 1], "bdcharge"
+            ____obj[____index] = ____obj[____index] - 2
+            local spawned = true
+            local rand = rng:RandomInt(100)
+            local pos = game:GetRoom():FindFreePickupSpawnPosition(player.Position)
+            local runes = {Card.RUNE_ALGIZ, Card.RUNE_ANSUZ, Card.RUNE_BERKANO, Card.RUNE_BLACK, Card.RUNE_BLANK, Card.RUNE_DAGAZ, Card.RUNE_EHWAZ, Card.RUNE_HAGALAZ, Card.RUNE_JERA, Card.RUNE_PERTHRO, Card.CARD_SOUL_APOLLYON, Card.CARD_SOUL_AZAZEL, Card.CARD_SOUL_BETHANY, Card.CARD_SOUL_BLUEBABY, Card.CARD_SOUL_CAIN, Card.CARD_SOUL_EDEN, Card.CARD_SOUL_EVE, Card.CARD_SOUL_FORGOTTEN, Card.CARD_SOUL_ISAAC, Card.CARD_SOUL_JACOB, Card.CARD_SOUL_JUDAS, Card.CARD_SOUL_KEEPER, Card.CARD_SOUL_LAZARUS, Card.CARD_SOUL_LILITH, Card.CARD_SOUL_LOST, Card.CARD_SOUL_MAGDALENE, Card.CARD_SOUL_SAMSON}
+            local chests = {PickupVariant.PICKUP_OLDCHEST, PickupVariant.PICKUP_LOCKEDCHEST, PickupVariant.PICKUP_REDCHEST, PickupVariant.PICKUP_CHEST, PickupVariant.PICKUP_WOODENCHEST}
+            local cards = {Card.CARD_ACE_OF_CLUBS, Card.CARD_ACE_OF_DIAMONDS, Card.CARD_ACE_OF_HEARTS, Card.CARD_ACE_OF_SPADES, Card.CARD_ANCIENT_RECALL, Card.CARD_CHAOS, Card.CARD_CHARIOT, Card.CARD_CLUBS_2, Card.CARD_CREDIT, Card.CARD_DEATH, Card.CARD_DEVIL, Card.CARD_DIAMONDS_2, Card.CARD_DICE_SHARD, Card.CARD_EMERGENCY_CONTACT, Card.CARD_EMPEROR, Card.CARD_EMPRESS, Card.CARD_ERA_WALK, Card.CARD_FOOL, Card.CARD_GET_OUT_OF_JAIL, Card.CARD_HANGED_MAN, Card.CARD_HEARTS_2, Card.CARD_HERMIT, Card.CARD_HIEROPHANT, Card.CARD_HIGH_PRIESTESS, Card.CARD_HOLY, Card.CARD_HUGE_GROWTH, Card.CARD_HUMANITY, Card.CARD_JOKER, Card.CARD_JUDGEMENT, Card.CARD_JUSTICE, Card.CARD_LOVERS, Card.CARD_MAGICIAN, Card.CARD_MOON, Card.CARD_QUEEN_OF_HEARTS, Card.CARD_QUESTIONMARK, Card.CARD_REVERSE_CHARIOT, Card.CARD_REVERSE_DEATH, Card.CARD_REVERSE_DEVIL, Card.CARD_REVERSE_EMPEROR, Card.CARD_REVERSE_EMPRESS, Card.CARD_REVERSE_FOOL, Card.CARD_REVERSE_HANGED_MAN, Card.CARD_REVERSE_HERMIT, Card.CARD_REVERSE_HIEROPHANT, Card.CARD_REVERSE_HIGH_PRIESTESS, Card.CARD_REVERSE_JUDGEMENT, Card.CARD_REVERSE_JUSTICE, Card.CARD_REVERSE_LOVERS, Card.CARD_REVERSE_MAGICIAN, Card.CARD_REVERSE_MOON, Card.CARD_REVERSE_STARS, Card.CARD_REVERSE_STRENGTH, Card.CARD_REVERSE_SUN, Card.CARD_REVERSE_TEMPERANCE, Card.CARD_REVERSE_TOWER, Card.CARD_REVERSE_WHEEL_OF_FORTUNE, Card.CARD_REVERSE_WORLD, Card.CARD_RULES}
+            if rand == 100 then
+                Isaac.Spawn(
+                    EntityType.ENTITY_PICKUP,
+                    PickupVariant.PICKUP_COLLECTIBLE,
+                    0,
+                    pos,
+                    Vector(0, 0),
+                    nil
+                )
+            elseif rand > 95 then
+                Isaac.Spawn(
+                    EntityType.ENTITY_PICKUP,
+                    chests[rng:RandomInt(#chests - 1) + 1],
+                    0,
+                    pos,
+                    Vector(0, 0),
+                    nil
+                )
+            elseif rand > 90 then
+                Isaac.Spawn(
+                    EntityType.ENTITY_PICKUP,
+                    PickupVariant.PICKUP_TAROTCARD,
+                    runes[rng:RandomInt(#runes - 1) + 1],
+                    pos,
+                    Vector(0, 0),
+                    nil
+                )
+            elseif rand > 87 then
+                Isaac.Spawn(
+                    EntityType.ENTITY_PICKUP,
+                    PickupVariant.PICKUP_TRINKET,
+                    0,
+                    pos,
+                    Vector(0, 0),
+                    nil
+                )
+            elseif rand > 82 then
+                Isaac.Spawn(
+                    EntityType.ENTITY_PICKUP,
+                    PickupVariant.PICKUP_PILL,
+                    0,
+                    pos,
+                    Vector(0, 0),
+                    nil
+                )
+            elseif rand > 77 then
+                Isaac.Spawn(
+                    EntityType.ENTITY_PICKUP,
+                    PickupVariant.PICKUP_TAROTCARD,
+                    cards[rng:RandomInt(#cards - 1) + 1],
+                    pos,
+                    Vector(0, 0),
+                    nil
+                )
+            elseif rand > 62 then
+                Isaac.Spawn(
+                    EntityType.ENTITY_PICKUP,
+                    PickupVariant.PICKUP_COIN,
+                    0,
+                    pos,
+                    Vector(0, 0),
+                    nil
+                )
+                Isaac.Spawn(
+                    EntityType.ENTITY_PICKUP,
+                    PickupVariant.PICKUP_COIN,
+                    0,
+                    game:GetRoom():FindFreePickupSpawnPosition(player.Position),
+                    Vector(0, 0),
+                    nil
+                )
+                Isaac.Spawn(
+                    EntityType.ENTITY_PICKUP,
+                    PickupVariant.PICKUP_COIN,
+                    0,
+                    game:GetRoom():FindFreePickupSpawnPosition(player.Position),
+                    Vector(0, 0),
+                    nil
+                )
+            elseif rand > 47 then
+                Isaac.Spawn(
+                    EntityType.ENTITY_PICKUP,
+                    PickupVariant.PICKUP_BOMB,
+                    0,
+                    pos,
+                    Vector(0, 0),
+                    nil
+                )
+            elseif rand > 32 then
+                Isaac.Spawn(
+                    EntityType.ENTITY_PICKUP,
+                    PickupVariant.PICKUP_KEY,
+                    0,
+                    pos,
+                    Vector(0, 0),
+                    nil
+                )
+            elseif rand > 5 then
+                if game:GetRoom():GetType() == RoomType.ROOM_ANGEL then
+                    Isaac.Spawn(
+                        EntityType.ENTITY_PICKUP,
+                        PickupVariant.PICKUP_HEART,
+                        HeartSubType.HEART_SOUL,
+                        pos,
+                        Vector(0, 0),
+                        nil
+                    )
+                else
+                    Isaac.Spawn(
+                        EntityType.ENTITY_PICKUP,
+                        PickupVariant.PICKUP_HEART,
+                        HeartSubType.HEART_BLACK,
+                        pos,
+                        Vector(0, 0),
+                        nil
+                    )
                 end
+            else
+                spawned = false
+            end
+            if spawned then
+                player:AnimateHappy()
+                sfxManager:Play(SoundEffect.SOUND_THUMBSUP)
+            else
+                player:AnimateSad()
+                sfxManager:Play(SoundEffect.SOUND_THUMBS_DOWN)
             end
         end
         return true
@@ -3029,36 +3025,36 @@ function ____exports.alabasterHearts(self, pickup, modPlayerData)
                 if (player ~= nil) and (player:GetPlayerType() == ModPlayerTypes.ALABASTER) then
                     if player.Position:Distance(pickup.Position) < (player.Size + pickup.Size) then
                         pickup:Remove()
-                        local ____switch26 = pickup.SubType
-                        if ____switch26 == HeartSubType.HEART_DOUBLEPACK then
-                            goto ____switch26_case_0
-                        elseif ____switch26 == HeartSubType.HEART_FULL then
-                            goto ____switch26_case_1
+                        local ____switch25 = pickup.SubType
+                        if ____switch25 == HeartSubType.HEART_DOUBLEPACK then
+                            goto ____switch25_case_0
+                        elseif ____switch25 == HeartSubType.HEART_FULL then
+                            goto ____switch25_case_1
                         end
-                        goto ____switch26_case_default
-                        ::____switch26_case_0::
+                        goto ____switch25_case_default
+                        ::____switch25_case_0::
                         do
                             local ____obj, ____index = modPlayerData.data[i + 1], "bdcharge"
                             ____obj[____index] = ____obj[____index] + 4
-                            goto ____switch26_end
+                            goto ____switch25_end
                         end
-                        ::____switch26_case_1::
+                        ::____switch25_case_1::
                         do
                             do
                                 local ____obj, ____index = modPlayerData.data[i + 1], "bdcharge"
                                 ____obj[____index] = ____obj[____index] + 2
-                                goto ____switch26_end
+                                goto ____switch25_end
                             end
                         end
-                        ::____switch26_case_default::
+                        ::____switch25_case_default::
                         do
                             do
                                 local ____obj, ____index = modPlayerData.data[i + 1], "bdcharge"
                                 ____obj[____index] = ____obj[____index] + 1
-                                goto ____switch26_end
+                                goto ____switch25_end
                             end
                         end
-                        ::____switch26_end::
+                        ::____switch25_end::
                         print(modPlayerData.data[i + 1].bdcharge)
                     end
                 end
