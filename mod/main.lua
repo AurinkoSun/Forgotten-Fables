@@ -1898,6 +1898,8 @@ ____exports.ModTearVariants[____exports.ModTearVariants.GHOST] = "GHOST"
 ____exports.ModEntityVariants = ModEntityVariants or ({})
 ____exports.ModEntityVariants.GHOST_TEAR = 50
 ____exports.ModEntityVariants[____exports.ModEntityVariants.GHOST_TEAR] = "GHOST_TEAR"
+____exports.ModEntityVariants.PEEL = Isaac.GetEntityVariantByName("Peel")
+____exports.ModEntityVariants[____exports.ModEntityVariants.PEEL] = "PEEL"
 ____exports.ModPlayerTypes = ModPlayerTypes or ({})
 ____exports.ModPlayerTypes.ALABASTER = Isaac.GetPlayerTypeByName("Alabaster")
 ____exports.ModPlayerTypes[____exports.ModPlayerTypes.ALABASTER] = "ALABASTER"
@@ -1906,6 +1908,36 @@ ____exports.ModCostumes.ALABASTER_HAIR = Isaac.GetCostumeIdByPath("gfx/character
 ____exports.ModCostumes[____exports.ModCostumes.ALABASTER_HAIR] = "ALABASTER_HAIR"
 ____exports.game = Game()
 ____exports.sfxManager = SFXManager()
+return ____exports
+ end,
+["globals.peel"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
+local ____exports = {}
+local ____constants = require("constants")
+local ModEntityVariants = ____constants.ModEntityVariants
+function ____exports.peelUpdate(self, npc)
+    if npc.Variant == ModEntityVariants.PEEL then
+        if npc.HitPoints <= (npc.MaxHitPoints / 2) then
+            local ____obj, ____index = npc.Velocity, "X"
+            ____obj[____index] = ____obj[____index] * 1.1
+            local ____obj, ____index = npc.Velocity, "Y"
+            ____obj[____index] = ____obj[____index] * 1.1
+            Isaac.Spawn(
+                EntityType.ENTITY_EFFECT,
+                EffectVariant.CREEP_RED,
+                0,
+                npc.Position,
+                Vector(0, 0),
+                npc
+            )
+        end
+    end
+end
+function ____exports.peelDmg(self, npc, damage)
+    if npc.HitPoints <= ((npc.MaxHitPoints - damage) / 2) then
+        npc:GetSprite():ReplaceSpritesheet(0, "../resources/gfx/monsters/Peel2.png")
+        npc:GetSprite():LoadGraphics()
+    end
+end
 return ____exports
  end,
 ["items.passive.fatfetus"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
@@ -2376,12 +2408,22 @@ return ____exports
  end,
 ["callbacks.MC_ENTITY_TAKE_DMG"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
 local ____exports = {}
+local ____constants = require("constants")
+local ModEntityVariants = ____constants.ModEntityVariants
+local ModItemTypes = ____constants.ModItemTypes
+local ____peel = require("globals.peel")
+local peelDmg = ____peel.peelDmg
 local ____fatfetus = require("items.passive.fatfetus")
 local glitterdrops = ____fatfetus.glitterdrops
 function ____exports.entityTakeDamage(self, entity, amt, flags, src, _modPlayerData)
     if entity.Type == EntityType.ENTITY_PLAYER then
     end
-    glitterdrops(nil, entity, amt, flags, src)
+    if Isaac.GetPlayer():HasCollectible(ModItemTypes.FAT_FETUS) then
+        glitterdrops(nil, entity, amt, flags, src)
+    end
+    if entity.Type == ModEntityVariants.PEEL then
+        peelDmg(nil, entity, amt)
+    end
 end
 return ____exports
  end,
@@ -2507,6 +2549,15 @@ function ____exports.evalCache(self, _modPlayerData, player, flags)
     alabasterStats(nil, player, flags)
     ffstats(nil, player, flags)
     ghostShotStats(nil, player, flags)
+end
+return ____exports
+ end,
+["callbacks.MC_NPC_UPDATE"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
+local ____exports = {}
+local ____peel = require("globals.peel")
+local peelUpdate = ____peel.peelUpdate
+function ____exports.npcUpdate(self, entity)
+    peelUpdate(nil, entity)
 end
 return ____exports
  end,
@@ -3236,6 +3287,8 @@ local ____MC_ENTITY_TAKE_DMG = require("callbacks.MC_ENTITY_TAKE_DMG")
 local entityTakeDamage = ____MC_ENTITY_TAKE_DMG.entityTakeDamage
 local ____MC_EVALUATE_CACHE = require("callbacks.MC_EVALUATE_CACHE")
 local evalCache = ____MC_EVALUATE_CACHE.evalCache
+local ____MC_NPC_UPDATE = require("callbacks.MC_NPC_UPDATE")
+local npcUpdate = ____MC_NPC_UPDATE.npcUpdate
 local ____MC_POST_BOMB_INIT = require("callbacks.MC_POST_BOMB_INIT")
 local bombInit = ____MC_POST_BOMB_INIT.bombInit
 local ____MC_POST_BOMB_UPDATE = require("callbacks.MC_POST_BOMB_UPDATE")
@@ -3286,6 +3339,7 @@ ____exports.preTearCollision = preTearCollision
 ____exports.usePill = usePill
 ____exports.bombUpdate = bombUpdate
 ____exports.postUpdate = postUpdate
+____exports.npcUpdate = npcUpdate
 return ____exports
  end,
 ["main"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
