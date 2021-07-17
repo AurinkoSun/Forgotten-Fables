@@ -4,6 +4,8 @@ local ____MC_ENTITY_TAKE_DMG = require("callbacks.MC_ENTITY_TAKE_DMG")
 local entityTakeDamage = ____MC_ENTITY_TAKE_DMG.entityTakeDamage
 local ____MC_EVALUATE_CACHE = require("callbacks.MC_EVALUATE_CACHE")
 local evalCache = ____MC_EVALUATE_CACHE.evalCache
+local ____MC_NPC_UPDATE = require("callbacks.MC_NPC_UPDATE")
+local npcUpdate = ____MC_NPC_UPDATE.npcUpdate
 local ____MC_POST_BOMB_INIT = require("callbacks.MC_POST_BOMB_INIT")
 local bombInit = ____MC_POST_BOMB_INIT.bombInit
 local ____MC_POST_BOMB_UPDATE = require("callbacks.MC_POST_BOMB_UPDATE")
@@ -48,4 +50,5 @@ ____exports.preTearCollision = preTearCollision
 ____exports.usePill = usePill
 ____exports.bombUpdate = bombUpdate
 ____exports.postUpdate = postUpdate
+____exports.npcUpdate = npcUpdate
 return ____exports

@@ -24,6 +24,7 @@ export enum ModTearVariants {
 export enum ModEntityVariants {
   // TSARAHBODY = 200,
   GHOST_TEAR = 50,
+  PEEL = Isaac.GetEntityVariantByName("Peel"),
 }
 /**
  * Enum for new PlayerTypes
