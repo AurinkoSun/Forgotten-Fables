@@ -1,4 +1,6 @@
 // import { sarahLostKill } from "../globals/sarahlostdamage";
+import { ModEntityVariants, ModItemTypes } from "../constants";
+import { peelDmg } from "../globals/peel";
 import { glitterdrops } from "../items/passive/fatfetus";
 import { PlayerData } from "../playerdata";
 
@@ -12,5 +14,7 @@ export function entityTakeDamage(
   if (entity.Type === EntityType.ENTITY_PLAYER) {
     // sarahLostKill(modPlayerData, entity, amt, flags);
   }
-  glitterdrops(entity, amt, flags, src);
+  if (Isaac.GetPlayer().HasCollectible(ModItemTypes.FAT_FETUS))
+    glitterdrops(entity, amt, flags, src);
+  if (entity.Type === ModEntityVariants.PEEL) peelDmg(entity, amt);
 }

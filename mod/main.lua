@@ -3375,6 +3375,7 @@ forgottenFables:AddCallback(ModCallbacks.MC_POST_BOMB_UPDATE, callbacks.bombUpda
 forgottenFables:AddCallback(ModCallbacks.MC_POST_BOMB_INIT, callbacks.bombInit)
 forgottenFables:AddCallback(ModCallbacks.MC_POST_PROJECTILE_INIT, callbacks.projectileInit)
 forgottenFables:AddCallback(ModCallbacks.MC_POST_UPDATE, callbacks.postUpdate)
+forgottenFables:AddCallback(ModCallbacks.MC_NPC_UPDATE, callbacks.npcUpdate)
 return ____exports
  end,
 ["globals.floorinit"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]

@@ -1,5 +1,6 @@
 import { entityTakeDamage } from "./MC_ENTITY_TAKE_DMG";
 import { evalCache } from "./MC_EVALUATE_CACHE";
+import { npcUpdate } from "./MC_NPC_UPDATE";
 import { bombInit } from "./MC_POST_BOMB_INIT";
 import { bombUpdate } from "./MC_POST_BOMB_UPDATE";
 import { postFireTear } from "./MC_POST_FIRE_TEAR";
@@ -35,3 +36,4 @@ export { preTearCollision };
 export { usePill };
 export { bombUpdate };
 export { postUpdate };
+export { npcUpdate };
