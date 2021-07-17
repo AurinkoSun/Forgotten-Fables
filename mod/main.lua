@@ -2875,7 +2875,7 @@ local ____playerdata = require("playerdata")
 local GetPlayerId = ____playerdata.GetPlayerId
 function ____exports.bloodDrive(self, player, modPlayerData, rng)
     if (player:GetPlayerType() == ModPlayerTypes.ALABASTER) and ((game:GetRoom():GetType() == RoomType.ROOM_ANGEL) or (game:GetRoom():GetType() == RoomType.ROOM_DEVIL)) then
-        if modPlayerData.data[GetPlayerId(nil, player) + 1].bdcharge >= 0 then
+        if modPlayerData.data[GetPlayerId(nil, player) + 1].bdcharge > 0 then
             local ____obj, ____index = modPlayerData.data[GetPlayerId(nil, player) + 1], "bdcharge"
             ____obj[____index] = ____obj[____index] - 2
             local spawned = true
