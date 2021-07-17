@@ -29,7 +29,7 @@ export function useItem(
       break;
     }
     case ModItemTypes.BLOODDRIVE: {
-      returnVal = bloodDrive(player, modPlayerData);
+      returnVal = bloodDrive(player, modPlayerData, rng);
       break;
     }
     case ModItemTypes.STONE_D6: {

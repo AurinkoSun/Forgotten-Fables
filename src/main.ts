@@ -21,6 +21,15 @@ forgottenFables.AddCallback(
   ModCallbacks.MC_POST_PLAYER_UPDATE,
   callbacks.playerUpdate,
 );
+forgottenFables.AddCallback(ModCallbacks.MC_POST_RENDER, () => {
+  callbacks.render(modPlayerData);
+});
+forgottenFables.AddCallback(
+  ModCallbacks.MC_POST_GAME_STARTED,
+  (continued: boolean) => {
+    callbacks.gameStart(forgottenFables, modPlayerData, continued);
+  },
+);
 forgottenFables.AddCallback(
   ModCallbacks.MC_EVALUATE_CACHE,
   (player: EntityPlayer, flag: CacheFlag) => {

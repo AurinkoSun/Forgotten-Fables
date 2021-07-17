@@ -59,19 +59,21 @@ export function ghostCollide(tear: EntityTear, collider: Entity): EntityTear {
     ) {
       tear.GetData().seed = collider.GetDropRNG().GetSeed();
       const player: EntityPlayer = tear.GetData().player as EntityPlayer;
-      const explosionEffect = Isaac.Spawn(
-        EntityType.ENTITY_EFFECT,
-        EffectVariant.BOMB_EXPLOSION,
-        0,
-        tear.Position,
-        Vector(0, 0),
-        player,
-      ).ToEffect();
-      if (explosionEffect !== null) {
-        explosionEffect.SetDamageSource(EntityType.ENTITY_PLAYER);
-        explosionEffect.CollisionDamage = player.Damage * 0.8;
-        const playeradjrange = (player.TearHeight * -1) / 23.75; // The player's range divided by the default
-        explosionEffect.Scale *= playeradjrange;
+      for (let i = 0; i < 3; i++) {
+        const explosionEffect = Isaac.Spawn(
+          EntityType.ENTITY_EFFECT,
+          EffectVariant.BLOOD_EXPLOSION,
+          0,
+          tear.Position,
+          Vector(0, 0),
+          player,
+        ).ToEffect();
+        if (explosionEffect !== null) {
+          explosionEffect.SetDamageSource(EntityType.ENTITY_PLAYER);
+          explosionEffect.CollisionDamage = player.Damage * 2;
+          const playeradjrange = (player.TearHeight * -1) / 23.75; // The player's range divided by the default
+          explosionEffect.Scale *= playeradjrange;
+        }
       }
     }
   }
@@ -79,10 +81,7 @@ export function ghostCollide(tear: EntityTear, collider: Entity): EntityTear {
 }
 export function ghostShotStats(player: EntityPlayer, flags: CacheFlag): void {
   if (flags === CacheFlag.CACHE_DAMAGE) {
-    if (
-      player.HasCollectible(ModItemTypes.BBGHOST_SHOT) ||
-      player.HasCollectible(ModItemTypes.GHOST_SHOT)
-    ) {
+    if (player.HasCollectible(ModItemTypes.BBGHOST_SHOT)) {
       player.Damage *= 0.8;
     }
   }
