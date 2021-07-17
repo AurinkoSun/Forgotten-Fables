@@ -21,7 +21,7 @@ export function bloodDrive(
        4% for a  random chest (red, gold, grey, old, wooden)
        1% chance for a random item
     */
-    if (modPlayerData.data[GetPlayerId(player)].bdcharge >= 0) {
+    if (modPlayerData.data[GetPlayerId(player)].bdcharge > 0) {
       modPlayerData.data[GetPlayerId(player)].bdcharge -= 2;
       let spawned = true;
       const rand = rng.RandomInt(100);
