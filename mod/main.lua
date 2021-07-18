@@ -2509,7 +2509,7 @@ function ____exports.ghostCollide(self, tear, collider)
                 while i < 3 do
                     local explosionEffect = Isaac.Spawn(
                         EntityType.ENTITY_EFFECT,
-                        EffectVariant.BLOOD_EXPLOSION,
+                        EffectVariant.IMPACT,
                         0,
                         tear.Position,
                         Vector(0, 0),
