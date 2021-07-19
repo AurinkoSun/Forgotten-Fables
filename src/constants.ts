@@ -50,6 +50,11 @@ export enum ModCostumes {
     "gfx/characters/c_Alabaster_Hair.anm2",
   ),
 }
+export enum ModSlotVariants {
+  // We'll most likely add quite a few more of these later
+  SARAHNPC = Isaac.GetEntityVariantByName("Sarah (NPC)"),
+}
 export const game = Game();
 export const sfxManager = SFXManager();
 export const rng = RNG();
+export const hud = game.GetHUD();

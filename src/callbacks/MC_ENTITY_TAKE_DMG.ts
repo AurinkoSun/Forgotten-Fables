@@ -1,6 +1,6 @@
 // import { sarahLostKill } from "../globals/sarahlostdamage";
 import { ModEntityVariants, ModItemTypes } from "../constants";
-import { peelDmg } from "../globals/peel";
+import { peelDmg } from "../entities/peel";
 import { glitterdrops } from "../items/passive/fatfetus";
 import { PlayerData } from "../playerdata";
 

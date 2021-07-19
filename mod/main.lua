@@ -1906,12 +1906,16 @@ ____exports.ModPlayerTypes[____exports.ModPlayerTypes.ALABASTER] = "ALABASTER"
 ____exports.ModCostumes = ModCostumes or ({})
 ____exports.ModCostumes.ALABASTER_HAIR = Isaac.GetCostumeIdByPath("gfx/characters/c_Alabaster_Hair.anm2")
 ____exports.ModCostumes[____exports.ModCostumes.ALABASTER_HAIR] = "ALABASTER_HAIR"
+____exports.ModSlotVariants = ModSlotVariants or ({})
+____exports.ModSlotVariants.SARAHNPC = Isaac.GetEntityVariantByName("Sarah (NPC)")
+____exports.ModSlotVariants[____exports.ModSlotVariants.SARAHNPC] = "SARAHNPC"
 ____exports.game = Game()
 ____exports.sfxManager = SFXManager()
 ____exports.rng = RNG()
+____exports.hud = ____exports.game:GetHUD()
 return ____exports
  end,
-["globals.peel"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
+["entities.peel"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
 local ____exports = {}
 local ____constants = require("constants")
 local ModEntityVariants = ____constants.ModEntityVariants
@@ -2416,7 +2420,7 @@ local ____exports = {}
 local ____constants = require("constants")
 local ModEntityVariants = ____constants.ModEntityVariants
 local ModItemTypes = ____constants.ModItemTypes
-local ____peel = require("globals.peel")
+local ____peel = require("entities.peel")
 local peelDmg = ____peel.peelDmg
 local ____fatfetus = require("items.passive.fatfetus")
 local glitterdrops = ____fatfetus.glitterdrops
@@ -2577,8 +2581,8 @@ local ____fatfetus = require("items.passive.fatfetus")
 local ffstats = ____fatfetus.ffstats
 local ____ghostshot = require("items.passive.ghostshot")
 local ghostShotStats = ____ghostshot.ghostShotStats
-function ____exports.evalCache(self, _modPlayerData, player, flags)
-    alabasterStats(nil, player, flags)
+function ____exports.evalCache(self, modPlayerData, player, flags)
+    alabasterStats(nil, player, flags, modPlayerData)
     ffstats(nil, player, flags)
     ghostShotStats(nil, player, flags)
 end
@@ -2586,7 +2590,7 @@ return ____exports
  end,
 ["callbacks.MC_NPC_UPDATE"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
 local ____exports = {}
-local ____peel = require("globals.peel")
+local ____peel = require("entities.peel")
 local peelUpdate = ____peel.peelUpdate
 function ____exports.npcUpdate(self, entity)
     peelUpdate(nil, entity)
@@ -2635,6 +2639,7 @@ return ____exports
 local ____exports = {}
 local ____constants = require("constants")
 local game = ____constants.game
+local hud = ____constants.hud
 local ModPlayerTypes = ____constants.ModPlayerTypes
 local hudOffset = 0
 local OFFSET = Vector(2, 1.2)
@@ -2680,7 +2685,7 @@ function ____exports.render(self, modPlayerData)
     if not data.initialized then
         ____exports.init(nil)
     end
-    if game:GetHUD():IsVisible() and hasAlabaster then
+    if hud:IsVisible() and hasAlabaster then
         local x = 0
         do
             local i = 0
@@ -3148,9 +3153,72 @@ function ____exports.render(self, modPlayerData)
 end
 return ____exports
  end,
+["entities.sarahnpc"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
+require("lualib_bundle");
+local ____exports = {}
+local ____constants = require("constants")
+local game = ____constants.game
+local hud = ____constants.hud
+local ModPlayerTypes = ____constants.ModPlayerTypes
+local ModSlotVariants = ____constants.ModSlotVariants
+local sfxManager = ____constants.sfxManager
+function ____exports.sarahUpdate(self)
+    __TS__ArrayForEach(
+        Isaac.GetRoomEntities(),
+        function(____, entity)
+            if (entity.Type == EntityType.ENTITY_SLOT) and (entity.Variant == ModSlotVariants.SARAHNPC) then
+                local beggarFlags = EntityFlag.FLAG_NO_TARGET | EntityFlag.FLAG_NO_STATUS_EFFECTS
+                if entity:GetEntityFlags() ~= beggarFlags then
+                    entity:ClearEntityFlags(
+                        entity:GetEntityFlags()
+                    )
+                    entity:AddEntityFlags(beggarFlags)
+                    entity.EntityCollisionClass = EntityCollisionClass.ENTCOLL_PLAYERONLY
+                end
+                if entity:GetData().state == nil then
+                    entity:GetData().state = 0
+                    entity:GetData().paycount = 0
+                    entity:GetData().itemdrop = false
+                end
+                local player = game:GetNearestPlayer(entity.Position)
+                if (not entity:GetSprite():IsPlaying("Idle")) and (not entity:GetSprite():IsPlaying("Thumbsup")) then
+                    entity:GetSprite():Play("Idle", true)
+                else
+                    print("hi")
+                    local distance1 = player.Position:Distance(entity.Position)
+                    local distance2 = player.Size + entity.Size
+                    print(distance1, "  ", distance2)
+                    if distance1 <= distance2 then
+                        if player:GetPlayerType() ~= ModPlayerTypes.ALABASTER then
+                            entity:GetData().bumped_player = player
+                            sfxManager:Play(SoundEffect.SOUND_SCAMPER, 1, 0, false, 1)
+                            entity:GetSprite():Play("Thumbsup", true)
+                            hud:ShowFortuneText("Hi! I'm Sarah!")
+                        end
+                    end
+                end
+            end
+            if entity:GetSprite():IsFinished("Thumbsup") then
+                entity:GetSprite():Play("Idle", true)
+            end
+            if entity:GetSprite():IsFinished("Die") then
+                entity:Remove()
+                game:GetLevel():SetStateFlag(LevelStateFlag.STATE_BUM_KILLED, true)
+            end
+            if entity.GridCollisionClass == EntityGridCollisionClass.GRIDCOLL_GROUND then
+                entity:GetSprite():Play("Die", true)
+            end
+        end
+    )
+end
+return ____exports
+ end,
 ["callbacks.MC_POST_UPDATE"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
 local ____exports = {}
+local ____sarahnpc = require("entities.sarahnpc")
+local sarahUpdate = ____sarahnpc.sarahUpdate
 function ____exports.postUpdate(self)
+    sarahUpdate(nil)
 end
 return ____exports
  end,
