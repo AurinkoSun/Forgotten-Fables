@@ -59,21 +59,46 @@ export function ghostCollide(tear: EntityTear, collider: Entity): EntityTear {
     ) {
       tear.GetData().seed = collider.GetDropRNG().GetSeed();
       const player: EntityPlayer = tear.GetData().player as EntityPlayer;
-      for (let i = 0; i < 3; i++) {
-        const explosionEffect = Isaac.Spawn(
-          EntityType.ENTITY_EFFECT,
-          EffectVariant.IMPACT,
-          0,
-          tear.Position,
-          Vector(0, 0),
-          player,
-        ).ToEffect();
-        if (explosionEffect !== null) {
-          explosionEffect.SetDamageSource(EntityType.ENTITY_PLAYER);
-          explosionEffect.CollisionDamage = player.Damage * 2;
-          const playeradjrange = (player.TearHeight * -1) / 23.75; // The player's range divided by the default
-          explosionEffect.Scale *= playeradjrange;
-        }
+      const lightEffect = Isaac.Spawn(
+        EntityType.ENTITY_EFFECT,
+        EffectVariant.ENEMY_GHOST,
+        1,
+        tear.Position,
+        Vector(0, 0),
+        player,
+      ).ToEffect();
+      const poofEffect = Isaac.Spawn(
+        EntityType.ENTITY_EFFECT,
+        EffectVariant.POOF01,
+        0,
+        tear.Position,
+        Vector(0, 0),
+        player,
+      ).ToEffect();
+      const bloodEffect = Isaac.Spawn(
+        EntityType.ENTITY_EFFECT,
+        EffectVariant.BLOOD_EXPLOSION,
+        0,
+        tear.Position,
+        Vector(0, 0),
+        player,
+      ).ToEffect();
+      // const playeradjrange = (player.TearHeight * -1) / 23.75; // The player's range divided by the default. //Uncomment once range gets fixed in the api
+      if (lightEffect !== null) {
+        lightEffect.SetDamageSource(EntityType.ENTITY_PLAYER);
+        lightEffect.CollisionDamage = player.Damage * 0.4;
+        // lightEffect.Scale *= playeradjrange; //Uncomment once range gets fixed in the api
+      }
+      if (poofEffect !== null) {
+        poofEffect.SetDamageSource(EntityType.ENTITY_PLAYER);
+        poofEffect.CollisionDamage = player.Damage * 0.4;
+        // poofEffect.Scale *= playeradjrange;
+      }
+      if (bloodEffect !== null) {
+        bloodEffect.SetDamageSource(EntityType.ENTITY_PLAYER);
+        bloodEffect.CollisionDamage = player.Damage * 0.4;
+        // bloodEffect.Scale *= playeradjrange;
+        bloodEffect.LifeSpan = 10;
       }
     }
   }

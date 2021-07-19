@@ -82,27 +82,28 @@ export function sarahUpdate(): void {
           }
         }
       }
-    }
-    if (entity.GetSprite().IsFinished("Thumbsup")) {
-      entity.GetSprite().Play("Idle", true);
-    }
-    if (entity.GetSprite().IsFinished("Die")) {
-      entity.Remove();
-      game.GetLevel().SetStateFlag(LevelStateFlag.STATE_BUM_KILLED, true);
-    }
-    if (
-      entity.GridCollisionClass === EntityGridCollisionClass.GRIDCOLL_GROUND
-    ) {
-      const reward = rewards[rng.RandomInt(rewards.length)];
-      Isaac.Spawn(
-        reward[0],
-        reward[1],
-        reward[2],
-        entity.Position,
-        Vector(0, 0),
-        entity,
-      );
-      entity.GetSprite().Play("Die", true);
+
+      if (entity.GetSprite().IsFinished("Thumbsup")) {
+        entity.GetSprite().Play("Idle", true);
+      }
+      if (entity.GetSprite().IsFinished("Die")) {
+        entity.Remove();
+        game.GetLevel().SetStateFlag(LevelStateFlag.STATE_BUM_KILLED, true);
+      }
+      if (
+        entity.GridCollisionClass === EntityGridCollisionClass.GRIDCOLL_GROUND
+      ) {
+        const reward = rewards[rng.RandomInt(rewards.length)];
+        Isaac.Spawn(
+          reward[0],
+          reward[1],
+          reward[2],
+          entity.Position,
+          Vector(0, 0),
+          entity,
+        );
+        entity.GetSprite().Play("Die", true);
+      }
     }
   });
 }

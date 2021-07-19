@@ -13,7 +13,7 @@ const modPlayerData: { data: PlayerData[] } = {
     new PlayerData(null, 0, false, 0),
   ],
 };
-
+// const debugEntitySpawn = true;
 const forgottenFables = RegisterMod("Forgotten Fables", 1);
 forgottenFables.AddCallback(ModCallbacks.MC_PRE_GAME_EXIT, () => {
   callbacks.preGameExit(forgottenFables, modPlayerData);
@@ -105,5 +105,13 @@ forgottenFables.AddCallback(
   callbacks.projectileInit,
 );
 
+/* forgottenFables.AddCallback(
+  ModCallbacks.MC_PRE_ENTITY_SPAWN,
+  (type: number, variant: number, subtype: number) => {
+    if (debugEntitySpawn) {
+      print(type, ".", variant, ".", subtype);
+    }
+  },
+); */
 forgottenFables.AddCallback(ModCallbacks.MC_POST_UPDATE, callbacks.postUpdate);
 forgottenFables.AddCallback(ModCallbacks.MC_NPC_UPDATE, callbacks.npcUpdate);

@@ -2540,25 +2540,42 @@ function ____exports.ghostCollide(self, tear, collider)
         if (tear:GetData().player ~= nil) and (collider:GetDropRNG():GetSeed() ~= tear:GetData().seed) then
             tear:GetData().seed = collider:GetDropRNG():GetSeed()
             local player = tear:GetData().player
-            do
-                local i = 0
-                while i < 3 do
-                    local explosionEffect = Isaac.Spawn(
-                        EntityType.ENTITY_EFFECT,
-                        EffectVariant.IMPACT,
-                        0,
-                        tear.Position,
-                        Vector(0, 0),
-                        player
-                    ):ToEffect()
-                    if explosionEffect ~= nil then
-                        explosionEffect:SetDamageSource(EntityType.ENTITY_PLAYER)
-                        explosionEffect.CollisionDamage = player.Damage * 2
-                        local playeradjrange = (player.TearHeight * -1) / 23.75
-                        explosionEffect.Scale = explosionEffect.Scale * playeradjrange
-                    end
-                    i = i + 1
-                end
+            local lightEffect = Isaac.Spawn(
+                EntityType.ENTITY_EFFECT,
+                EffectVariant.ENEMY_GHOST,
+                1,
+                tear.Position,
+                Vector(0, 0),
+                player
+            ):ToEffect()
+            local poofEffect = Isaac.Spawn(
+                EntityType.ENTITY_EFFECT,
+                EffectVariant.POOF01,
+                0,
+                tear.Position,
+                Vector(0, 0),
+                player
+            ):ToEffect()
+            local bloodEffect = Isaac.Spawn(
+                EntityType.ENTITY_EFFECT,
+                EffectVariant.BLOOD_EXPLOSION,
+                0,
+                tear.Position,
+                Vector(0, 0),
+                player
+            ):ToEffect()
+            if lightEffect ~= nil then
+                lightEffect:SetDamageSource(EntityType.ENTITY_PLAYER)
+                lightEffect.CollisionDamage = player.Damage * 0.4
+            end
+            if poofEffect ~= nil then
+                poofEffect:SetDamageSource(EntityType.ENTITY_PLAYER)
+                poofEffect.CollisionDamage = player.Damage * 0.4
+            end
+            if bloodEffect ~= nil then
+                bloodEffect:SetDamageSource(EntityType.ENTITY_PLAYER)
+                bloodEffect.CollisionDamage = player.Damage * 0.4
+                bloodEffect.LifeSpan = 10
             end
         end
     end
@@ -3199,25 +3216,25 @@ function ____exports.sarahUpdate(self)
                         end
                     end
                 end
-            end
-            if entity:GetSprite():IsFinished("Thumbsup") then
-                entity:GetSprite():Play("Idle", true)
-            end
-            if entity:GetSprite():IsFinished("Die") then
-                entity:Remove()
-                game:GetLevel():SetStateFlag(LevelStateFlag.STATE_BUM_KILLED, true)
-            end
-            if entity.GridCollisionClass == EntityGridCollisionClass.GRIDCOLL_GROUND then
-                local reward = rewards[rng:RandomInt(#rewards) + 1]
-                Isaac.Spawn(
-                    reward[1],
-                    reward[2],
-                    reward[3],
-                    entity.Position,
-                    Vector(0, 0),
-                    entity
-                )
-                entity:GetSprite():Play("Die", true)
+                if entity:GetSprite():IsFinished("Thumbsup") then
+                    entity:GetSprite():Play("Idle", true)
+                end
+                if entity:GetSprite():IsFinished("Die") then
+                    entity:Remove()
+                    game:GetLevel():SetStateFlag(LevelStateFlag.STATE_BUM_KILLED, true)
+                end
+                if entity.GridCollisionClass == EntityGridCollisionClass.GRIDCOLL_GROUND then
+                    local reward = rewards[rng:RandomInt(#rewards) + 1]
+                    Isaac.Spawn(
+                        reward[1],
+                        reward[2],
+                        reward[3],
+                        entity.Position,
+                        Vector(0, 0),
+                        entity
+                    )
+                    entity:GetSprite():Play("Die", true)
+                end
             end
         end
     )
