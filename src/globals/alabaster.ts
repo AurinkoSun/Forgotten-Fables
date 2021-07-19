@@ -1,13 +1,53 @@
-import { ModPlayerTypes } from "../constants";
+import { ModPlayerTypes, rng } from "../constants";
+import { GetPlayerId, PlayerData } from "../playerdata";
 
-export function alabasterStats(player: EntityPlayer, flags: CacheFlag): void {
+export function alabasterStats(
+  player: EntityPlayer,
+  flags: CacheFlag,
+  modPlayerData: { data: PlayerData[] },
+): void {
   if (player.GetPlayerType() === ModPlayerTypes.ALABASTER) {
     if (flags === CacheFlag.CACHE_SHOTSPEED) {
       player.ShotSpeed -= 0.15;
+      player.ShotSpeed += modPlayerData.data[GetPlayerId(player)].tStats[4];
     }
     if (flags === CacheFlag.CACHE_FLYING) {
       player.CanFly = true;
     }
+    if (flags === CacheFlag.CACHE_DAMAGE) {
+      player.Damage += modPlayerData.data[GetPlayerId(player)].tStats[0];
+    }
+    if (flags === CacheFlag.CACHE_SPEED) {
+      player.MoveSpeed += modPlayerData.data[GetPlayerId(player)].tStats[3];
+    }
+    if (flags === CacheFlag.CACHE_FIREDELAY) {
+      player.MaxFireDelay -= modPlayerData.data[GetPlayerId(player)].tStats[1];
+    }
+    if (flags === CacheFlag.CACHE_RANGE) {
+      player.TearHeight -= modPlayerData.data[GetPlayerId(player)].tStats[2]; // currently broken in the api but this code should work once it gets fixed
+    }
+  }
+}
+const stats = [0.15, 0.15, 0.15, 0.15, 0.15]; // temp values. change them. damage,tears,range,speed,shot speed.
+const flags = [
+  CacheFlag.CACHE_DAMAGE,
+  CacheFlag.CACHE_FIREDELAY,
+  CacheFlag.CACHE_RANGE,
+  CacheFlag.CACHE_SPEED,
+  CacheFlag.CACHE_SHOTSPEED,
+];
+export function birthright(
+  player: EntityPlayer,
+  modPlayerData: { data: PlayerData[] },
+): void {
+  if (
+    player.HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) &&
+    player.GetPlayerType() === ModPlayerTypes.ALABASTER
+  ) {
+    const rand = rng.RandomInt(6);
+    modPlayerData.data[GetPlayerId(player)].tStats[rand] += stats[rand];
+    player.AddCacheFlags(flags[rand]);
+    player.EvaluateItems();
   }
 }
 export function alabasterHealth(player: EntityPlayer): void {

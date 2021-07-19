@@ -52,3 +52,4 @@ export enum ModCostumes {
 }
 export const game = Game();
 export const sfxManager = SFXManager();
+export const rng = RNG();

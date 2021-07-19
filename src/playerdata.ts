@@ -10,6 +10,7 @@ export class PlayerData {
   player: EntityPlayer | null = null;
   id: number;
   bdcharge: number;
+  tStats: number[];
   /**
    * @param player
    * the player to attach to the PlayerData
@@ -26,12 +27,14 @@ export class PlayerData {
     bdcharge = 0,
     lost = false,
     razors = 0,
+    tStats = [0, 0, 0, 0, 0],
   ) {
     this.player = player;
     this.lost = lost;
     this.razors = razors;
     this.bdcharge = bdcharge;
     this.id = player !== null ? GetPlayerId(player) : -1;
+    this.tStats = tStats;
   }
 
   RegenerateID(): void {

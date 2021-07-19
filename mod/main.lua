@@ -1908,6 +1908,7 @@ ____exports.ModCostumes.ALABASTER_HAIR = Isaac.GetCostumeIdByPath("gfx/character
 ____exports.ModCostumes[____exports.ModCostumes.ALABASTER_HAIR] = "ALABASTER_HAIR"
 ____exports.game = Game()
 ____exports.sfxManager = SFXManager()
+____exports.rng = RNG()
 return ____exports
  end,
 ["globals.peel"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
@@ -2375,7 +2376,7 @@ end
 ____exports.PlayerData = __TS__Class()
 local PlayerData = ____exports.PlayerData
 PlayerData.name = "PlayerData"
-function PlayerData.prototype.____constructor(self, player, bdcharge, lost, razors)
+function PlayerData.prototype.____constructor(self, player, bdcharge, lost, razors, tStats)
     if player == nil then
         player = nil
     end
@@ -2388,12 +2389,16 @@ function PlayerData.prototype.____constructor(self, player, bdcharge, lost, razo
     if razors == nil then
         razors = 0
     end
+    if tStats == nil then
+        tStats = {0, 0, 0, 0, 0}
+    end
     self.player = nil
     self.player = player
     self.lost = lost
     self.razors = razors
     self.bdcharge = bdcharge
     self.id = ((player ~= nil) and ____exports.GetPlayerId(nil, player)) or -1
+    self.tStats = tStats
 end
 function PlayerData.prototype.RegenerateID(self)
     self.id = ____exports.GetPlayerId(nil, self.player)
@@ -2431,14 +2436,41 @@ return ____exports
 local ____exports = {}
 local ____constants = require("constants")
 local ModPlayerTypes = ____constants.ModPlayerTypes
-function ____exports.alabasterStats(self, player, flags)
+local rng = ____constants.rng
+local ____playerdata = require("playerdata")
+local GetPlayerId = ____playerdata.GetPlayerId
+function ____exports.alabasterStats(self, player, flags, modPlayerData)
     if player:GetPlayerType() == ModPlayerTypes.ALABASTER then
         if flags == CacheFlag.CACHE_SHOTSPEED then
             player.ShotSpeed = player.ShotSpeed - 0.15
+            player.ShotSpeed = player.ShotSpeed + modPlayerData.data[GetPlayerId(nil, player) + 1].tStats[5]
         end
         if flags == CacheFlag.CACHE_FLYING then
             player.CanFly = true
         end
+        if flags == CacheFlag.CACHE_DAMAGE then
+            player.Damage = player.Damage + modPlayerData.data[GetPlayerId(nil, player) + 1].tStats[1]
+        end
+        if flags == CacheFlag.CACHE_SPEED then
+            player.MoveSpeed = player.MoveSpeed + modPlayerData.data[GetPlayerId(nil, player) + 1].tStats[4]
+        end
+        if flags == CacheFlag.CACHE_FIREDELAY then
+            player.MaxFireDelay = player.MaxFireDelay - modPlayerData.data[GetPlayerId(nil, player) + 1].tStats[2]
+        end
+        if flags == CacheFlag.CACHE_RANGE then
+            player.TearHeight = player.TearHeight - modPlayerData.data[GetPlayerId(nil, player) + 1].tStats[3]
+        end
+    end
+end
+local stats = {0.15, 0.15, 0.15, 0.15, 0.15}
+local flags = {CacheFlag.CACHE_DAMAGE, CacheFlag.CACHE_FIREDELAY, CacheFlag.CACHE_RANGE, CacheFlag.CACHE_SPEED, CacheFlag.CACHE_SHOTSPEED}
+function ____exports.birthright(self, player, modPlayerData)
+    if player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) and (player:GetPlayerType() == ModPlayerTypes.ALABASTER) then
+        local rand = rng:RandomInt(6)
+        local ____obj, ____index = modPlayerData.data[GetPlayerId(nil, player) + 1].tStats, rand + 1
+        ____obj[____index] = ____obj[____index] + stats[rand + 1]
+        player:AddCacheFlags(flags[rand + 1])
+        player:EvaluateItems()
     end
 end
 function ____exports.alabasterHealth(self, player)
@@ -2608,6 +2640,7 @@ local hudOffset = 0
 local OFFSET = Vector(2, 1.2)
 local LISTYOFFSET = Vector(0, 13)
 local HEARTPATH = "gfx/hudheart.anm2"
+local hasAlabaster = false
 local data = {
     firstAlaIndex = -1,
     initialized = false,
@@ -2616,7 +2649,6 @@ local data = {
     num2 = -10,
     font = Font()
 }
-local alabasters = 0
 function ____exports.init(self)
     do
         local i = 0
@@ -2625,13 +2657,13 @@ function ____exports.init(self)
             if (player ~= nil) and (player:GetPlayerType() == ModPlayerTypes.ALABASTER) then
                 if data.firstAlaIndex == -1 then
                     data.firstAlaIndex = i
+                    hasAlabaster = true
                 end
-                alabasters = alabasters + 1
             end
             i = i + 1
         end
     end
-    if alabasters == 0 then
+    if data.firstAlaIndex < 0 then
         return
     end
     data.initialized = true
@@ -2648,7 +2680,7 @@ function ____exports.render(self, modPlayerData)
     if not data.initialized then
         ____exports.init(nil)
     end
-    if game:GetHUD():IsVisible() then
+    if game:GetHUD():IsVisible() and hasAlabaster then
         local x = 0
         do
             local i = 0
@@ -2871,6 +2903,8 @@ local ____constants = require("constants")
 local game = ____constants.game
 local ModPlayerTypes = ____constants.ModPlayerTypes
 local sfxManager = ____constants.sfxManager
+local ____alabaster = require("globals.alabaster")
+local birthright = ____alabaster.birthright
 local ____playerdata = require("playerdata")
 local GetPlayerId = ____playerdata.GetPlayerId
 function ____exports.bloodDrive(self, player, modPlayerData, rng)
@@ -2879,7 +2913,8 @@ function ____exports.bloodDrive(self, player, modPlayerData, rng)
             local ____obj, ____index = modPlayerData.data[GetPlayerId(nil, player) + 1], "bdcharge"
             ____obj[____index] = ____obj[____index] - 2
             local spawned = true
-            local rand = rng:RandomInt(100)
+            birthright(nil, player, modPlayerData)
+            local rand = rng:RandomInt(101)
             local pos = game:GetRoom():FindFreePickupSpawnPosition(player.Position)
             local runes = {Card.RUNE_ALGIZ, Card.RUNE_ANSUZ, Card.RUNE_BERKANO, Card.RUNE_BLACK, Card.RUNE_BLANK, Card.RUNE_DAGAZ, Card.RUNE_EHWAZ, Card.RUNE_HAGALAZ, Card.RUNE_JERA, Card.RUNE_PERTHRO, Card.CARD_SOUL_APOLLYON, Card.CARD_SOUL_AZAZEL, Card.CARD_SOUL_BETHANY, Card.CARD_SOUL_BLUEBABY, Card.CARD_SOUL_CAIN, Card.CARD_SOUL_EDEN, Card.CARD_SOUL_EVE, Card.CARD_SOUL_FORGOTTEN, Card.CARD_SOUL_ISAAC, Card.CARD_SOUL_JACOB, Card.CARD_SOUL_JUDAS, Card.CARD_SOUL_KEEPER, Card.CARD_SOUL_LAZARUS, Card.CARD_SOUL_LILITH, Card.CARD_SOUL_LOST, Card.CARD_SOUL_MAGDALENE, Card.CARD_SOUL_SAMSON}
             local chests = {PickupVariant.PICKUP_OLDCHEST, PickupVariant.PICKUP_LOCKEDCHEST, PickupVariant.PICKUP_REDCHEST, PickupVariant.PICKUP_CHEST, PickupVariant.PICKUP_WOODENCHEST}

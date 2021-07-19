@@ -5,6 +5,7 @@ const hudOffset = 0;
 const OFFSET = Vector(2, 1.2);
 const LISTYOFFSET = Vector(0, 13);
 const HEARTPATH = "gfx/hudheart.anm2";
+let hasAlabaster = false;
 const data = {
   firstAlaIndex: -1,
   initialized: false,
@@ -13,7 +14,6 @@ const data = {
   num2: -10,
   font: Font(),
 };
-let alabasters = 0;
 export function init(): void {
   for (let i = 0; i < game.GetNumPlayers(); i++) {
     const player = game.GetPlayer(i);
@@ -23,11 +23,11 @@ export function init(): void {
     ) {
       if (data.firstAlaIndex === -1) {
         data.firstAlaIndex = i;
+        hasAlabaster = true;
       }
-      alabasters += 1;
     }
   }
-  if (alabasters === 0) {
+  if (data.firstAlaIndex < 0) {
     return;
   }
   data.initialized = true;
@@ -44,7 +44,7 @@ export function render(modPlayerData: { data: PlayerData[] }): void {
   if (!data.initialized) {
     init();
   }
-  if (game.GetHUD().IsVisible()) {
+  if (game.GetHUD().IsVisible() && hasAlabaster) {
     let x = 0;
     for (let i = 0; i < game.GetNumPlayers(); i++) {
       const player = game.GetPlayer(i);

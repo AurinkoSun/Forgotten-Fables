@@ -1,4 +1,5 @@
 import { game, ModPlayerTypes, sfxManager } from "../../constants";
+import { birthright } from "../../globals/alabaster";
 import { GetPlayerId, PlayerData } from "../../playerdata";
 
 export function bloodDrive(
@@ -24,7 +25,8 @@ export function bloodDrive(
     if (modPlayerData.data[GetPlayerId(player)].bdcharge > 0) {
       modPlayerData.data[GetPlayerId(player)].bdcharge -= 2;
       let spawned = true;
-      const rand = rng.RandomInt(100);
+      birthright(player, modPlayerData);
+      const rand = rng.RandomInt(101);
       const pos = game.GetRoom().FindFreePickupSpawnPosition(player.Position);
       const runes = [
         Card.RUNE_ALGIZ,
