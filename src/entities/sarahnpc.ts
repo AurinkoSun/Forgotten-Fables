@@ -3,9 +3,47 @@ import {
   hud,
   ModPlayerTypes,
   ModSlotVariants,
+  rng,
   sfxManager,
 } from "../constants";
 
+const rewards = [
+  [
+    EntityType.ENTITY_PICKUP,
+    PickupVariant.PICKUP_COLLECTIBLE,
+    CollectibleType.COLLECTIBLE_PACT,
+  ],
+  [
+    EntityType.ENTITY_PICKUP,
+    PickupVariant.PICKUP_COLLECTIBLE,
+    CollectibleType.COLLECTIBLE_MISSING_PAGE_2,
+  ],
+  [
+    EntityType.ENTITY_PICKUP,
+    PickupVariant.PICKUP_COLLECTIBLE,
+    CollectibleType.COLLECTIBLE_MR_DOLLY,
+  ],
+  [
+    EntityType.ENTITY_PICKUP,
+    PickupVariant.PICKUP_TRINKET,
+    TrinketType.TRINKET_MISSING_PAGE,
+  ],
+  [
+    EntityType.ENTITY_PICKUP,
+    PickupVariant.PICKUP_TRINKET,
+    TrinketType.TRINKET_MISSING_POSTER,
+  ],
+  [
+    EntityType.ENTITY_PICKUP,
+    PickupVariant.PICKUP_TRINKET,
+    TrinketType.TRINKET_KIDS_DRAWING,
+  ],
+  [
+    EntityType.ENTITY_PICKUP,
+    PickupVariant.PICKUP_COLLECTIBLE,
+    CollectibleType.COLLECTIBLE_LEAD_PENCIL,
+  ],
+];
 export function sarahUpdate(): void {
   Isaac.GetRoomEntities().forEach((entity: Entity) => {
     if (
@@ -55,6 +93,15 @@ export function sarahUpdate(): void {
     if (
       entity.GridCollisionClass === EntityGridCollisionClass.GRIDCOLL_GROUND
     ) {
+      const reward = rewards[rng.RandomInt(rewards.length)];
+      Isaac.Spawn(
+        reward[0],
+        reward[1],
+        reward[2],
+        entity.Position,
+        Vector(0, 0),
+        entity,
+      );
       entity.GetSprite().Play("Die", true);
     }
   });

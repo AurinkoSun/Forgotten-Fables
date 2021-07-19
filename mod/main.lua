@@ -3161,7 +3161,9 @@ local game = ____constants.game
 local hud = ____constants.hud
 local ModPlayerTypes = ____constants.ModPlayerTypes
 local ModSlotVariants = ____constants.ModSlotVariants
+local rng = ____constants.rng
 local sfxManager = ____constants.sfxManager
+local rewards = {{EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, CollectibleType.COLLECTIBLE_PACT}, {EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, CollectibleType.COLLECTIBLE_MISSING_PAGE_2}, {EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, CollectibleType.COLLECTIBLE_MR_DOLLY}, {EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TRINKET, TrinketType.TRINKET_MISSING_PAGE}, {EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TRINKET, TrinketType.TRINKET_MISSING_POSTER}, {EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TRINKET, TrinketType.TRINKET_KIDS_DRAWING}, {EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, CollectibleType.COLLECTIBLE_LEAD_PENCIL}}
 function ____exports.sarahUpdate(self)
     __TS__ArrayForEach(
         Isaac.GetRoomEntities(),
@@ -3206,6 +3208,15 @@ function ____exports.sarahUpdate(self)
                 game:GetLevel():SetStateFlag(LevelStateFlag.STATE_BUM_KILLED, true)
             end
             if entity.GridCollisionClass == EntityGridCollisionClass.GRIDCOLL_GROUND then
+                local reward = rewards[rng:RandomInt(#rewards) + 1]
+                Isaac.Spawn(
+                    reward[1],
+                    reward[2],
+                    reward[3],
+                    entity.Position,
+                    Vector(0, 0),
+                    entity
+                )
                 entity:GetSprite():Play("Die", true)
             end
         end
