@@ -1892,6 +1892,8 @@ ____exports.ModItemTypes.RUSSIANROULETTE = Isaac.GetItemIdByName("Russian Roulet
 ____exports.ModItemTypes[____exports.ModItemTypes.RUSSIANROULETTE] = "RUSSIANROULETTE"
 ____exports.ModItemTypes.STONE_D6 = Isaac.GetItemIdByName("Stone D6")
 ____exports.ModItemTypes[____exports.ModItemTypes.STONE_D6] = "STONE_D6"
+____exports.ModItemTypes.BOMBCONVERTER = Isaac.GetItemIdByName("Bomb Converter")
+____exports.ModItemTypes[____exports.ModItemTypes.BOMBCONVERTER] = "BOMBCONVERTER"
 ____exports.ModTearVariants = ModTearVariants or ({})
 ____exports.ModTearVariants.GHOST = Isaac.GetEntityVariantByName("Ghost Tear")
 ____exports.ModTearVariants[____exports.ModTearVariants.GHOST] = "GHOST"
@@ -3404,6 +3406,18 @@ function ____exports.preTearCollision(self, tear, collider, _low)
 end
 return ____exports
  end,
+["items.active.bombconverter"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
+local ____exports = {}
+function ____exports.bombConverter(self, player)
+    if player:GetNumBombs() >= 15 then
+        player:AddBombs(-15)
+        player:AddGigaBombs(1)
+        return true
+    end
+    return false
+end
+return ____exports
+ end,
 ["items.active.russianroulette"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
 local ____exports = {}
 local ____constants = require("constants")
@@ -3492,6 +3506,8 @@ local ____costumes = require("globals.costumes")
 local costumes = ____costumes.costumes
 local ____blooddrive = require("items.active.blooddrive")
 local bloodDrive = ____blooddrive.bloodDrive
+local ____bombconverter = require("items.active.bombconverter")
+local bombConverter = ____bombconverter.bombConverter
 local ____russianroulette = require("items.active.russianroulette")
 local rRoulette = ____russianroulette.rRoulette
 local ____stoned6 = require("items.active.stoned6")
@@ -3499,34 +3515,35 @@ local stoneD6 = ____stoned6.stoneD6
 function ____exports.useItem(self, item, rng, player, _slot, modPlayerData)
     local returnVal = nil
     local ____switch3 = item
-    if ____switch3 == ModItemTypes.RUSSIANROULETTE then
+    if ____switch3 == ModItemTypes.BOMBCONVERTER then
         goto ____switch3_case_0
-    elseif ____switch3 == ModItemTypes.BLOODDRIVE then
+    elseif ____switch3 == ModItemTypes.RUSSIANROULETTE then
         goto ____switch3_case_1
-    elseif ____switch3 == ModItemTypes.STONE_D6 then
+    elseif ____switch3 == ModItemTypes.BLOODDRIVE then
         goto ____switch3_case_2
+    elseif ____switch3 == ModItemTypes.STONE_D6 then
+        goto ____switch3_case_3
     end
     goto ____switch3_case_default
     ::____switch3_case_0::
     do
-        do
-            returnVal = rRoulette(nil, rng, player)
-            goto ____switch3_end
-        end
+        returnVal = bombConverter(nil, player)
+        goto ____switch3_end
     end
     ::____switch3_case_1::
     do
-        do
-            returnVal = bloodDrive(nil, player, modPlayerData, rng)
-            goto ____switch3_end
-        end
+        returnVal = rRoulette(nil, rng, player)
+        goto ____switch3_end
     end
     ::____switch3_case_2::
     do
-        do
-            returnVal = stoneD6(nil)
-            goto ____switch3_end
-        end
+        returnVal = bloodDrive(nil, player, modPlayerData, rng)
+        goto ____switch3_end
+    end
+    ::____switch3_case_3::
+    do
+        returnVal = stoneD6(nil)
+        goto ____switch3_end
     end
     ::____switch3_case_default::
     do

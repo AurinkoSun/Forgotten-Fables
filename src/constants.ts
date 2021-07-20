@@ -11,6 +11,7 @@ export enum ModItemTypes {
   BLUE_HEART = Isaac.GetItemIdByName("Blue Heart"),
   RUSSIANROULETTE = Isaac.GetItemIdByName("Russian Roulette"),
   STONE_D6 = Isaac.GetItemIdByName("Stone D6"),
+  BOMBCONVERTER = Isaac.GetItemIdByName("Bomb Converter"),
 }
 export enum ModTearVariants {
   GHOST = Isaac.GetEntityVariantByName("Ghost Tear"),
