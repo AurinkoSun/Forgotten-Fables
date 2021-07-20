@@ -1894,6 +1894,8 @@ ____exports.ModItemTypes.STONE_D6 = Isaac.GetItemIdByName("Stone D6")
 ____exports.ModItemTypes[____exports.ModItemTypes.STONE_D6] = "STONE_D6"
 ____exports.ModItemTypes.BOMBCONVERTER = Isaac.GetItemIdByName("Bomb Converter")
 ____exports.ModItemTypes[____exports.ModItemTypes.BOMBCONVERTER] = "BOMBCONVERTER"
+____exports.ModItemTypes.MEATBUCKET = Isaac.GetItemIdByName("Bucket of Meat")
+____exports.ModItemTypes[____exports.ModItemTypes.MEATBUCKET] = "MEATBUCKET"
 ____exports.ModTearVariants = ModTearVariants or ({})
 ____exports.ModTearVariants.GHOST = Isaac.GetEntityVariantByName("Ghost Tear")
 ____exports.ModTearVariants[____exports.ModTearVariants.GHOST] = "GHOST"
@@ -3408,6 +3410,37 @@ function ____exports.bombConverter(self, player)
 end
 return ____exports
  end,
+["items.active.bucketofmeat"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
+local ____exports = {}
+function ____exports.bucketOfMeat(self, player)
+    local counter = 0
+    for ____, entity in ipairs(
+        Isaac.GetRoomEntities()
+    ) do
+        if (entity.Type == EntityType.ENTITY_PICKUP) and (entity.Variant == PickupVariant.PICKUP_HEART) then
+            if entity.SubType == HeartSubType.HEART_HALF then
+                counter = counter + 1
+                entity:Remove()
+            elseif entity.SubType == HeartSubType.HEART_FULL then
+                counter = counter + 2
+                entity:Remove()
+            end
+        end
+    end
+    if counter == 0 then
+        return false
+    end
+    do
+        local i = 0
+        while i < (counter / 2) do
+            Isaac.Spawn(EntityType.ENTITY_FAMILIAR, FamiliarVariant.BLOOD_BABY, 7, player.Position, player.Velocity, player)
+            i = i + 1
+        end
+    end
+    return true
+end
+return ____exports
+ end,
 ["items.active.russianroulette"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
 local ____exports = {}
 local ____constants = require("constants")
@@ -3498,6 +3531,8 @@ local ____blooddrive = require("items.active.blooddrive")
 local bloodDrive = ____blooddrive.bloodDrive
 local ____bombconverter = require("items.active.bombconverter")
 local bombConverter = ____bombconverter.bombConverter
+local ____bucketofmeat = require("items.active.bucketofmeat")
+local bucketOfMeat = ____bucketofmeat.bucketOfMeat
 local ____russianroulette = require("items.active.russianroulette")
 local rRoulette = ____russianroulette.rRoulette
 local ____stoned6 = require("items.active.stoned6")
@@ -3505,32 +3540,39 @@ local stoneD6 = ____stoned6.stoneD6
 function ____exports.useItem(self, item, rng, player, _slot, modPlayerData)
     local returnVal = nil
     local ____switch3 = item
-    if ____switch3 == ModItemTypes.BOMBCONVERTER then
+    if ____switch3 == ModItemTypes.MEATBUCKET then
         goto ____switch3_case_0
-    elseif ____switch3 == ModItemTypes.RUSSIANROULETTE then
+    elseif ____switch3 == ModItemTypes.BOMBCONVERTER then
         goto ____switch3_case_1
-    elseif ____switch3 == ModItemTypes.BLOODDRIVE then
+    elseif ____switch3 == ModItemTypes.RUSSIANROULETTE then
         goto ____switch3_case_2
-    elseif ____switch3 == ModItemTypes.STONE_D6 then
+    elseif ____switch3 == ModItemTypes.BLOODDRIVE then
         goto ____switch3_case_3
+    elseif ____switch3 == ModItemTypes.STONE_D6 then
+        goto ____switch3_case_4
     end
     goto ____switch3_case_default
     ::____switch3_case_0::
     do
-        returnVal = bombConverter(nil, player)
+        returnVal = bucketOfMeat(nil, player)
         goto ____switch3_end
     end
     ::____switch3_case_1::
     do
-        returnVal = rRoulette(nil, rng, player)
+        returnVal = bombConverter(nil, player)
         goto ____switch3_end
     end
     ::____switch3_case_2::
     do
-        returnVal = bloodDrive(nil, player, modPlayerData, rng)
+        returnVal = rRoulette(nil, rng, player)
         goto ____switch3_end
     end
     ::____switch3_case_3::
+    do
+        returnVal = bloodDrive(nil, player, modPlayerData, rng)
+        goto ____switch3_end
+    end
+    ::____switch3_case_4::
     do
         returnVal = stoneD6(nil)
         goto ____switch3_end
@@ -3659,6 +3701,7 @@ local modPlayerData = {
         __TS__New(PlayerData, nil, 0, false, 0, {0, 0, 0, 0, 0})
     }
 }
+local debugEntitySpawn = true
 local forgottenFables = RegisterMod("Forgotten Fables", 1)
 descriptions(nil)
 forgottenFables:AddCallback(
@@ -3729,6 +3772,14 @@ forgottenFables:AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, callbacks.postFireTe
 forgottenFables:AddCallback(ModCallbacks.MC_POST_BOMB_UPDATE, callbacks.bombUpdate)
 forgottenFables:AddCallback(ModCallbacks.MC_POST_BOMB_INIT, callbacks.bombInit)
 forgottenFables:AddCallback(ModCallbacks.MC_POST_PROJECTILE_INIT, callbacks.projectileInit)
+if debugEntitySpawn then
+    forgottenFables:AddCallback(
+        ModCallbacks.MC_PRE_ENTITY_SPAWN,
+        function(____, ____type, variant, subtype)
+            print(____type, ".", variant, ".", subtype)
+        end
+    )
+end
 forgottenFables:AddCallback(ModCallbacks.MC_POST_UPDATE, callbacks.postUpdate)
 forgottenFables:AddCallback(ModCallbacks.MC_NPC_UPDATE, callbacks.npcUpdate)
 return ____exports
