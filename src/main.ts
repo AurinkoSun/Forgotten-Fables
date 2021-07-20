@@ -1,4 +1,5 @@
 import * as callbacks from "./callbacks/callbacks";
+import { descriptions } from "./globals/EID";
 import { PlayerData } from "./playerdata";
 
 const modPlayerData: { data: PlayerData[] } = {
@@ -15,6 +16,7 @@ const modPlayerData: { data: PlayerData[] } = {
 };
 // const debugEntitySpawn = true;
 const forgottenFables = RegisterMod("Forgotten Fables", 1);
+descriptions();
 forgottenFables.AddCallback(ModCallbacks.MC_PRE_GAME_EXIT, () => {
   callbacks.preGameExit(forgottenFables, modPlayerData);
 });

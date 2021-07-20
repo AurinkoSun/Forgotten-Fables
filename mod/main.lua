@@ -3613,10 +3613,33 @@ ____exports.postUpdate = postUpdate
 ____exports.npcUpdate = npcUpdate
 return ____exports
  end,
+["globals.EID"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
+local ____exports = {}
+function ____exports.descriptions(self)
+    if EID ~= nil then
+        Isaac.DebugString("adding eid stuff")
+        EID:addCollectible(
+            Isaac.GetItemIdByName("Ghost Shot"),
+            "Turns your tears into ghosts#When they touch an enemy, ghosts explode,#dealing 0.4x your damage 3 times",
+            "Ghost Shot",
+            "en_us"
+        )
+        EID:addBirthright(
+            Isaac.GetPlayerTypeByName("Alabaster", false),
+            "Alabaster now gets small#random stat ups similar#to Candy Heart when#consuming hearts with#Blood Drive",
+            "Alabaster",
+            "en_us"
+        )
+    end
+end
+return ____exports
+ end,
 ["main"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
 require("lualib_bundle");
 local ____exports = {}
 local callbacks = require("callbacks.callbacks")
+local ____EID = require("globals.EID")
+local descriptions = ____EID.descriptions
 local ____playerdata = require("playerdata")
 local PlayerData = ____playerdata.PlayerData
 local modPlayerData = {
@@ -3632,6 +3655,7 @@ local modPlayerData = {
     }
 }
 local forgottenFables = RegisterMod("Forgotten Fables", 1)
+descriptions(nil)
 forgottenFables:AddCallback(
     ModCallbacks.MC_PRE_GAME_EXIT,
     function()
