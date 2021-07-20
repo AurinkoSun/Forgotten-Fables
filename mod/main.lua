@@ -2647,14 +2647,6 @@ function ____exports.ghostCollide(self, tear, collider)
                 Vector(0, 0),
                 player
             ):ToEffect()
-            local poofEffect = Isaac.Spawn(
-                EntityType.ENTITY_EFFECT,
-                EffectVariant.POOF01,
-                0,
-                tear.Position,
-                Vector(0, 0),
-                player
-            ):ToEffect()
             local bloodEffect = Isaac.Spawn(
                 EntityType.ENTITY_EFFECT,
                 EffectVariant.BLOOD_EXPLOSION,
@@ -2665,16 +2657,14 @@ function ____exports.ghostCollide(self, tear, collider)
             ):ToEffect()
             if lightEffect ~= nil then
                 lightEffect:SetDamageSource(EntityType.ENTITY_PLAYER)
-                lightEffect.CollisionDamage = player.Damage * 0.4
-            end
-            if poofEffect ~= nil then
-                poofEffect:SetDamageSource(EntityType.ENTITY_PLAYER)
-                poofEffect.CollisionDamage = player.Damage * 0.4
+                lightEffect.CollisionDamage = player.Damage * 0.8
+                lightEffect.Scale = lightEffect.Scale * ((1 / 3) * (player.Damage / 3.5))
             end
             if bloodEffect ~= nil then
                 bloodEffect:SetDamageSource(EntityType.ENTITY_PLAYER)
                 bloodEffect.CollisionDamage = player.Damage * 0.4
                 bloodEffect.LifeSpan = 10
+                bloodEffect.Scale = bloodEffect.Scale * ((1 / 3) * (player.Damage / 3.5))
             end
         end
     elseif tear.Variant == ModTearVariants.GHOST_HAEMO then
