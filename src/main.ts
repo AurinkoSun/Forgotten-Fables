@@ -43,6 +43,10 @@ forgottenFables.AddCallback(
   ModCallbacks.MC_PRE_TEAR_COLLISION,
   callbacks.preTearCollision,
 );
+forgottenFables.AddCallback(
+  ModCallbacks.MC_POST_TEAR_UPDATE,
+  callbacks.tearUpdate,
+);
 
 // forgottenFables.AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, callbacks.newFloor);
 forgottenFables.AddCallback(

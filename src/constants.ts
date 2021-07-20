@@ -14,6 +14,7 @@ export enum ModItemTypes {
 }
 export enum ModTearVariants {
   GHOST = Isaac.GetEntityVariantByName("Ghost Tear"),
+  GHOST_HAEMO = Isaac.GetEntityVariantByName("Haemolacria Ghost Tear"),
 }
 /* export enum ModEntityTypes {
   TSARAHBODY = 799,
@@ -23,7 +24,6 @@ export enum ModTearVariants {
  */
 export enum ModEntityVariants {
   // TSARAHBODY = 200,
-  GHOST_TEAR = 50,
   PEEL = Isaac.GetEntityVariantByName("Peel"),
 }
 /**
