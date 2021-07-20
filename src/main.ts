@@ -3,14 +3,14 @@ import { PlayerData } from "./playerdata";
 
 const modPlayerData: { data: PlayerData[] } = {
   data: [
-    new PlayerData(null, 0, false, 0),
-    new PlayerData(null, 0, false, 0),
-    new PlayerData(null, 0, false, 0),
-    new PlayerData(null, 0, false, 0),
-    new PlayerData(null, 0, false, 0),
-    new PlayerData(null, 0, false, 0),
-    new PlayerData(null, 0, false, 0),
-    new PlayerData(null, 0, false, 0),
+    new PlayerData(null, 0, false, 0, [0, 0, 0, 0, 0]),
+    new PlayerData(null, 0, false, 0, [0, 0, 0, 0, 0]),
+    new PlayerData(null, 0, false, 0, [0, 0, 0, 0, 0]),
+    new PlayerData(null, 0, false, 0, [0, 0, 0, 0, 0]);
+    new PlayerData(null, 0, false, 0, [0, 0, 0, 0, 0]),
+    new PlayerData(null, 0, false, 0, [0, 0, 0, 0, 0]),
+    new PlayerData(null, 0, false, 0, [0, 0, 0, 0, 0]),
+    new PlayerData(null, 0, false, 0, [0, 0, 0, 0, 0]),
   ],
 };
 // const debugEntitySpawn = true;
