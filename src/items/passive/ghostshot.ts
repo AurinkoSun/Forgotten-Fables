@@ -1,4 +1,4 @@
-import { ModItemTypes, ModTearVariants } from "../../constants";
+import { ModItemTypes, ModPlayerTypes, ModTearVariants } from "../../constants";
 
 export function ghostShot(tear: EntityTear): void {
   if (
@@ -10,7 +10,8 @@ export function ghostShot(tear: EntityTear): void {
       bbghostReplace(tear, player);
     } else if (
       player !== null &&
-      player.HasCollectible(ModItemTypes.GHOST_SHOT)
+      (player.HasCollectible(ModItemTypes.GHOST_SHOT) ||
+        player.GetPlayerType() === ModPlayerTypes.ALABASTER)
     ) {
       if (player.HasWeaponType(WeaponType.WEAPON_TEARS)) {
         ghostReplace(tear, player);
@@ -43,6 +44,7 @@ function ghostReplace(tear: EntityTear, player: EntityPlayer): EntityTear {
   const animName = tear.GetSprite().GetAnimation();
   tear.ChangeVariant(ModTearVariants.GHOST);
   tear.GetSprite().Load("gfx/Ghost_Tear.anm2", true);
+  print(animName);
   tear.GetSprite().Play(animName, true);
   tear.CollisionDamage = player.Damage;
   tear.AddTearFlags(TearFlags.TEAR_HOMING);

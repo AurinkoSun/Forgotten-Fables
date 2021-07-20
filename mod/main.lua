@@ -2496,6 +2496,7 @@ return ____exports
 local ____exports = {}
 local ____constants = require("constants")
 local ModItemTypes = ____constants.ModItemTypes
+local ModPlayerTypes = ____constants.ModPlayerTypes
 local ModTearVariants = ____constants.ModTearVariants
 local bbghostReplace, ghostReplace
 function bbghostReplace(self, tear, player)
@@ -2511,6 +2512,7 @@ function ghostReplace(self, tear, player)
     local animName = tear:GetSprite():GetAnimation()
     tear:ChangeVariant(ModTearVariants.GHOST)
     tear:GetSprite():Load("gfx/Ghost_Tear.anm2", true)
+    print(animName)
     tear:GetSprite():Play(animName, true)
     tear.CollisionDamage = player.Damage
     tear:AddTearFlags(TearFlags.TEAR_HOMING)
@@ -2524,7 +2526,7 @@ function ____exports.ghostShot(self, tear)
         local player = tear.SpawnerEntity:ToPlayer()
         if (player ~= nil) and player:HasCollectible(ModItemTypes.BBGHOST_SHOT) then
             bbghostReplace(nil, tear, player)
-        elseif (player ~= nil) and player:HasCollectible(ModItemTypes.GHOST_SHOT) then
+        elseif (player ~= nil) and (player:HasCollectible(ModItemTypes.GHOST_SHOT) or (player:GetPlayerType() == ModPlayerTypes.ALABASTER)) then
             if player:HasWeaponType(WeaponType.WEAPON_TEARS) then
                 ghostReplace(nil, tear, player)
             else
@@ -2751,9 +2753,6 @@ function ____exports.pocketItems(self, _modPlayerData)
                 ::____switch5_case_0::
                 do
                     do
-                        if not player:HasCollectible(ModItemTypes.GHOST_SHOT) then
-                            player:AddCollectible(ModItemTypes.GHOST_SHOT)
-                        end
                         if player:GetActiveItem(ActiveSlot.SLOT_POCKET) ~= ModItemTypes.BLOODDRIVE then
                             print("blood drive added!")
                             player:AddCollectible(ModItemTypes.BLOODDRIVE, nil, nil, ActiveSlot.SLOT_POCKET)
@@ -3482,14 +3481,14 @@ local ____playerdata = require("playerdata")
 local PlayerData = ____playerdata.PlayerData
 local modPlayerData = {
     data = {
-        __TS__New(PlayerData, nil, 0, false, 0),
-        __TS__New(PlayerData, nil, 0, false, 0),
-        __TS__New(PlayerData, nil, 0, false, 0),
-        __TS__New(PlayerData, nil, 0, false, 0),
-        __TS__New(PlayerData, nil, 0, false, 0),
-        __TS__New(PlayerData, nil, 0, false, 0),
-        __TS__New(PlayerData, nil, 0, false, 0),
-        __TS__New(PlayerData, nil, 0, false, 0)
+        __TS__New(PlayerData, nil, 0, false, 0, {0, 0, 0, 0, 0}),
+        __TS__New(PlayerData, nil, 0, false, 0, {0, 0, 0, 0, 0}),
+        __TS__New(PlayerData, nil, 0, false, 0, {0, 0, 0, 0, 0}),
+        __TS__New(PlayerData, nil, 0, false, 0, {0, 0, 0, 0, 0}),
+        __TS__New(PlayerData, nil, 0, false, 0, {0, 0, 0, 0, 0}),
+        __TS__New(PlayerData, nil, 0, false, 0, {0, 0, 0, 0, 0}),
+        __TS__New(PlayerData, nil, 0, false, 0, {0, 0, 0, 0, 0}),
+        __TS__New(PlayerData, nil, 0, false, 0, {0, 0, 0, 0, 0})
     }
 }
 local forgottenFables = RegisterMod("Forgotten Fables", 1)

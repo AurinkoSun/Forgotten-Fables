@@ -6,7 +6,7 @@ const modPlayerData: { data: PlayerData[] } = {
     new PlayerData(null, 0, false, 0, [0, 0, 0, 0, 0]),
     new PlayerData(null, 0, false, 0, [0, 0, 0, 0, 0]),
     new PlayerData(null, 0, false, 0, [0, 0, 0, 0, 0]),
-    new PlayerData(null, 0, false, 0, [0, 0, 0, 0, 0]);
+    new PlayerData(null, 0, false, 0, [0, 0, 0, 0, 0]),
     new PlayerData(null, 0, false, 0, [0, 0, 0, 0, 0]),
     new PlayerData(null, 0, false, 0, [0, 0, 0, 0, 0]),
     new PlayerData(null, 0, false, 0, [0, 0, 0, 0, 0]),
