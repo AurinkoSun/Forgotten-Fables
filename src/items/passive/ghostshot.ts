@@ -6,9 +6,7 @@ export function ghostShot(tear: EntityTear): void {
     tear.SpawnerEntity.Type === EntityType.ENTITY_PLAYER
   ) {
     const player = tear.SpawnerEntity.ToPlayer();
-    if (player !== null && player.HasCollectible(ModItemTypes.BBGHOST_SHOT)) {
-      bbghostReplace(tear, player);
-    } else if (
+    if (
       player !== null &&
       (player.HasCollectible(ModItemTypes.GHOST_SHOT) ||
         player.GetPlayerType() === ModPlayerTypes.ALABASTER)
@@ -22,23 +20,6 @@ export function ghostShot(tear: EntityTear): void {
       }
     }
   }
-}
-function bbghostReplace(tear: EntityTear, player: EntityPlayer): Entity {
-  tear.Visible = false;
-  const ghost = Isaac.Spawn(
-    EntityType.ENTITY_EFFECT,
-    EffectVariant.PURGATORY,
-    1,
-    tear.Position,
-    tear.Velocity.div(0 - player.TearHeight)
-      .mul(23.75)
-      .div(1.5),
-    player,
-  );
-  ghost.GetSprite().PlaybackSpeed *= 2;
-  ghost.CollisionDamage = player.Damage;
-  tear.Remove();
-  return ghost;
 }
 function ghostReplace(tear: EntityTear, player: EntityPlayer): EntityTear {
   if (player.HasCollectible(CollectibleType.COLLECTIBLE_HAEMOLACRIA)) {
@@ -63,6 +44,8 @@ function ghostReplace(tear: EntityTear, player: EntityPlayer): EntityTear {
     tear.GetData().ghost = true;
     tear.GetData().player = player;
   }
+  tear.EntityCollisionClass = EntityCollisionClass.ENTCOLL_ENEMIES;
+  tear.HomingFriction -= 0.05;
   return tear;
 }
 const height = -5;
@@ -141,11 +124,14 @@ export function ghostCollide(tear: EntityTear, collider: Entity): void {
         player,
       );
       if (ghostExplosion !== null) {
-        print("hi");
-        ghostExplosion.SpriteScale.div(10);
-        ghostExplosion.GetSprite().Scale.div(10);
+        ghostExplosion.SpriteScale = ghostExplosion.SpriteScale.div(2).mul(
+          math.sqrt(player.Damage) / math.sqrt(3.5),
+        );
+        ghostExplosion.SizeMulti = ghostExplosion.SizeMulti.div(2).mul(
+          math.sqrt(player.Damage) / math.sqrt(3.5),
+        );
         ghostExplosion.CollisionDamage = player.Damage * 1.2;
-        // lightEffect.Scale *= playeradjrange; //Uncomment once range gets fixed in the api
+        tear.Remove();
       }
     }
   } else if (tear.Variant === ModTearVariants.GHOST_HAEMO) {

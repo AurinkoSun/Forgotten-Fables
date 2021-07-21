@@ -2502,16 +2502,7 @@ local ____constants = require("constants")
 local ModItemTypes = ____constants.ModItemTypes
 local ModPlayerTypes = ____constants.ModPlayerTypes
 local ModTearVariants = ____constants.ModTearVariants
-local bbghostReplace, ghostReplace
-function bbghostReplace(self, tear, player)
-    tear.Visible = false
-    local ghost = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.PURGATORY, 1, tear.Position, ((tear.Velocity / (0 - player.TearHeight)) * 23.75) / 1.5, player)
-    local ____obj, ____index = ghost:GetSprite(), "PlaybackSpeed"
-    ____obj[____index] = ____obj[____index] * 2
-    ghost.CollisionDamage = player.Damage
-    tear:Remove()
-    return ghost
-end
+local ghostReplace
 function ghostReplace(self, tear, player)
     if player:HasCollectible(CollectibleType.COLLECTIBLE_HAEMOLACRIA) then
         local animName = tear:GetSprite():GetAnimation()
@@ -2535,14 +2526,14 @@ function ghostReplace(self, tear, player)
         tear:GetData().ghost = true
         tear:GetData().player = player
     end
+    tear.EntityCollisionClass = EntityCollisionClass.ENTCOLL_ENEMIES
+    tear.HomingFriction = tear.HomingFriction - 0.05
     return tear
 end
 function ____exports.ghostShot(self, tear)
     if (tear.SpawnerEntity ~= nil) and (tear.SpawnerEntity.Type == EntityType.ENTITY_PLAYER) then
         local player = tear.SpawnerEntity:ToPlayer()
-        if (player ~= nil) and player:HasCollectible(ModItemTypes.BBGHOST_SHOT) then
-            bbghostReplace(nil, tear, player)
-        elseif (player ~= nil) and (player:HasCollectible(ModItemTypes.GHOST_SHOT) or (player:GetPlayerType() == ModPlayerTypes.ALABASTER)) then
+        if (player ~= nil) and (player:HasCollectible(ModItemTypes.GHOST_SHOT) or (player:GetPlayerType() == ModPlayerTypes.ALABASTER)) then
             if player:HasWeaponType(WeaponType.WEAPON_TEARS) then
                 ghostReplace(nil, tear, player)
             else
@@ -2624,10 +2615,10 @@ function ____exports.ghostCollide(self, tear, collider)
                 player
             )
             if ghostExplosion ~= nil then
-                print("hi")
-                local ____ = ghostExplosion.SpriteScale / 10
-                local ____ = ghostExplosion:GetSprite().Scale / 10
+                ghostExplosion.SpriteScale = (ghostExplosion.SpriteScale / 2) * (math.sqrt(player.Damage) / math.sqrt(3.5))
+                ghostExplosion.SizeMulti = (ghostExplosion.SizeMulti / 2) * (math.sqrt(player.Damage) / math.sqrt(3.5))
                 ghostExplosion.CollisionDamage = player.Damage * 1.2
+                tear:Remove()
             end
         end
     elseif tear.Variant == ModTearVariants.GHOST_HAEMO then
@@ -2734,6 +2725,7 @@ local ghostShot = ____ghostshot.ghostShot
 function ____exports.postFireTear(self, tear)
     fatFetusTears(nil, tear)
     ghostShot(nil, tear)
+    print(tear.HomingFriction)
 end
 return ____exports
  end,
