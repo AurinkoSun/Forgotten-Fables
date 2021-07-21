@@ -68,7 +68,6 @@ forgottenFables.AddCallback(
     callbacks.usePill(pillEffect, player, flags, modPlayerData);
   },
 );
-
 forgottenFables.AddCallback(
   ModCallbacks.MC_USE_ITEM,
   (item: number, rng: RNG, player: EntityPlayer, _flag, slot) => {

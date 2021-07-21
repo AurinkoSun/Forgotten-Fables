@@ -80,10 +80,12 @@ export function ghostUpdate(tear: EntityTear): void {
         player,
       ).ToEffect();
       if (ghostExplosion !== null) {
-        print(ghostExplosion.Scale);
-        ghostExplosion.Scale /= 10;
-        ghostExplosion.GetSprite().Update();
-        print(ghostExplosion.Scale);
+        ghostExplosion.SpriteScale = ghostExplosion.SpriteScale.div(2).mul(
+          math.sqrt(player.Damage) / math.sqrt(3.5),
+        );
+        ghostExplosion.SizeMulti = ghostExplosion.SizeMulti.div(2).mul(
+          math.sqrt(player.Damage) / math.sqrt(3.5),
+        );
         ghostExplosion.CollisionDamage = player.Damage * 1.2;
         tear.Remove();
       }
