@@ -14,7 +14,7 @@ const modPlayerData: { data: PlayerData[] } = {
     new PlayerData(null, 0, false, 0, [0, 0, 0, 0, 0]),
   ],
 };
-const debugEntitySpawn = true;
+const debugEntitySpawn = false;
 const forgottenFables = RegisterMod("Forgotten Fables", 1);
 descriptions();
 forgottenFables.AddCallback(ModCallbacks.MC_PRE_GAME_EXIT, () => {

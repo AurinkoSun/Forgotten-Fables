@@ -2517,7 +2517,6 @@ function ghostReplace(self, tear, player)
         local animName = tear:GetSprite():GetAnimation()
         tear:ChangeVariant(ModTearVariants.GHOST_HAEMO)
         tear:GetSprite():Load("gfx/Ghost_Tear.anm2", true)
-        print(animName)
         tear:GetSprite():Play(animName, true)
         tear.CollisionDamage = player.Damage
         tear:AddTearFlags(TearFlags.TEAR_HOMING)
@@ -2529,7 +2528,6 @@ function ghostReplace(self, tear, player)
         local animName = tear:GetSprite():GetAnimation()
         tear:ChangeVariant(ModTearVariants.GHOST)
         tear:GetSprite():Load("gfx/Ghost_Tear.anm2", true)
-        print(animName)
         tear:GetSprite():Play(animName, true)
         tear.CollisionDamage = player.Damage
         tear:AddTearFlags(TearFlags.TEAR_HOMING)
@@ -2561,7 +2559,7 @@ function ____exports.ghostUpdate(self, tear)
     if tear.Variant == ModTearVariants.GHOST then
         if (tear:GetData().player ~= nil) and (tear.Height > -5) then
             local player = tear:GetData().player
-            local lightEffect = Isaac.Spawn(
+            local ghostExplosion = Isaac.Spawn(
                 EntityType.ENTITY_EFFECT,
                 EffectVariant.ENEMY_GHOST,
                 1,
@@ -2569,71 +2567,49 @@ function ____exports.ghostUpdate(self, tear)
                 Vector(0, 0),
                 player
             ):ToEffect()
-            local poofEffect = Isaac.Spawn(
-                EntityType.ENTITY_EFFECT,
-                EffectVariant.POOF01,
-                0,
-                tear.Position,
-                Vector(0, 0),
-                player
-            ):ToEffect()
-            local bloodEffect = Isaac.Spawn(
-                EntityType.ENTITY_EFFECT,
-                EffectVariant.BLOOD_EXPLOSION,
-                0,
-                tear.Position,
-                Vector(0, 0),
-                player
-            ):ToEffect()
-            if lightEffect ~= nil then
-                lightEffect:SetDamageSource(EntityType.ENTITY_PLAYER)
-                lightEffect.CollisionDamage = player.Damage * 0.4
+            if ghostExplosion ~= nil then
+                print(ghostExplosion.Scale)
+                ghostExplosion.Scale = ghostExplosion.Scale / 10
+                ghostExplosion:GetSprite():Update()
+                print(ghostExplosion.Scale)
+                ghostExplosion.CollisionDamage = player.Damage * 1.2
+                tear:Remove()
             end
-            if poofEffect ~= nil then
-                poofEffect:SetDamageSource(EntityType.ENTITY_PLAYER)
-                poofEffect.CollisionDamage = player.Damage * 0.4
-            end
-            if bloodEffect ~= nil then
-                bloodEffect:SetDamageSource(EntityType.ENTITY_PLAYER)
-                bloodEffect.CollisionDamage = player.Damage * 0.4
-                bloodEffect.LifeSpan = 10
+        elseif (tear.Variant == ModTearVariants.GHOST_HAEMO) and (tear.Height > height) then
+            if tear:GetData().player ~= nil then
+                local player = tear:GetData().player
+                player:FireTear(tear.Position, tear.Velocity * multiplier):ChangeVariant(ModTearVariants.GHOST)
+                player:FireTear(
+                    tear.Position,
+                    (tear.Velocity * multiplier):Rotated(45)
+                ):ChangeVariant(ModTearVariants.GHOST)
+                player:FireTear(
+                    tear.Position,
+                    (tear.Velocity * multiplier):Rotated(90)
+                ):ChangeVariant(ModTearVariants.GHOST)
+                player:FireTear(
+                    tear.Position,
+                    (tear.Velocity * multiplier):Rotated(135)
+                ):ChangeVariant(ModTearVariants.GHOST)
+                player:FireTear(
+                    tear.Position,
+                    (tear.Velocity * multiplier):Rotated(180)
+                ):ChangeVariant(ModTearVariants.GHOST)
+                player:FireTear(
+                    tear.Position,
+                    (tear.Velocity * multiplier):Rotated(225)
+                ):ChangeVariant(ModTearVariants.GHOST)
+                player:FireTear(
+                    tear.Position,
+                    (tear.Velocity * multiplier):Rotated(270)
+                ):ChangeVariant(ModTearVariants.GHOST)
+                player:FireTear(
+                    tear.Position,
+                    (tear.Velocity * multiplier):Rotated(315)
+                ):ChangeVariant(ModTearVariants.GHOST)
             end
             tear:Remove()
         end
-    elseif (tear.Variant == ModTearVariants.GHOST_HAEMO) and (tear.Height > height) then
-        if tear:GetData().player ~= nil then
-            local player = tear:GetData().player
-            player:FireTear(tear.Position, tear.Velocity * multiplier):ChangeVariant(ModTearVariants.GHOST)
-            player:FireTear(
-                tear.Position,
-                (tear.Velocity * multiplier):Rotated(45)
-            ):ChangeVariant(ModTearVariants.GHOST)
-            player:FireTear(
-                tear.Position,
-                (tear.Velocity * multiplier):Rotated(90)
-            ):ChangeVariant(ModTearVariants.GHOST)
-            player:FireTear(
-                tear.Position,
-                (tear.Velocity * multiplier):Rotated(135)
-            ):ChangeVariant(ModTearVariants.GHOST)
-            player:FireTear(
-                tear.Position,
-                (tear.Velocity * multiplier):Rotated(180)
-            ):ChangeVariant(ModTearVariants.GHOST)
-            player:FireTear(
-                tear.Position,
-                (tear.Velocity * multiplier):Rotated(225)
-            ):ChangeVariant(ModTearVariants.GHOST)
-            player:FireTear(
-                tear.Position,
-                (tear.Velocity * multiplier):Rotated(270)
-            ):ChangeVariant(ModTearVariants.GHOST)
-            player:FireTear(
-                tear.Position,
-                (tear.Velocity * multiplier):Rotated(315)
-            ):ChangeVariant(ModTearVariants.GHOST)
-        end
-        tear:Remove()
     end
 end
 function ____exports.ghostCollide(self, tear, collider)
@@ -2641,32 +2617,19 @@ function ____exports.ghostCollide(self, tear, collider)
         if (tear:GetData().player ~= nil) and (collider:GetDropRNG():GetSeed() ~= tear:GetData().seed) then
             tear:GetData().seed = collider:GetDropRNG():GetSeed()
             local player = tear:GetData().player
-            local lightEffect = Isaac.Spawn(
+            local ghostExplosion = Isaac.Spawn(
                 EntityType.ENTITY_EFFECT,
                 EffectVariant.ENEMY_GHOST,
                 1,
                 tear.Position,
                 Vector(0, 0),
                 player
-            ):ToEffect()
-            local bloodEffect = Isaac.Spawn(
-                EntityType.ENTITY_EFFECT,
-                EffectVariant.BLOOD_EXPLOSION,
-                0,
-                tear.Position,
-                Vector(0, 0),
-                player
-            ):ToEffect()
-            if lightEffect ~= nil then
-                lightEffect:SetDamageSource(EntityType.ENTITY_PLAYER)
-                lightEffect.CollisionDamage = player.Damage * 0.8
-                lightEffect.Scale = lightEffect.Scale * ((1 / 3) * (player.Damage / 3.5))
-            end
-            if bloodEffect ~= nil then
-                bloodEffect:SetDamageSource(EntityType.ENTITY_PLAYER)
-                bloodEffect.CollisionDamage = player.Damage * 0.4
-                bloodEffect.LifeSpan = 10
-                bloodEffect.Scale = bloodEffect.Scale * ((1 / 3) * (player.Damage / 3.5))
+            )
+            if ghostExplosion ~= nil then
+                print("hi")
+                local ____ = ghostExplosion.SpriteScale / 10
+                local ____ = ghostExplosion:GetSprite().Scale / 10
+                ghostExplosion.CollisionDamage = player.Damage * 1.2
             end
         end
     elseif tear.Variant == ModTearVariants.GHOST_HAEMO then
@@ -3703,7 +3666,7 @@ local modPlayerData = {
         __TS__New(PlayerData, nil, 0, false, 0, {0, 0, 0, 0, 0})
     }
 }
-local debugEntitySpawn = true
+local debugEntitySpawn = false
 local forgottenFables = RegisterMod("Forgotten Fables", 1)
 descriptions(nil)
 forgottenFables:AddCallback(

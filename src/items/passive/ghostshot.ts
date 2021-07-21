@@ -45,7 +45,6 @@ function ghostReplace(tear: EntityTear, player: EntityPlayer): EntityTear {
     const animName = tear.GetSprite().GetAnimation();
     tear.ChangeVariant(ModTearVariants.GHOST_HAEMO);
     tear.GetSprite().Load("gfx/Ghost_Tear.anm2", true);
-    print(animName);
     tear.GetSprite().Play(animName, true);
     tear.CollisionDamage = player.Damage;
     tear.AddTearFlags(TearFlags.TEAR_HOMING);
@@ -57,7 +56,6 @@ function ghostReplace(tear: EntityTear, player: EntityPlayer): EntityTear {
     const animName = tear.GetSprite().GetAnimation();
     tear.ChangeVariant(ModTearVariants.GHOST);
     tear.GetSprite().Load("gfx/Ghost_Tear.anm2", true);
-    print(animName);
     tear.GetSprite().Play(animName, true);
     tear.CollisionDamage = player.Damage;
     tear.AddTearFlags(TearFlags.TEAR_HOMING);
@@ -73,7 +71,7 @@ export function ghostUpdate(tear: EntityTear): void {
   if (tear.Variant === ModTearVariants.GHOST) {
     if (tear.GetData().player !== null && tear.Height > -5) {
       const player: EntityPlayer = tear.GetData().player as EntityPlayer;
-      const lightEffect = Isaac.Spawn(
+      const ghostExplosion = Isaac.Spawn(
         EntityType.ENTITY_EFFECT,
         EffectVariant.ENEMY_GHOST,
         1,
@@ -81,73 +79,47 @@ export function ghostUpdate(tear: EntityTear): void {
         Vector(0, 0),
         player,
       ).ToEffect();
-      const poofEffect = Isaac.Spawn(
-        EntityType.ENTITY_EFFECT,
-        EffectVariant.POOF01,
-        0,
-        tear.Position,
-        Vector(0, 0),
-        player,
-      ).ToEffect();
-      const bloodEffect = Isaac.Spawn(
-        EntityType.ENTITY_EFFECT,
-        EffectVariant.BLOOD_EXPLOSION,
-        0,
-        tear.Position,
-        Vector(0, 0),
-        player,
-      ).ToEffect();
-      // const playeradjrange = (player.TearHeight * -1) / 23.75; // The player's range divided by the default. //Uncomment once range gets fixed in the api
-      if (lightEffect !== null) {
-        lightEffect.SetDamageSource(EntityType.ENTITY_PLAYER);
-        lightEffect.CollisionDamage = player.Damage * 0.4;
-        // lightEffect.Scale *= playeradjrange; //Uncomment once range gets fixed in the api
+      if (ghostExplosion !== null) {
+        print(ghostExplosion.Scale);
+        ghostExplosion.Scale /= 10;
+        ghostExplosion.GetSprite().Update();
+        print(ghostExplosion.Scale);
+        ghostExplosion.CollisionDamage = player.Damage * 1.2;
+        tear.Remove();
       }
-      if (poofEffect !== null) {
-        poofEffect.SetDamageSource(EntityType.ENTITY_PLAYER);
-        poofEffect.CollisionDamage = player.Damage * 0.4;
-        // poofEffect.Scale *= playeradjrange;
-      }
-      if (bloodEffect !== null) {
-        bloodEffect.SetDamageSource(EntityType.ENTITY_PLAYER);
-        bloodEffect.CollisionDamage = player.Damage * 0.4;
-        // bloodEffect.Scale *= playeradjrange;
-        bloodEffect.LifeSpan = 10;
+    } else if (
+      tear.Variant === ModTearVariants.GHOST_HAEMO &&
+      tear.Height > height
+    ) {
+      if (tear.GetData().player !== null) {
+        const player: EntityPlayer = tear.GetData().player as EntityPlayer;
+        player
+          .FireTear(tear.Position, tear.Velocity.mul(multiplier))
+          .ChangeVariant(ModTearVariants.GHOST);
+        player
+          .FireTear(tear.Position, tear.Velocity.mul(multiplier).Rotated(45))
+          .ChangeVariant(ModTearVariants.GHOST);
+        player
+          .FireTear(tear.Position, tear.Velocity.mul(multiplier).Rotated(90))
+          .ChangeVariant(ModTearVariants.GHOST);
+        player
+          .FireTear(tear.Position, tear.Velocity.mul(multiplier).Rotated(135))
+          .ChangeVariant(ModTearVariants.GHOST);
+        player
+          .FireTear(tear.Position, tear.Velocity.mul(multiplier).Rotated(180))
+          .ChangeVariant(ModTearVariants.GHOST);
+        player
+          .FireTear(tear.Position, tear.Velocity.mul(multiplier).Rotated(225))
+          .ChangeVariant(ModTearVariants.GHOST);
+        player
+          .FireTear(tear.Position, tear.Velocity.mul(multiplier).Rotated(270))
+          .ChangeVariant(ModTearVariants.GHOST);
+        player
+          .FireTear(tear.Position, tear.Velocity.mul(multiplier).Rotated(315))
+          .ChangeVariant(ModTearVariants.GHOST);
       }
       tear.Remove();
     }
-  } else if (
-    tear.Variant === ModTearVariants.GHOST_HAEMO &&
-    tear.Height > height
-  ) {
-    if (tear.GetData().player !== null) {
-      const player: EntityPlayer = tear.GetData().player as EntityPlayer;
-      player
-        .FireTear(tear.Position, tear.Velocity.mul(multiplier))
-        .ChangeVariant(ModTearVariants.GHOST);
-      player
-        .FireTear(tear.Position, tear.Velocity.mul(multiplier).Rotated(45))
-        .ChangeVariant(ModTearVariants.GHOST);
-      player
-        .FireTear(tear.Position, tear.Velocity.mul(multiplier).Rotated(90))
-        .ChangeVariant(ModTearVariants.GHOST);
-      player
-        .FireTear(tear.Position, tear.Velocity.mul(multiplier).Rotated(135))
-        .ChangeVariant(ModTearVariants.GHOST);
-      player
-        .FireTear(tear.Position, tear.Velocity.mul(multiplier).Rotated(180))
-        .ChangeVariant(ModTearVariants.GHOST);
-      player
-        .FireTear(tear.Position, tear.Velocity.mul(multiplier).Rotated(225))
-        .ChangeVariant(ModTearVariants.GHOST);
-      player
-        .FireTear(tear.Position, tear.Velocity.mul(multiplier).Rotated(270))
-        .ChangeVariant(ModTearVariants.GHOST);
-      player
-        .FireTear(tear.Position, tear.Velocity.mul(multiplier).Rotated(315))
-        .ChangeVariant(ModTearVariants.GHOST);
-    }
-    tear.Remove();
   }
 }
 export function ghostCollide(tear: EntityTear, collider: Entity): void {
@@ -158,35 +130,20 @@ export function ghostCollide(tear: EntityTear, collider: Entity): void {
     ) {
       tear.GetData().seed = collider.GetDropRNG().GetSeed();
       const player: EntityPlayer = tear.GetData().player as EntityPlayer;
-      const lightEffect = Isaac.Spawn(
+      const ghostExplosion = Isaac.Spawn(
         EntityType.ENTITY_EFFECT,
         EffectVariant.ENEMY_GHOST,
         1,
         tear.Position,
         Vector(0, 0),
         player,
-      ).ToEffect();
-      const bloodEffect = Isaac.Spawn(
-        EntityType.ENTITY_EFFECT,
-        EffectVariant.BLOOD_EXPLOSION,
-        0,
-        tear.Position,
-        Vector(0, 0),
-        player,
-      ).ToEffect();
-      // const playeradjrange = (player.TearHeight * -1) / 23.75; // The player's range divided by the default. //Uncomment once range gets fixed in the api
-      if (lightEffect !== null) {
-        lightEffect.SetDamageSource(EntityType.ENTITY_PLAYER);
-        lightEffect.CollisionDamage = player.Damage * 0.8;
+      );
+      if (ghostExplosion !== null) {
+        print("hi");
+        ghostExplosion.SpriteScale.div(10);
+        ghostExplosion.GetSprite().Scale.div(10);
+        ghostExplosion.CollisionDamage = player.Damage * 1.2;
         // lightEffect.Scale *= playeradjrange; //Uncomment once range gets fixed in the api
-        lightEffect.Scale *= (1 / 3) * (player.Damage / 3.5);
-      }
-      if (bloodEffect !== null) {
-        bloodEffect.SetDamageSource(EntityType.ENTITY_PLAYER);
-        bloodEffect.CollisionDamage = player.Damage * 0.4;
-        // bloodEffect.Scale *= playeradjrange;
-        bloodEffect.LifeSpan = 10;
-        bloodEffect.Scale *= (1 / 3) * (player.Damage / 3.5);
       }
     }
   } else if (tear.Variant === ModTearVariants.GHOST_HAEMO) {
