@@ -49,7 +49,6 @@ forgottenFables.AddCallback(
   ModCallbacks.MC_POST_TEAR_UPDATE,
   callbacks.tearUpdate,
 );
-
 // forgottenFables.AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, callbacks.newFloor);
 forgottenFables.AddCallback(
   ModCallbacks.MC_POST_PLAYER_INIT,
@@ -61,7 +60,14 @@ forgottenFables.AddCallback(
 forgottenFables.AddCallback(ModCallbacks.MC_POST_NEW_ROOM, () => {
   callbacks.postNewRoom(modPlayerData);
 });
-
+forgottenFables.AddCallback(
+  ModCallbacks.MC_POST_LASER_INIT,
+  callbacks.laserInit,
+);
+forgottenFables.AddCallback(
+  ModCallbacks.MC_POST_KNIFE_INIT,
+  callbacks.knifeInit,
+);
 forgottenFables.AddCallback(
   ModCallbacks.MC_USE_PILL,
   (pillEffect: number, player: EntityPlayer, flags: number) => {

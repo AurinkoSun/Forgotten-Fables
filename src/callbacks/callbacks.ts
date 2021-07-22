@@ -5,6 +5,8 @@ import { bombInit } from "./MC_POST_BOMB_INIT";
 import { bombUpdate } from "./MC_POST_BOMB_UPDATE";
 import { postFireTear } from "./MC_POST_FIRE_TEAR";
 import { gameStart } from "./MC_POST_GAME_STARTED";
+import { knifeInit } from "./MC_POST_KNIFE_INIT";
+import { laserInit } from "./MC_POST_LASER_INIT";
 import { postNewRoom } from "./MC_POST_NEW_ROOM";
 import { npcRender } from "./MC_POST_NPC_RENDER";
 import { postPickupUpdate } from "./MC_POST_PICKUP_UPDATE";
@@ -19,6 +21,8 @@ import { preTearCollision } from "./MC_PRE_TEAR_COLLISION";
 import { useItem } from "./MC_USE_ITEM";
 import { usePill } from "./MC_USE_PILL";
 
+export { knifeInit };
+export { laserInit };
 export { tearUpdate };
 export { render };
 export { gameStart };

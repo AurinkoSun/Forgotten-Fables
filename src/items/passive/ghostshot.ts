@@ -21,6 +21,44 @@ export function ghostShot(tear: EntityTear): void {
     }
   }
 }
+export function gsLaser(laser: EntityLaser): void {
+  if (laser.SpawnerEntity !== null) {
+    const player = laser.SpawnerEntity.ToPlayer();
+    if (player !== null) {
+      if (player.HasCollectible(ModItemTypes.GHOST_SHOT)) {
+        laser.AddTearFlags(TearFlags.TEAR_HOMING);
+        laser.AddTearFlags(TearFlags.TEAR_SPECTRAL);
+        laser.AddTearFlags(TearFlags.TEAR_EXPLOSIVE);
+      }
+    }
+  }
+}
+export function gsKnife(knife: EntityKnife): void {
+  if (knife.SpawnerEntity !== null) {
+    const player = knife.SpawnerEntity.ToPlayer();
+    if (player !== null) {
+      if (player.HasCollectible(ModItemTypes.GHOST_SHOT)) {
+        knife.AddTearFlags(TearFlags.TEAR_HOMING);
+        knife.AddTearFlags(TearFlags.TEAR_SPECTRAL);
+        knife.AddTearFlags(TearFlags.TEAR_EXPLOSIVE);
+      }
+    }
+  }
+}
+export function gsBomb(bomb: EntityBomb): void {
+  if (bomb.IsFetus) {
+    if (bomb.SpawnerEntity !== null) {
+      const player = bomb.SpawnerEntity.ToPlayer();
+      if (player !== null) {
+        if (player.HasCollectible(ModItemTypes.GHOST_SHOT)) {
+          bomb.AddTearFlags(TearFlags.TEAR_HOMING);
+          bomb.AddTearFlags(TearFlags.TEAR_SPECTRAL);
+          bomb.AddTearFlags(TearFlags.TEAR_EXPLOSIVE);
+        }
+      }
+    }
+  }
+}
 function ghostReplace(tear: EntityTear, player: EntityPlayer): EntityTear {
   if (player.HasCollectible(CollectibleType.COLLECTIBLE_HAEMOLACRIA)) {
     const animName = tear.GetSprite().GetAnimation();
