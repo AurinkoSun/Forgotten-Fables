@@ -109,6 +109,7 @@ export function ghostUpdate(tear: EntityTear): void {
             math.sqrt(player.Damage) / math.sqrt(3.5),
           );
           ghostExplosion.CollisionDamage = player.Damage / 3;
+          ghostExplosion.EntityCollisionClass = EntityCollisionClass.ENTCOLL_ENEMIES;
         }
       }
       tear.Remove();
