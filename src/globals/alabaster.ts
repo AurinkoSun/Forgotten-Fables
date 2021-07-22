@@ -15,7 +15,6 @@ export function alabasterStats(
       player.CanFly = true;
     }
     if (flags === CacheFlag.CACHE_DAMAGE) {
-      player.Damage -= 2.5;
       player.Damage += modPlayerData.data[GetPlayerId(player)].tStats[0];
     }
     if (flags === CacheFlag.CACHE_SPEED) {

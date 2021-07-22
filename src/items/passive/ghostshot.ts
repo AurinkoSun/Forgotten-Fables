@@ -70,7 +70,7 @@ export function ghostUpdate(tear: EntityTear): void {
           ghostExplosion.SizeMulti = ghostExplosion.SizeMulti.div(2).mul(
             math.sqrt(player.Damage) / math.sqrt(3.5),
           );
-          ghostExplosion.CollisionDamage = player.Damage;
+          ghostExplosion.CollisionDamage = player.Damage / 3;
         }
       }
       tear.Remove();
@@ -133,7 +133,7 @@ export function ghostCollide(tear: EntityTear, collider: Entity): void {
           ghostExplosion.SizeMulti = ghostExplosion.SizeMulti.div(2).mul(
             math.sqrt(player.Damage) / math.sqrt(3.5),
           );
-          ghostExplosion.CollisionDamage = player.Damage;
+          ghostExplosion.CollisionDamage = player.Damage / 3;
         }
       }
     }
@@ -168,14 +168,6 @@ export function ghostCollide(tear: EntityTear, collider: Entity): void {
       player
         .FireTear(tear.Position, tear.Velocity.mul(multiplier).Rotated(315))
         .ChangeVariant(ModTearVariants.GHOST);
-    }
-  }
-}
-
-export function ghostShotStats(player: EntityPlayer, flags: CacheFlag): void {
-  if (flags === CacheFlag.CACHE_DAMAGE) {
-    if (player.HasCollectible(ModItemTypes.BBGHOST_SHOT)) {
-      player.Damage *= 0.8;
     }
   }
 }
