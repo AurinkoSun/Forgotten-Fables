@@ -1892,12 +1892,16 @@ ____exports.ModItemTypes.RUSSIANROULETTE = Isaac.GetItemIdByName("Russian Roulet
 ____exports.ModItemTypes[____exports.ModItemTypes.RUSSIANROULETTE] = "RUSSIANROULETTE"
 ____exports.ModItemTypes.STONE_D6 = Isaac.GetItemIdByName("Stone D6")
 ____exports.ModItemTypes[____exports.ModItemTypes.STONE_D6] = "STONE_D6"
+____exports.ModItemTypes.BOMBCONVERTER = Isaac.GetItemIdByName("Bomb Converter")
+____exports.ModItemTypes[____exports.ModItemTypes.BOMBCONVERTER] = "BOMBCONVERTER"
+____exports.ModItemTypes.MEATBUCKET = Isaac.GetItemIdByName("Bucket of Meat")
+____exports.ModItemTypes[____exports.ModItemTypes.MEATBUCKET] = "MEATBUCKET"
 ____exports.ModTearVariants = ModTearVariants or ({})
 ____exports.ModTearVariants.GHOST = Isaac.GetEntityVariantByName("Ghost Tear")
 ____exports.ModTearVariants[____exports.ModTearVariants.GHOST] = "GHOST"
+____exports.ModTearVariants.GHOST_HAEMO = Isaac.GetEntityVariantByName("Haemolacria Ghost Tear")
+____exports.ModTearVariants[____exports.ModTearVariants.GHOST_HAEMO] = "GHOST_HAEMO"
 ____exports.ModEntityVariants = ModEntityVariants or ({})
-____exports.ModEntityVariants.GHOST_TEAR = 50
-____exports.ModEntityVariants[____exports.ModEntityVariants.GHOST_TEAR] = "GHOST_TEAR"
 ____exports.ModEntityVariants.PEEL = Isaac.GetEntityVariantByName("Peel")
 ____exports.ModEntityVariants[____exports.ModEntityVariants.PEEL] = "PEEL"
 ____exports.ModPlayerTypes = ModPlayerTypes or ({})
@@ -1906,12 +1910,16 @@ ____exports.ModPlayerTypes[____exports.ModPlayerTypes.ALABASTER] = "ALABASTER"
 ____exports.ModCostumes = ModCostumes or ({})
 ____exports.ModCostumes.ALABASTER_HAIR = Isaac.GetCostumeIdByPath("gfx/characters/c_Alabaster_Hair.anm2")
 ____exports.ModCostumes[____exports.ModCostumes.ALABASTER_HAIR] = "ALABASTER_HAIR"
+____exports.ModSlotVariants = ModSlotVariants or ({})
+____exports.ModSlotVariants.SARAHNPC = Isaac.GetEntityVariantByName("Sarah (NPC)")
+____exports.ModSlotVariants[____exports.ModSlotVariants.SARAHNPC] = "SARAHNPC"
 ____exports.game = Game()
 ____exports.sfxManager = SFXManager()
 ____exports.rng = RNG()
+____exports.hud = ____exports.game:GetHUD()
 return ____exports
  end,
-["globals.peel"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
+["entities.peel"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
 local ____exports = {}
 local ____constants = require("constants")
 local ModEntityVariants = ____constants.ModEntityVariants
@@ -2416,7 +2424,7 @@ local ____exports = {}
 local ____constants = require("constants")
 local ModEntityVariants = ____constants.ModEntityVariants
 local ModItemTypes = ____constants.ModItemTypes
-local ____peel = require("globals.peel")
+local ____peel = require("entities.peel")
 local peelDmg = ____peel.peelDmg
 local ____fatfetus = require("items.passive.fatfetus")
 local glitterdrops = ____fatfetus.glitterdrops
@@ -2462,13 +2470,13 @@ function ____exports.alabasterStats(self, player, flags, modPlayerData)
         end
     end
 end
-local stats = {0.15, 0.15, 0.15, 0.15, 0.15}
+____exports.stats = {0.15, 0.15, 0.15, 0.15, 0.15}
 local flags = {CacheFlag.CACHE_DAMAGE, CacheFlag.CACHE_FIREDELAY, CacheFlag.CACHE_RANGE, CacheFlag.CACHE_SPEED, CacheFlag.CACHE_SHOTSPEED}
 function ____exports.birthright(self, player, modPlayerData)
     if player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) and (player:GetPlayerType() == ModPlayerTypes.ALABASTER) then
         local rand = rng:RandomInt(6)
         local ____obj, ____index = modPlayerData.data[GetPlayerId(nil, player) + 1].tStats, rand + 1
-        ____obj[____index] = ____obj[____index] + stats[rand + 1]
+        ____obj[____index] = ____obj[____index] + ____exports.stats[rand + 1]
         player:AddCacheFlags(flags[rand + 1])
         player:EvaluateItems()
     end
@@ -2492,35 +2500,40 @@ return ____exports
 local ____exports = {}
 local ____constants = require("constants")
 local ModItemTypes = ____constants.ModItemTypes
+local ModPlayerTypes = ____constants.ModPlayerTypes
 local ModTearVariants = ____constants.ModTearVariants
-local bbghostReplace, ghostReplace
-function bbghostReplace(self, tear, player)
-    tear.Visible = false
-    local ghost = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.PURGATORY, 1, tear.Position, ((tear.Velocity / (0 - player.TearHeight)) * 23.75) / 1.5, player)
-    local ____obj, ____index = ghost:GetSprite(), "PlaybackSpeed"
-    ____obj[____index] = ____obj[____index] * 2
-    ghost.CollisionDamage = player.Damage
-    tear:Remove()
-    return ghost
-end
+local ghostReplace
 function ghostReplace(self, tear, player)
-    local animName = tear:GetSprite():GetAnimation()
-    tear:ChangeVariant(ModTearVariants.GHOST)
-    tear:GetSprite():Load("gfx/Ghost_Tear.anm2", true)
-    tear:GetSprite():Play(animName, true)
-    tear.CollisionDamage = player.Damage
-    tear:AddTearFlags(TearFlags.TEAR_HOMING)
-    tear:AddTearFlags(TearFlags.TEAR_SPECTRAL)
-    tear:GetData().ghost = true
-    tear:GetData().player = player
+    if player:HasCollectible(CollectibleType.COLLECTIBLE_HAEMOLACRIA) then
+        local animName = tear:GetSprite():GetAnimation()
+        tear:ChangeVariant(ModTearVariants.GHOST_HAEMO)
+        tear:GetSprite():Load("gfx/Ghost_Tear.anm2", true)
+        tear:GetSprite():Play(animName, true)
+        tear.CollisionDamage = player.Damage
+        tear:AddTearFlags(TearFlags.TEAR_HOMING)
+        tear:AddTearFlags(TearFlags.TEAR_SPECTRAL)
+        tear:GetData().ghost = true
+        tear:GetData().haemo = true
+        tear:GetData().player = player
+    else
+        local animName = tear:GetSprite():GetAnimation()
+        tear:ChangeVariant(ModTearVariants.GHOST)
+        tear:GetSprite():Load("gfx/Ghost_Tear.anm2", true)
+        tear:GetSprite():Play(animName, true)
+        tear.CollisionDamage = player.Damage
+        tear:AddTearFlags(TearFlags.TEAR_HOMING)
+        tear:AddTearFlags(TearFlags.TEAR_SPECTRAL)
+        tear:GetData().ghost = true
+        tear:GetData().player = player
+    end
+    tear.EntityCollisionClass = EntityCollisionClass.ENTCOLL_ENEMIES
+    tear.HomingFriction = tear.HomingFriction - 0.05
     return tear
 end
 function ____exports.ghostShot(self, tear)
     if (tear.SpawnerEntity ~= nil) and (tear.SpawnerEntity.Type == EntityType.ENTITY_PLAYER) then
         local player = tear.SpawnerEntity:ToPlayer()
-        if (player ~= nil) and player:HasCollectible(ModItemTypes.BBGHOST_SHOT) then
-            bbghostReplace(nil, tear, player)
-        elseif (player ~= nil) and player:HasCollectible(ModItemTypes.GHOST_SHOT) then
+        if (player ~= nil) and (player:HasCollectible(ModItemTypes.GHOST_SHOT) or (player:GetPlayerType() == ModPlayerTypes.ALABASTER)) then
             if player:HasWeaponType(WeaponType.WEAPON_TEARS) then
                 ghostReplace(nil, tear, player)
             else
@@ -2531,34 +2544,118 @@ function ____exports.ghostShot(self, tear)
         end
     end
 end
+local height = -5
+local multiplier = 0.5
+function ____exports.ghostUpdate(self, tear)
+    if tear.Variant == ModTearVariants.GHOST then
+        if (tear:GetData().player ~= nil) and (tear.Height > -5) then
+            local player = tear:GetData().player
+            local ghostExplosion = Isaac.Spawn(
+                EntityType.ENTITY_EFFECT,
+                EffectVariant.ENEMY_GHOST,
+                1,
+                tear.Position,
+                Vector(0, 0),
+                player
+            ):ToEffect()
+            if ghostExplosion ~= nil then
+                ghostExplosion.SpriteScale = (ghostExplosion.SpriteScale / 2) * (math.sqrt(player.Damage) / math.sqrt(3.5))
+                ghostExplosion.SizeMulti = (ghostExplosion.SizeMulti / 2) * (math.sqrt(player.Damage) / math.sqrt(3.5))
+                ghostExplosion.CollisionDamage = player.Damage * 1.2
+                tear:Remove()
+            end
+        elseif (tear.Variant == ModTearVariants.GHOST_HAEMO) and (tear.Height > height) then
+            if tear:GetData().player ~= nil then
+                local player = tear:GetData().player
+                player:FireTear(tear.Position, tear.Velocity * multiplier):ChangeVariant(ModTearVariants.GHOST)
+                player:FireTear(
+                    tear.Position,
+                    (tear.Velocity * multiplier):Rotated(45)
+                ):ChangeVariant(ModTearVariants.GHOST)
+                player:FireTear(
+                    tear.Position,
+                    (tear.Velocity * multiplier):Rotated(90)
+                ):ChangeVariant(ModTearVariants.GHOST)
+                player:FireTear(
+                    tear.Position,
+                    (tear.Velocity * multiplier):Rotated(135)
+                ):ChangeVariant(ModTearVariants.GHOST)
+                player:FireTear(
+                    tear.Position,
+                    (tear.Velocity * multiplier):Rotated(180)
+                ):ChangeVariant(ModTearVariants.GHOST)
+                player:FireTear(
+                    tear.Position,
+                    (tear.Velocity * multiplier):Rotated(225)
+                ):ChangeVariant(ModTearVariants.GHOST)
+                player:FireTear(
+                    tear.Position,
+                    (tear.Velocity * multiplier):Rotated(270)
+                ):ChangeVariant(ModTearVariants.GHOST)
+                player:FireTear(
+                    tear.Position,
+                    (tear.Velocity * multiplier):Rotated(315)
+                ):ChangeVariant(ModTearVariants.GHOST)
+            end
+            tear:Remove()
+        end
+    end
+end
 function ____exports.ghostCollide(self, tear, collider)
-    if tear:GetData().ghost == true then
+    if tear.Variant == ModTearVariants.GHOST then
         if (tear:GetData().player ~= nil) and (collider:GetDropRNG():GetSeed() ~= tear:GetData().seed) then
             tear:GetData().seed = collider:GetDropRNG():GetSeed()
             local player = tear:GetData().player
-            do
-                local i = 0
-                while i < 3 do
-                    local explosionEffect = Isaac.Spawn(
-                        EntityType.ENTITY_EFFECT,
-                        EffectVariant.IMPACT,
-                        0,
-                        tear.Position,
-                        Vector(0, 0),
-                        player
-                    ):ToEffect()
-                    if explosionEffect ~= nil then
-                        explosionEffect:SetDamageSource(EntityType.ENTITY_PLAYER)
-                        explosionEffect.CollisionDamage = player.Damage * 2
-                        local playeradjrange = (player.TearHeight * -1) / 23.75
-                        explosionEffect.Scale = explosionEffect.Scale * playeradjrange
-                    end
-                    i = i + 1
-                end
+            local ghostExplosion = Isaac.Spawn(
+                EntityType.ENTITY_EFFECT,
+                EffectVariant.ENEMY_GHOST,
+                1,
+                tear.Position,
+                Vector(0, 0),
+                player
+            )
+            if ghostExplosion ~= nil then
+                ghostExplosion.SpriteScale = (ghostExplosion.SpriteScale / 2) * (math.sqrt(player.Damage) / math.sqrt(3.5))
+                ghostExplosion.SizeMulti = (ghostExplosion.SizeMulti / 2) * (math.sqrt(player.Damage) / math.sqrt(3.5))
+                ghostExplosion.CollisionDamage = player.Damage * 1.2
+                tear:Remove()
             end
         end
+    elseif tear.Variant == ModTearVariants.GHOST_HAEMO then
+        if (tear:GetData().player ~= nil) and (collider:GetDropRNG():GetSeed() ~= tear:GetData().seed) then
+            tear:GetData().seed = collider:GetDropRNG():GetSeed()
+            local player = tear:GetData().player
+            player:FireTear(tear.Position, tear.Velocity * multiplier):ChangeVariant(ModTearVariants.GHOST)
+            player:FireTear(
+                tear.Position,
+                (tear.Velocity * multiplier):Rotated(45)
+            ):ChangeVariant(ModTearVariants.GHOST)
+            player:FireTear(
+                tear.Position,
+                (tear.Velocity * multiplier):Rotated(90)
+            ):ChangeVariant(ModTearVariants.GHOST)
+            player:FireTear(
+                tear.Position,
+                (tear.Velocity * multiplier):Rotated(135)
+            ):ChangeVariant(ModTearVariants.GHOST)
+            player:FireTear(
+                tear.Position,
+                (tear.Velocity * multiplier):Rotated(180)
+            ):ChangeVariant(ModTearVariants.GHOST)
+            player:FireTear(
+                tear.Position,
+                (tear.Velocity * multiplier):Rotated(225)
+            ):ChangeVariant(ModTearVariants.GHOST)
+            player:FireTear(
+                tear.Position,
+                (tear.Velocity * multiplier):Rotated(270)
+            ):ChangeVariant(ModTearVariants.GHOST)
+            player:FireTear(
+                tear.Position,
+                (tear.Velocity * multiplier):Rotated(315)
+            ):ChangeVariant(ModTearVariants.GHOST)
+        end
     end
-    return tear
 end
 function ____exports.ghostShotStats(self, player, flags)
     if flags == CacheFlag.CACHE_DAMAGE then
@@ -2577,8 +2674,8 @@ local ____fatfetus = require("items.passive.fatfetus")
 local ffstats = ____fatfetus.ffstats
 local ____ghostshot = require("items.passive.ghostshot")
 local ghostShotStats = ____ghostshot.ghostShotStats
-function ____exports.evalCache(self, _modPlayerData, player, flags)
-    alabasterStats(nil, player, flags)
+function ____exports.evalCache(self, modPlayerData, player, flags)
+    alabasterStats(nil, player, flags, modPlayerData)
     ffstats(nil, player, flags)
     ghostShotStats(nil, player, flags)
 end
@@ -2586,7 +2683,7 @@ return ____exports
  end,
 ["callbacks.MC_NPC_UPDATE"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
 local ____exports = {}
-local ____peel = require("globals.peel")
+local ____peel = require("entities.peel")
 local peelUpdate = ____peel.peelUpdate
 function ____exports.npcUpdate(self, entity)
     peelUpdate(nil, entity)
@@ -2628,6 +2725,7 @@ local ghostShot = ____ghostshot.ghostShot
 function ____exports.postFireTear(self, tear)
     fatFetusTears(nil, tear)
     ghostShot(nil, tear)
+    print(tear.HomingFriction)
 end
 return ____exports
  end,
@@ -2635,6 +2733,7 @@ return ____exports
 local ____exports = {}
 local ____constants = require("constants")
 local game = ____constants.game
+local hud = ____constants.hud
 local ModPlayerTypes = ____constants.ModPlayerTypes
 local hudOffset = 0
 local OFFSET = Vector(2, 1.2)
@@ -2680,7 +2779,7 @@ function ____exports.render(self, modPlayerData)
     if not data.initialized then
         ____exports.init(nil)
     end
-    if game:GetHUD():IsVisible() and hasAlabaster then
+    if hud:IsVisible() and hasAlabaster then
         local x = 0
         do
             local i = 0
@@ -2729,9 +2828,6 @@ function ____exports.pocketItems(self, _modPlayerData)
                 ::____switch5_case_0::
                 do
                     do
-                        if not player:HasCollectible(ModItemTypes.GHOST_SHOT) then
-                            player:AddCollectible(ModItemTypes.GHOST_SHOT)
-                        end
                         if player:GetActiveItem(ActiveSlot.SLOT_POCKET) ~= ModItemTypes.BLOODDRIVE then
                             print("blood drive added!")
                             player:AddCollectible(ModItemTypes.BLOODDRIVE, nil, nil, ActiveSlot.SLOT_POCKET)
@@ -3148,9 +3244,92 @@ function ____exports.render(self, modPlayerData)
 end
 return ____exports
  end,
+["callbacks.MC_POST_TEAR_UPDATE"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
+local ____exports = {}
+local ____ghostshot = require("items.passive.ghostshot")
+local ghostUpdate = ____ghostshot.ghostUpdate
+function ____exports.tearUpdate(self, tear)
+    ghostUpdate(nil, tear)
+end
+return ____exports
+ end,
+["entities.sarahnpc"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
+require("lualib_bundle");
+local ____exports = {}
+local ____constants = require("constants")
+local game = ____constants.game
+local hud = ____constants.hud
+local ModPlayerTypes = ____constants.ModPlayerTypes
+local ModSlotVariants = ____constants.ModSlotVariants
+local rng = ____constants.rng
+local sfxManager = ____constants.sfxManager
+local rewards = {{EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, CollectibleType.COLLECTIBLE_PACT}, {EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, CollectibleType.COLLECTIBLE_MISSING_PAGE_2}, {EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, CollectibleType.COLLECTIBLE_MR_DOLLY}, {EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TRINKET, TrinketType.TRINKET_MISSING_PAGE}, {EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TRINKET, TrinketType.TRINKET_MISSING_POSTER}, {EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TRINKET, TrinketType.TRINKET_KIDS_DRAWING}, {EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, CollectibleType.COLLECTIBLE_LEAD_PENCIL}}
+function ____exports.sarahUpdate(self)
+    __TS__ArrayForEach(
+        Isaac.GetRoomEntities(),
+        function(____, entity)
+            if (entity.Type == EntityType.ENTITY_SLOT) and (entity.Variant == ModSlotVariants.SARAHNPC) then
+                local beggarFlags = EntityFlag.FLAG_NO_TARGET | EntityFlag.FLAG_NO_STATUS_EFFECTS
+                if entity:GetEntityFlags() ~= beggarFlags then
+                    entity:ClearEntityFlags(
+                        entity:GetEntityFlags()
+                    )
+                    entity:AddEntityFlags(beggarFlags)
+                    entity.EntityCollisionClass = EntityCollisionClass.ENTCOLL_PLAYERONLY
+                end
+                if entity:GetData().state == nil then
+                    entity:GetData().state = 0
+                    entity:GetData().paycount = 0
+                    entity:GetData().itemdrop = false
+                end
+                local player = game:GetNearestPlayer(entity.Position)
+                if (not entity:GetSprite():IsPlaying("Idle")) and (not entity:GetSprite():IsPlaying("Thumbsup")) then
+                    entity:GetSprite():Play("Idle", true)
+                else
+                    print("hi")
+                    local distance1 = player.Position:Distance(entity.Position)
+                    local distance2 = player.Size + entity.Size
+                    print(distance1, "  ", distance2)
+                    if distance1 <= distance2 then
+                        if player:GetPlayerType() ~= ModPlayerTypes.ALABASTER then
+                            entity:GetData().bumped_player = player
+                            sfxManager:Play(SoundEffect.SOUND_SCAMPER, 1, 0, false, 1)
+                            entity:GetSprite():Play("Thumbsup", true)
+                            hud:ShowFortuneText("Hi! I'm Sarah!")
+                        end
+                    end
+                end
+                if entity:GetSprite():IsFinished("Thumbsup") then
+                    entity:GetSprite():Play("Idle", true)
+                end
+                if entity:GetSprite():IsFinished("Die") then
+                    entity:Remove()
+                    game:GetLevel():SetStateFlag(LevelStateFlag.STATE_BUM_KILLED, true)
+                end
+                if entity.GridCollisionClass == EntityGridCollisionClass.GRIDCOLL_GROUND then
+                    local reward = rewards[rng:RandomInt(#rewards) + 1]
+                    Isaac.Spawn(
+                        reward[1],
+                        reward[2],
+                        reward[3],
+                        entity.Position,
+                        Vector(0, 0),
+                        entity
+                    )
+                    entity:GetSprite():Play("Die", true)
+                end
+            end
+        end
+    )
+end
+return ____exports
+ end,
 ["callbacks.MC_POST_UPDATE"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
 local ____exports = {}
+local ____sarahnpc = require("entities.sarahnpc")
+local sarahUpdate = ____sarahnpc.sarahUpdate
 function ____exports.postUpdate(self)
+    sarahUpdate(nil)
 end
 return ____exports
  end,
@@ -3169,6 +3348,49 @@ local ____ghostshot = require("items.passive.ghostshot")
 local ghostCollide = ____ghostshot.ghostCollide
 function ____exports.preTearCollision(self, tear, collider, _low)
     ghostCollide(nil, tear, collider)
+end
+return ____exports
+ end,
+["items.active.bombconverter"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
+local ____exports = {}
+function ____exports.bombConverter(self, player)
+    if player:GetNumBombs() >= 15 then
+        player:AddBombs(-15)
+        player:AddGigaBombs(1)
+        return true
+    end
+    return false
+end
+return ____exports
+ end,
+["items.active.bucketofmeat"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
+local ____exports = {}
+function ____exports.bucketOfMeat(self, player)
+    local counter = 0
+    for ____, entity in ipairs(
+        Isaac.GetRoomEntities()
+    ) do
+        if (entity.Type == EntityType.ENTITY_PICKUP) and (entity.Variant == PickupVariant.PICKUP_HEART) then
+            if entity.SubType == HeartSubType.HEART_HALF then
+                counter = counter + 1
+                entity:Remove()
+            elseif entity.SubType == HeartSubType.HEART_FULL then
+                counter = counter + 2
+                entity:Remove()
+            end
+        end
+    end
+    if counter == 0 then
+        return false
+    end
+    do
+        local i = 0
+        while i < (counter / 2) do
+            Isaac.Spawn(EntityType.ENTITY_FAMILIAR, FamiliarVariant.BLOOD_BABY, 7, player.Position, player.Velocity, player)
+            i = i + 1
+        end
+    end
+    return true
 end
 return ____exports
  end,
@@ -3260,6 +3482,10 @@ local ____costumes = require("globals.costumes")
 local costumes = ____costumes.costumes
 local ____blooddrive = require("items.active.blooddrive")
 local bloodDrive = ____blooddrive.bloodDrive
+local ____bombconverter = require("items.active.bombconverter")
+local bombConverter = ____bombconverter.bombConverter
+local ____bucketofmeat = require("items.active.bucketofmeat")
+local bucketOfMeat = ____bucketofmeat.bucketOfMeat
 local ____russianroulette = require("items.active.russianroulette")
 local rRoulette = ____russianroulette.rRoulette
 local ____stoned6 = require("items.active.stoned6")
@@ -3267,34 +3493,42 @@ local stoneD6 = ____stoned6.stoneD6
 function ____exports.useItem(self, item, rng, player, _slot, modPlayerData)
     local returnVal = nil
     local ____switch3 = item
-    if ____switch3 == ModItemTypes.RUSSIANROULETTE then
+    if ____switch3 == ModItemTypes.MEATBUCKET then
         goto ____switch3_case_0
-    elseif ____switch3 == ModItemTypes.BLOODDRIVE then
+    elseif ____switch3 == ModItemTypes.BOMBCONVERTER then
         goto ____switch3_case_1
-    elseif ____switch3 == ModItemTypes.STONE_D6 then
+    elseif ____switch3 == ModItemTypes.RUSSIANROULETTE then
         goto ____switch3_case_2
+    elseif ____switch3 == ModItemTypes.BLOODDRIVE then
+        goto ____switch3_case_3
+    elseif ____switch3 == ModItemTypes.STONE_D6 then
+        goto ____switch3_case_4
     end
     goto ____switch3_case_default
     ::____switch3_case_0::
     do
-        do
-            returnVal = rRoulette(nil, rng, player)
-            goto ____switch3_end
-        end
+        returnVal = bucketOfMeat(nil, player)
+        goto ____switch3_end
     end
     ::____switch3_case_1::
     do
-        do
-            returnVal = bloodDrive(nil, player, modPlayerData, rng)
-            goto ____switch3_end
-        end
+        returnVal = bombConverter(nil, player)
+        goto ____switch3_end
     end
     ::____switch3_case_2::
     do
-        do
-            returnVal = stoneD6(nil)
-            goto ____switch3_end
-        end
+        returnVal = rRoulette(nil, rng, player)
+        goto ____switch3_end
+    end
+    ::____switch3_case_3::
+    do
+        returnVal = bloodDrive(nil, player, modPlayerData, rng)
+        goto ____switch3_end
+    end
+    ::____switch3_case_4::
+    do
+        returnVal = stoneD6(nil)
+        goto ____switch3_end
     end
     ::____switch3_case_default::
     do
@@ -3347,6 +3581,8 @@ local ____MC_POST_PROJECTILE_INIT = require("callbacks.MC_POST_PROJECTILE_INIT")
 local projectileInit = ____MC_POST_PROJECTILE_INIT.projectileInit
 local ____MC_POST_RENDER = require("callbacks.MC_POST_RENDER")
 local render = ____MC_POST_RENDER.render
+local ____MC_POST_TEAR_UPDATE = require("callbacks.MC_POST_TEAR_UPDATE")
+local tearUpdate = ____MC_POST_TEAR_UPDATE.tearUpdate
 local ____MC_POST_UPDATE = require("callbacks.MC_POST_UPDATE")
 local postUpdate = ____MC_POST_UPDATE.postUpdate
 local ____MC_PRE_GAME_EXIT = require("callbacks.MC_PRE_GAME_EXIT")
@@ -3357,6 +3593,7 @@ local ____MC_USE_ITEM = require("callbacks.MC_USE_ITEM")
 local useItem = ____MC_USE_ITEM.useItem
 local ____MC_USE_PILL = require("callbacks.MC_USE_PILL")
 local usePill = ____MC_USE_PILL.usePill
+____exports.tearUpdate = tearUpdate
 ____exports.render = render
 ____exports.gameStart = gameStart
 ____exports.playerUpdate = playerUpdate
@@ -3378,25 +3615,50 @@ ____exports.postUpdate = postUpdate
 ____exports.npcUpdate = npcUpdate
 return ____exports
  end,
+["globals.EID"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
+local ____exports = {}
+local ____constants = require("constants")
+local ModItemTypes = ____constants.ModItemTypes
+local ModPlayerTypes = ____constants.ModPlayerTypes
+function ____exports.descriptions(self)
+    if EID ~= nil then
+        Isaac.DebugString("adding eid stuff")
+        EID:addCollectible(ModItemTypes.GHOST_SHOT, "Turns your tears into ghosts that explode", "Ghost Shot", "en_us")
+        EID:addCollectible(ModItemTypes.GHOST_SHOT, "Rerolls items into the item with the 'opposite' id. With no mods, item 1 (sad onion) rolls into item 729 (Decap Attack)", "Stone D6", "en_us")
+        EID:addCollectible(ModItemTypes.BLUE_HEART, "Gives 3 soul hearts.", "Blue Heart", "en_us")
+        EID:addCollectible(ModItemTypes.GHOST_SHOT, "Turns your tears into ghosts#When they touch an enemy or the ground, ghosts explode,dealing 0.4x your damage 3 times.", "Ghost Shot", "en_us_detailed")
+        EID:addCollectible(ModItemTypes.MEATBUCKET, "On use, sucks up all red hearts from the ground and gives you one blood clot per full heart", "Bucket of Meat", "en_us")
+        EID:addCollectible(ModItemTypes.BOMBCONVERTER, "On use, converts 15 bombs into 1 giga bomb.", "Bomb Converter", "en_us")
+        EID:addCollectible(ModItemTypes.BLOODDRIVE, "Alabaster's pocket active. Turns 2{{Heart}} into random items if used in a Devil or Angel room. Chances are as follows:#27% chance for a half soul heart(Angel Room) or black heart (Devil Room)#15% for a bomb#15% for a key#15% for 3 coins#10% for card or pill#8% for a trinket#5% for Rune or soul stone#4% for a  random chest (red, gold, grey, old, wooden)#1% chance for a random item", "Blood Drive", "en_us_detailed")
+        EID:addCollectible(ModItemTypes.BLOODDRIVE, "Alabaster's pocket active. Turns 2{{Heart}} into one pickup if used in a Devil or Angel room. Can give items.", "Blood Drive", "en_us_detailed")
+        EID:addBirthright(ModPlayerTypes.ALABASTER, "Alabaster now gets small random stat ups similar to Candy Heart when consuming {{Heart}}hearts with Blood Drive", "Alabaster", "en_us")
+    end
+end
+return ____exports
+ end,
 ["main"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
 require("lualib_bundle");
 local ____exports = {}
 local callbacks = require("callbacks.callbacks")
+local ____EID = require("globals.EID")
+local descriptions = ____EID.descriptions
 local ____playerdata = require("playerdata")
 local PlayerData = ____playerdata.PlayerData
 local modPlayerData = {
     data = {
-        __TS__New(PlayerData, nil, 0, false, 0),
-        __TS__New(PlayerData, nil, 0, false, 0),
-        __TS__New(PlayerData, nil, 0, false, 0),
-        __TS__New(PlayerData, nil, 0, false, 0),
-        __TS__New(PlayerData, nil, 0, false, 0),
-        __TS__New(PlayerData, nil, 0, false, 0),
-        __TS__New(PlayerData, nil, 0, false, 0),
-        __TS__New(PlayerData, nil, 0, false, 0)
+        __TS__New(PlayerData, nil, 0, false, 0, {0, 0, 0, 0, 0}),
+        __TS__New(PlayerData, nil, 0, false, 0, {0, 0, 0, 0, 0}),
+        __TS__New(PlayerData, nil, 0, false, 0, {0, 0, 0, 0, 0}),
+        __TS__New(PlayerData, nil, 0, false, 0, {0, 0, 0, 0, 0}),
+        __TS__New(PlayerData, nil, 0, false, 0, {0, 0, 0, 0, 0}),
+        __TS__New(PlayerData, nil, 0, false, 0, {0, 0, 0, 0, 0}),
+        __TS__New(PlayerData, nil, 0, false, 0, {0, 0, 0, 0, 0}),
+        __TS__New(PlayerData, nil, 0, false, 0, {0, 0, 0, 0, 0})
     }
 }
+local debugEntitySpawn = false
 local forgottenFables = RegisterMod("Forgotten Fables", 1)
+descriptions(nil)
 forgottenFables:AddCallback(
     ModCallbacks.MC_PRE_GAME_EXIT,
     function()
@@ -3423,6 +3685,7 @@ forgottenFables:AddCallback(
     end
 )
 forgottenFables:AddCallback(ModCallbacks.MC_PRE_TEAR_COLLISION, callbacks.preTearCollision)
+forgottenFables:AddCallback(ModCallbacks.MC_POST_TEAR_UPDATE, callbacks.tearUpdate)
 forgottenFables:AddCallback(
     ModCallbacks.MC_POST_PLAYER_INIT,
     function(____, player)
@@ -3464,6 +3727,14 @@ forgottenFables:AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, callbacks.postFireTe
 forgottenFables:AddCallback(ModCallbacks.MC_POST_BOMB_UPDATE, callbacks.bombUpdate)
 forgottenFables:AddCallback(ModCallbacks.MC_POST_BOMB_INIT, callbacks.bombInit)
 forgottenFables:AddCallback(ModCallbacks.MC_POST_PROJECTILE_INIT, callbacks.projectileInit)
+if debugEntitySpawn then
+    forgottenFables:AddCallback(
+        ModCallbacks.MC_PRE_ENTITY_SPAWN,
+        function(____, ____type, variant, subtype)
+            print(____type, ".", variant, ".", subtype)
+        end
+    )
+end
 forgottenFables:AddCallback(ModCallbacks.MC_POST_UPDATE, callbacks.postUpdate)
 forgottenFables:AddCallback(ModCallbacks.MC_NPC_UPDATE, callbacks.npcUpdate)
 return ____exports

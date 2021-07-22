@@ -28,7 +28,7 @@ export function alabasterStats(
     }
   }
 }
-const stats = [0.15, 0.15, 0.15, 0.15, 0.15]; // temp values. change them. damage,tears,range,speed,shot speed.
+export const stats = [0.15, 0.15, 0.15, 0.15, 0.15]; // temp values. change them. damage,tears,range,speed,shot speed.
 const flags = [
   CacheFlag.CACHE_DAMAGE,
   CacheFlag.CACHE_FIREDELAY,

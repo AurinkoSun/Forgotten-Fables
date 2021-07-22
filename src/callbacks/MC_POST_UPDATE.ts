@@ -1,3 +1,5 @@
+import { sarahUpdate } from "../entities/sarahnpc";
+
 export function postUpdate(): void {
-  // nothing
+  sarahUpdate();
 }

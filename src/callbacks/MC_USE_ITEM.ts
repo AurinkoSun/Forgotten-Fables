@@ -1,6 +1,8 @@
 import { ModItemTypes } from "../constants";
 import { costumes } from "../globals/costumes";
 import { bloodDrive } from "../items/active/blooddrive";
+import { bombConverter } from "../items/active/bombconverter";
+import { bucketOfMeat } from "../items/active/bucketofmeat";
 import { rRoulette } from "../items/active/russianroulette";
 import { stoneD6 } from "../items/active/stoned6";
 // import { revive, suicide } from "../items/active/suicide";
@@ -16,26 +18,27 @@ export function useItem(
 ): boolean | void {
   let returnVal: boolean | null = null;
   switch (item) {
-    /* case ModItemTypes.SUICIDE: {
+    case ModItemTypes.MEATBUCKET:
+      returnVal = bucketOfMeat(player);
+      break;
+    case ModItemTypes.BOMBCONVERTER:
+      returnVal = bombConverter(player);
+      break;
+    /* case ModItemTypes.SUICIDE:
       returnVal = suicide(modPlayerData, player);
       break;
-    }
-    case ModItemTypes.REVIVE: {
+    case ModItemTypes.REVIVE:
       returnVal = revive(modPlayerData, player);
-      break;
-    } */
-    case ModItemTypes.RUSSIANROULETTE: {
+      break; */
+    case ModItemTypes.RUSSIANROULETTE:
       returnVal = rRoulette(rng, player);
       break;
-    }
-    case ModItemTypes.BLOODDRIVE: {
+    case ModItemTypes.BLOODDRIVE:
       returnVal = bloodDrive(player, modPlayerData, rng);
       break;
-    }
-    case ModItemTypes.STONE_D6: {
+    case ModItemTypes.STONE_D6:
       returnVal = stoneD6();
       break;
-    }
     default:
       break;
   }

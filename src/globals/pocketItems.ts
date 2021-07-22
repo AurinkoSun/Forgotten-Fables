@@ -7,9 +7,6 @@ export function pocketItems(_modPlayerData: { data: PlayerData[] }): void {
     if (player !== null) {
       switch (player.GetPlayerType()) {
         case ModPlayerTypes.ALABASTER: {
-          if (!player.HasCollectible(ModItemTypes.GHOST_SHOT)) {
-            player.AddCollectible(ModItemTypes.GHOST_SHOT);
-          }
           if (
             player.GetActiveItem(ActiveSlot.SLOT_POCKET) !==
             ModItemTypes.BLOODDRIVE

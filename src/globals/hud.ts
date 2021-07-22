@@ -1,4 +1,4 @@
-import { game, ModPlayerTypes } from "../constants";
+import { game, hud, ModPlayerTypes } from "../constants";
 import { PlayerData } from "../playerdata";
 
 const hudOffset = 0;
@@ -44,7 +44,7 @@ export function render(modPlayerData: { data: PlayerData[] }): void {
   if (!data.initialized) {
     init();
   }
-  if (game.GetHUD().IsVisible() && hasAlabaster) {
+  if (hud.IsVisible() && hasAlabaster) {
     let x = 0;
     for (let i = 0; i < game.GetNumPlayers(); i++) {
       const player = game.GetPlayer(i);

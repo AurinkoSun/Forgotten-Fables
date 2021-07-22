@@ -1,20 +1,22 @@
 import * as callbacks from "./callbacks/callbacks";
+import { descriptions } from "./globals/EID";
 import { PlayerData } from "./playerdata";
 
 const modPlayerData: { data: PlayerData[] } = {
   data: [
-    new PlayerData(null, 0, false, 0),
-    new PlayerData(null, 0, false, 0),
-    new PlayerData(null, 0, false, 0),
-    new PlayerData(null, 0, false, 0),
-    new PlayerData(null, 0, false, 0),
-    new PlayerData(null, 0, false, 0),
-    new PlayerData(null, 0, false, 0),
-    new PlayerData(null, 0, false, 0),
+    new PlayerData(null, 0, false, 0, [0, 0, 0, 0, 0]),
+    new PlayerData(null, 0, false, 0, [0, 0, 0, 0, 0]),
+    new PlayerData(null, 0, false, 0, [0, 0, 0, 0, 0]),
+    new PlayerData(null, 0, false, 0, [0, 0, 0, 0, 0]),
+    new PlayerData(null, 0, false, 0, [0, 0, 0, 0, 0]),
+    new PlayerData(null, 0, false, 0, [0, 0, 0, 0, 0]),
+    new PlayerData(null, 0, false, 0, [0, 0, 0, 0, 0]),
+    new PlayerData(null, 0, false, 0, [0, 0, 0, 0, 0]),
   ],
 };
-
+const debugEntitySpawn = false;
 const forgottenFables = RegisterMod("Forgotten Fables", 1);
+descriptions();
 forgottenFables.AddCallback(ModCallbacks.MC_PRE_GAME_EXIT, () => {
   callbacks.preGameExit(forgottenFables, modPlayerData);
 });
@@ -43,6 +45,10 @@ forgottenFables.AddCallback(
   ModCallbacks.MC_PRE_TEAR_COLLISION,
   callbacks.preTearCollision,
 );
+forgottenFables.AddCallback(
+  ModCallbacks.MC_POST_TEAR_UPDATE,
+  callbacks.tearUpdate,
+);
 
 // forgottenFables.AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, callbacks.newFloor);
 forgottenFables.AddCallback(
@@ -62,7 +68,6 @@ forgottenFables.AddCallback(
     callbacks.usePill(pillEffect, player, flags, modPlayerData);
   },
 );
-
 forgottenFables.AddCallback(
   ModCallbacks.MC_USE_ITEM,
   (item: number, rng: RNG, player: EntityPlayer, _flag, slot) => {
@@ -104,6 +109,13 @@ forgottenFables.AddCallback(
   ModCallbacks.MC_POST_PROJECTILE_INIT,
   callbacks.projectileInit,
 );
-
+if (debugEntitySpawn) {
+  forgottenFables.AddCallback(
+    ModCallbacks.MC_PRE_ENTITY_SPAWN,
+    (type: number, variant: number, subtype: number) => {
+      print(type, ".", variant, ".", subtype);
+    },
+  );
+}
 forgottenFables.AddCallback(ModCallbacks.MC_POST_UPDATE, callbacks.postUpdate);
 forgottenFables.AddCallback(ModCallbacks.MC_NPC_UPDATE, callbacks.npcUpdate);

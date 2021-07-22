@@ -5,11 +5,11 @@ import { ghostShotStats } from "../items/passive/ghostshot";
 import { PlayerData } from "../playerdata";
 
 export function evalCache(
-  _modPlayerData: { data: PlayerData[] },
+  modPlayerData: { data: PlayerData[] },
   player: EntityPlayer,
   flags: CacheFlag,
 ): void {
-  alabasterStats(player, flags);
+  alabasterStats(player, flags, modPlayerData);
   ffstats(player, flags);
   ghostShotStats(player, flags);
   // sarahStats(player, modPlayerData, flags);
