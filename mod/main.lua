@@ -2450,22 +2450,19 @@ local GetPlayerId = ____playerdata.GetPlayerId
 function ____exports.alabasterStats(self, player, flags, modPlayerData)
     if player:GetPlayerType() == ModPlayerTypes.ALABASTER then
         if flags == CacheFlag.CACHE_SHOTSPEED then
-            player.ShotSpeed = player.ShotSpeed - 0.2
+            player.ShotSpeed = player.ShotSpeed - 0.15
             player.ShotSpeed = player.ShotSpeed + modPlayerData.data[GetPlayerId(nil, player) + 1].tStats[5]
         end
         if flags == CacheFlag.CACHE_FLYING then
             player.CanFly = true
         end
         if flags == CacheFlag.CACHE_DAMAGE then
-            player.Damage = player.Damage - 2.5
             player.Damage = player.Damage + modPlayerData.data[GetPlayerId(nil, player) + 1].tStats[1]
         end
         if flags == CacheFlag.CACHE_SPEED then
-            player.MoveSpeed = player.MoveSpeed - 0.1
             player.MoveSpeed = player.MoveSpeed + modPlayerData.data[GetPlayerId(nil, player) + 1].tStats[4]
         end
         if flags == CacheFlag.CACHE_FIREDELAY then
-            player.MaxFireDelay = player.MaxFireDelay + 1
             player.MaxFireDelay = player.MaxFireDelay - modPlayerData.data[GetPlayerId(nil, player) + 1].tStats[2]
         end
         if flags == CacheFlag.CACHE_RANGE then
@@ -2564,33 +2561,8 @@ function ____exports.ghostUpdate(self, tear)
             if ghostExplosion ~= nil then
                 ghostExplosion.SpriteScale = (ghostExplosion.SpriteScale / 2) * (math.sqrt(player.Damage) / math.sqrt(3.5))
                 ghostExplosion.SizeMulti = (ghostExplosion.SizeMulti / 2) * (math.sqrt(player.Damage) / math.sqrt(3.5))
-                ghostExplosion.CollisionDamage = player.Damage
-            end
-            ghostExplosion = Isaac.Spawn(
-                EntityType.ENTITY_EFFECT,
-                EffectVariant.ENEMY_GHOST,
-                1,
-                tear.Position,
-                Vector(0, 0),
-                player
-            ):ToEffect()
-            if ghostExplosion ~= nil then
-                ghostExplosion.SpriteScale = (ghostExplosion.SpriteScale / 2) * (math.sqrt(player.Damage) / math.sqrt(3.5))
-                ghostExplosion.SizeMulti = (ghostExplosion.SizeMulti / 2) * (math.sqrt(player.Damage) / math.sqrt(3.5))
-                ghostExplosion.CollisionDamage = player.Damage
-            end
-            ghostExplosion = Isaac.Spawn(
-                EntityType.ENTITY_EFFECT,
-                EffectVariant.ENEMY_GHOST,
-                1,
-                tear.Position,
-                Vector(0, 0),
-                player
-            ):ToEffect()
-            if ghostExplosion ~= nil then
-                ghostExplosion.SpriteScale = (ghostExplosion.SpriteScale / 2) * (math.sqrt(player.Damage) / math.sqrt(3.5))
-                ghostExplosion.SizeMulti = (ghostExplosion.SizeMulti / 2) * (math.sqrt(player.Damage) / math.sqrt(3.5))
-                ghostExplosion.CollisionDamage = player.Damage
+                ghostExplosion.CollisionDamage = player.Damage * 1.2
+                tear:Remove()
             end
         elseif (tear.Variant == ModTearVariants.GHOST_HAEMO) and (tear.Height > height) then
             if tear:GetData().player ~= nil then
@@ -2625,8 +2597,8 @@ function ____exports.ghostUpdate(self, tear)
                     (tear.Velocity * multiplier):Rotated(315)
                 ):ChangeVariant(ModTearVariants.GHOST)
             end
+            tear:Remove()
         end
-        tear:Remove()
     end
 end
 function ____exports.ghostCollide(self, tear, collider)

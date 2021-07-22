@@ -54,7 +54,7 @@ export function ghostUpdate(tear: EntityTear): void {
   if (tear.Variant === ModTearVariants.GHOST) {
     if (tear.GetData().player !== null && tear.Height > -5) {
       const player: EntityPlayer = tear.GetData().player as EntityPlayer;
-      let ghostExplosion = Isaac.Spawn(
+      const ghostExplosion = Isaac.Spawn(
         EntityType.ENTITY_EFFECT,
         EffectVariant.ENEMY_GHOST,
         1,
@@ -69,41 +69,8 @@ export function ghostUpdate(tear: EntityTear): void {
         ghostExplosion.SizeMulti = ghostExplosion.SizeMulti.div(2).mul(
           math.sqrt(player.Damage) / math.sqrt(3.5),
         );
-        ghostExplosion.CollisionDamage = player.Damage;
-      }
-      ghostExplosion = Isaac.Spawn(
-        EntityType.ENTITY_EFFECT,
-        EffectVariant.ENEMY_GHOST,
-        1,
-        tear.Position,
-        Vector(0, 0),
-        player,
-      ).ToEffect();
-      if (ghostExplosion !== null) {
-        ghostExplosion.SpriteScale = ghostExplosion.SpriteScale.div(2).mul(
-          math.sqrt(player.Damage) / math.sqrt(3.5),
-        );
-        ghostExplosion.SizeMulti = ghostExplosion.SizeMulti.div(2).mul(
-          math.sqrt(player.Damage) / math.sqrt(3.5),
-        );
-        ghostExplosion.CollisionDamage = player.Damage;
-      }
-      ghostExplosion = Isaac.Spawn(
-        EntityType.ENTITY_EFFECT,
-        EffectVariant.ENEMY_GHOST,
-        1,
-        tear.Position,
-        Vector(0, 0),
-        player,
-      ).ToEffect();
-      if (ghostExplosion !== null) {
-        ghostExplosion.SpriteScale = ghostExplosion.SpriteScale.div(2).mul(
-          math.sqrt(player.Damage) / math.sqrt(3.5),
-        );
-        ghostExplosion.SizeMulti = ghostExplosion.SizeMulti.div(2).mul(
-          math.sqrt(player.Damage) / math.sqrt(3.5),
-        );
-        ghostExplosion.CollisionDamage = player.Damage;
+        ghostExplosion.CollisionDamage = player.Damage * 1.2;
+        tear.Remove();
       }
     } else if (
       tear.Variant === ModTearVariants.GHOST_HAEMO &&
@@ -136,8 +103,8 @@ export function ghostUpdate(tear: EntityTear): void {
           .FireTear(tear.Position, tear.Velocity.mul(multiplier).Rotated(315))
           .ChangeVariant(ModTearVariants.GHOST);
       }
+      tear.Remove();
     }
-    tear.Remove();
   }
 }
 export function ghostCollide(tear: EntityTear, collider: Entity): void {
