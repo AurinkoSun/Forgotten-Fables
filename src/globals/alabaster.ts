@@ -8,19 +8,22 @@ export function alabasterStats(
 ): void {
   if (player.GetPlayerType() === ModPlayerTypes.ALABASTER) {
     if (flags === CacheFlag.CACHE_SHOTSPEED) {
-      player.ShotSpeed -= 0.15;
+      player.ShotSpeed -= 0.2;
       player.ShotSpeed += modPlayerData.data[GetPlayerId(player)].tStats[4];
     }
     if (flags === CacheFlag.CACHE_FLYING) {
       player.CanFly = true;
     }
     if (flags === CacheFlag.CACHE_DAMAGE) {
+      player.Damage -= 2.5;
       player.Damage += modPlayerData.data[GetPlayerId(player)].tStats[0];
     }
     if (flags === CacheFlag.CACHE_SPEED) {
+      player.MoveSpeed -= 0.1;
       player.MoveSpeed += modPlayerData.data[GetPlayerId(player)].tStats[3];
     }
     if (flags === CacheFlag.CACHE_FIREDELAY) {
+      player.MaxFireDelay += 1;
       player.MaxFireDelay -= modPlayerData.data[GetPlayerId(player)].tStats[1];
     }
     if (flags === CacheFlag.CACHE_RANGE) {
