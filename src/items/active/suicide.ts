@@ -1,9 +1,9 @@
 // import * as constants from "../../constants";
 // import { GetPlayerId, PlayerData } from "../../playerdata";
-import { PlayerData } from "../../playerdata";
+import { ModPlayerData } from "../../constants";
 
 export function suicide(
-  _modPlayerData: { data: PlayerData[] },
+  _modPlayerData: ModPlayerData,
   _player: EntityPlayer,
 ): boolean {
   /* if (
@@ -34,7 +34,7 @@ export function suicide(
   return false;
 }
 export function revive(
-  _modPlayerData: { data: PlayerData[] },
+  _modPlayerData: ModPlayerData,
   _player: EntityPlayer,
 ): boolean {
   /* if (

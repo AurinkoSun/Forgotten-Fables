@@ -1,11 +1,11 @@
+import { ModPlayerData } from "../constants";
 import { costumes } from "../globals/costumes";
-import { PlayerData } from "../playerdata";
 
 export function usePill(
   _pillEffect: number,
   _player: EntityPlayer,
   _useFlags: number,
-  modPlayerData: { data: PlayerData[] },
+  modPlayerData: ModPlayerData,
 ): void {
   costumes(modPlayerData);
 }

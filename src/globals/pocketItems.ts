@@ -1,7 +1,11 @@
-import { game, ModItemTypes, ModPlayerTypes } from "../constants";
-import { PlayerData } from "../playerdata";
+import {
+  game,
+  ModItemTypes,
+  ModPlayerData,
+  ModPlayerTypes,
+} from "../constants";
 
-export function pocketItems(_modPlayerData: { data: PlayerData[] }): void {
+export function pocketItems(_modPlayerData: ModPlayerData): void {
   for (let i = 0; i < Game().GetNumPlayers(); i++) {
     const player = game.GetPlayer(i);
     if (player !== null) {

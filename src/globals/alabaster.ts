@@ -1,10 +1,10 @@
-import { ModPlayerTypes, rng } from "../constants";
-import { GetPlayerId, PlayerData } from "../playerdata";
+import { ModPlayerData, ModPlayerTypes, rng } from "../constants";
+import { GetPlayerId } from "../playerdata";
 
 export function alabasterStats(
   player: EntityPlayer,
   flags: CacheFlag,
-  modPlayerData: { data: PlayerData[] },
+  modPlayerData: ModPlayerData,
 ): void {
   if (player.GetPlayerType() === ModPlayerTypes.ALABASTER) {
     if (flags === CacheFlag.CACHE_SHOTSPEED) {
@@ -40,7 +40,7 @@ const flags = [
 ];
 export function birthright(
   player: EntityPlayer,
-  modPlayerData: { data: PlayerData[] },
+  modPlayerData: ModPlayerData,
 ): void {
   if (
     player.HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) &&

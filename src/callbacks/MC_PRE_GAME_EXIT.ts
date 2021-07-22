@@ -1,9 +1,6 @@
+import { SaveData } from "../constants";
 import { save } from "../globals/saveload";
-import { PlayerData } from "../playerdata";
 
-export function preGameExit(
-  forgottenFables: Mod,
-  modPlayerData: { data: PlayerData[] },
-): void {
-  save(forgottenFables, modPlayerData);
+export function preGameExit(forgottenFables: Mod, data: SaveData): void {
+  save(forgottenFables, data);
 }

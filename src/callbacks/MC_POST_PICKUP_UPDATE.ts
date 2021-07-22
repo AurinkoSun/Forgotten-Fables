@@ -1,10 +1,10 @@
 // import { razor } from "../globals/razors";
+import { ModPlayerData } from "../constants";
 import { alabasterHearts } from "../items/active/blooddrive";
-import { PlayerData } from "../playerdata";
 
 export function postPickupUpdate(
   pickup: EntityPickup,
-  modPlayerData: { data: PlayerData[] },
+  modPlayerData: ModPlayerData,
 ): void {
   if (pickup.Variant === PickupVariant.PICKUP_HEART) {
     // razor(modPlayerData, pickup);

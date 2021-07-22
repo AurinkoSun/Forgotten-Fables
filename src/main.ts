@@ -1,8 +1,9 @@
 import * as callbacks from "./callbacks/callbacks";
+import { GlobalData, ModPlayerData, SaveData } from "./constants";
 import { descriptions } from "./globals/EID";
 import { PlayerData } from "./playerdata";
 
-const modPlayerData: { data: PlayerData[] } = {
+const modPlayerData: ModPlayerData = {
   data: [
     new PlayerData(null, 0, false, 0, [0, 0, 0, 0, 0]),
     new PlayerData(null, 0, false, 0, [0, 0, 0, 0, 0]),
@@ -14,11 +15,17 @@ const modPlayerData: { data: PlayerData[] } = {
     new PlayerData(null, 0, false, 0, [0, 0, 0, 0, 0]),
   ],
 };
-const debugEntitySpawn = false;
+const globalData: GlobalData = {
+  roomRespawned: false,
+  debugEntitySpawn: false,
+};
 const forgottenFables = RegisterMod("Forgotten Fables", 1);
 descriptions();
 forgottenFables.AddCallback(ModCallbacks.MC_PRE_GAME_EXIT, () => {
-  callbacks.preGameExit(forgottenFables, modPlayerData);
+  callbacks.preGameExit(
+    forgottenFables,
+    new SaveData(modPlayerData, globalData),
+  );
 });
 
 forgottenFables.AddCallback(
@@ -31,7 +38,7 @@ forgottenFables.AddCallback(ModCallbacks.MC_POST_RENDER, () => {
 forgottenFables.AddCallback(
   ModCallbacks.MC_POST_GAME_STARTED,
   (continued: boolean) => {
-    callbacks.gameStart(forgottenFables, modPlayerData, continued);
+    callbacks.gameStart(forgottenFables, modPlayerData, globalData, continued);
   },
 );
 forgottenFables.AddCallback(
@@ -56,9 +63,11 @@ forgottenFables.AddCallback(
     callbacks.postPlayerInit(player, modPlayerData);
   },
 );
-
+forgottenFables.AddCallback(ModCallbacks.MC_PRE_SPAWN_CLEAN_AWARD, () => {
+  callbacks.roomClear(globalData);
+});
 forgottenFables.AddCallback(ModCallbacks.MC_POST_NEW_ROOM, () => {
-  callbacks.postNewRoom(modPlayerData);
+  callbacks.postNewRoom(modPlayerData, globalData);
 });
 forgottenFables.AddCallback(
   ModCallbacks.MC_POST_LASER_INIT,
@@ -115,7 +124,7 @@ forgottenFables.AddCallback(
   ModCallbacks.MC_POST_PROJECTILE_INIT,
   callbacks.projectileInit,
 );
-if (debugEntitySpawn) {
+if (globalData.debugEntitySpawn) {
   forgottenFables.AddCallback(
     ModCallbacks.MC_PRE_ENTITY_SPAWN,
     (type: number, variant: number, subtype: number) => {

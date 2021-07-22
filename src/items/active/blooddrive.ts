@@ -1,10 +1,15 @@
-import { game, ModPlayerTypes, sfxManager } from "../../constants";
+import {
+  game,
+  ModPlayerData,
+  ModPlayerTypes,
+  sfxManager,
+} from "../../constants";
 import { birthright } from "../../globals/alabaster";
-import { GetPlayerId, PlayerData } from "../../playerdata";
+import { GetPlayerId } from "../../playerdata";
 
 export function bloodDrive(
   player: EntityPlayer,
-  modPlayerData: { data: PlayerData[] },
+  modPlayerData: ModPlayerData,
   rng: RNG,
 ): boolean | null {
   if (
@@ -258,7 +263,7 @@ export function bloodDrive(
 }
 export function alabasterHearts(
   pickup: EntityPickup,
-  modPlayerData: { data: PlayerData[] },
+  modPlayerData: ModPlayerData,
 ): void {
   if (
     pickup.Variant === PickupVariant.PICKUP_HEART &&

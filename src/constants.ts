@@ -1,3 +1,5 @@
+import { PlayerData } from "./playerdata";
+
 /**
  * Enum to keep track of new items' ID's
  */
@@ -13,6 +15,22 @@ export enum ModItemTypes {
   STONE_D6 = Isaac.GetItemIdByName("Stone D6"),
   BOMBCONVERTER = Isaac.GetItemIdByName("Bomb Converter"),
   MEATBUCKET = Isaac.GetItemIdByName("Bucket of Meat"),
+  BMERCURIUS = Isaac.GetItemIdByName("Mercurius?"),
+}
+export interface GlobalData {
+  roomRespawned: boolean;
+  debugEntitySpawn: boolean;
+}
+export class SaveData {
+  playerData: ModPlayerData;
+  globalData: GlobalData;
+  constructor(playerData: ModPlayerData, globalData: GlobalData) {
+    this.playerData = playerData;
+    this.globalData = globalData;
+  }
+}
+export interface ModPlayerData {
+  data: PlayerData[];
 }
 export enum ModTearVariants {
   GHOST = Isaac.GetEntityVariantByName("Ghost Tear"),

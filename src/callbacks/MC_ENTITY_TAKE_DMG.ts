@@ -1,15 +1,14 @@
 // import { sarahLostKill } from "../globals/sarahlostdamage";
-import { ModEntityVariants, ModItemTypes } from "../constants";
+import { ModEntityVariants, ModItemTypes, ModPlayerData } from "../constants";
 import { peelDmg } from "../entities/peel";
 import { glitterdrops } from "../items/passive/fatfetus";
-import { PlayerData } from "../playerdata";
 
 export function entityTakeDamage(
   entity: Entity,
   amt: number,
   flags: DamageFlag,
   src: EntityRef,
-  _modPlayerData: { data: PlayerData[] },
+  _modPlayerData: ModPlayerData,
 ): boolean | void {
   if (entity.Type === EntityType.ENTITY_PLAYER) {
     // sarahLostKill(modPlayerData, entity, amt, flags);

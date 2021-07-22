@@ -1875,7 +1875,65 @@ function __TS__TypeOf(value)
 end
 
  end,
+["playerdata"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
+require("lualib_bundle");
+local ____exports = {}
+local game
+function ____exports.GetPlayerId(self, player)
+    local returner = 0
+    do
+        local i = 0
+        while i < game:GetNumPlayers() do
+            local playeri = game:GetPlayer(i)
+            if ((playeri ~= nil) and (player ~= nil)) and (playeri:GetCollectibleRNG(1):GetSeed() == player:GetCollectibleRNG(1):GetSeed()) then
+                returner = i
+            end
+            i = i + 1
+        end
+    end
+    return returner
+end
+game = Game()
+____exports.PlayerData = __TS__Class()
+local PlayerData = ____exports.PlayerData
+PlayerData.name = "PlayerData"
+function PlayerData.prototype.____constructor(self, player, bdcharge, lost, razors, tStats)
+    if player == nil then
+        player = nil
+    end
+    if bdcharge == nil then
+        bdcharge = 0
+    end
+    if lost == nil then
+        lost = false
+    end
+    if razors == nil then
+        razors = 0
+    end
+    if tStats == nil then
+        tStats = {0, 0, 0, 0, 0}
+    end
+    self.player = nil
+    self.player = player
+    self.lost = lost
+    self.razors = razors
+    self.bdcharge = bdcharge
+    self.id = ((player ~= nil) and ____exports.GetPlayerId(nil, player)) or -1
+    self.tStats = tStats
+end
+function PlayerData.prototype.RegenerateID(self)
+    self.id = ____exports.GetPlayerId(nil, self.player)
+end
+function ____exports.PlayerSeed(self, player, CollID)
+    if CollID == nil then
+        CollID = 1
+    end
+    return ((player ~= nil) and player:GetCollectibleRNG(CollID):GetSeed()) or -1
+end
+return ____exports
+ end,
 ["constants"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
+require("lualib_bundle");
 local ____exports = {}
 ____exports.ModItemTypes = ModItemTypes or ({})
 ____exports.ModItemTypes.FAT_FETUS = Isaac.GetItemIdByName("Fat Fetus")
@@ -1896,6 +1954,15 @@ ____exports.ModItemTypes.BOMBCONVERTER = Isaac.GetItemIdByName("Bomb Converter")
 ____exports.ModItemTypes[____exports.ModItemTypes.BOMBCONVERTER] = "BOMBCONVERTER"
 ____exports.ModItemTypes.MEATBUCKET = Isaac.GetItemIdByName("Bucket of Meat")
 ____exports.ModItemTypes[____exports.ModItemTypes.MEATBUCKET] = "MEATBUCKET"
+____exports.ModItemTypes.BMERCURIUS = Isaac.GetItemIdByName("Mercurius?")
+____exports.ModItemTypes[____exports.ModItemTypes.BMERCURIUS] = "BMERCURIUS"
+____exports.SaveData = __TS__Class()
+local SaveData = ____exports.SaveData
+SaveData.name = "SaveData"
+function SaveData.prototype.____constructor(self, playerData, globalData)
+    self.playerData = playerData
+    self.globalData = globalData
+end
 ____exports.ModTearVariants = ModTearVariants or ({})
 ____exports.ModTearVariants.GHOST = Isaac.GetEntityVariantByName("Ghost Tear")
 ____exports.ModTearVariants[____exports.ModTearVariants.GHOST] = "GHOST"
@@ -2363,62 +2430,6 @@ function ____exports.ffstats(self, player, flags)
 end
 return ____exports
  end,
-["playerdata"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
-require("lualib_bundle");
-local ____exports = {}
-local constants = require("constants")
-function ____exports.GetPlayerId(self, player)
-    local returner = 0
-    do
-        local i = 0
-        while i < constants.game:GetNumPlayers() do
-            local playeri = constants.game:GetPlayer(i)
-            if ((playeri ~= nil) and (player ~= nil)) and (playeri:GetCollectibleRNG(1):GetSeed() == player:GetCollectibleRNG(1):GetSeed()) then
-                returner = i
-            end
-            i = i + 1
-        end
-    end
-    return returner
-end
-____exports.PlayerData = __TS__Class()
-local PlayerData = ____exports.PlayerData
-PlayerData.name = "PlayerData"
-function PlayerData.prototype.____constructor(self, player, bdcharge, lost, razors, tStats)
-    if player == nil then
-        player = nil
-    end
-    if bdcharge == nil then
-        bdcharge = 0
-    end
-    if lost == nil then
-        lost = false
-    end
-    if razors == nil then
-        razors = 0
-    end
-    if tStats == nil then
-        tStats = {0, 0, 0, 0, 0}
-    end
-    self.player = nil
-    self.player = player
-    self.lost = lost
-    self.razors = razors
-    self.bdcharge = bdcharge
-    self.id = ((player ~= nil) and ____exports.GetPlayerId(nil, player)) or -1
-    self.tStats = tStats
-end
-function PlayerData.prototype.RegenerateID(self)
-    self.id = ____exports.GetPlayerId(nil, self.player)
-end
-function ____exports.PlayerSeed(self, player, CollID)
-    if CollID == nil then
-        CollID = 1
-    end
-    return ((player ~= nil) and player:GetCollectibleRNG(CollID):GetSeed()) or -1
-end
-return ____exports
- end,
 ["callbacks.MC_ENTITY_TAKE_DMG"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
 local ____exports = {}
 local ____constants = require("constants")
@@ -2457,7 +2468,6 @@ function ____exports.alabasterStats(self, player, flags, modPlayerData)
             player.CanFly = true
         end
         if flags == CacheFlag.CACHE_DAMAGE then
-            player.Damage = player.Damage - 2.5
             player.Damage = player.Damage + modPlayerData.data[GetPlayerId(nil, player) + 1].tStats[1]
         end
         if flags == CacheFlag.CACHE_SPEED then
@@ -2496,6 +2506,27 @@ function ____exports.alabasterHealth(self, player)
             player:AddHearts(0 - redHealth)
         end
     end
+end
+return ____exports
+ end,
+["callbacks.MC_EVALUATE_CACHE"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
+local ____exports = {}
+local ____alabaster = require("globals.alabaster")
+local alabasterStats = ____alabaster.alabasterStats
+local ____fatfetus = require("items.passive.fatfetus")
+local ffstats = ____fatfetus.ffstats
+function ____exports.evalCache(self, modPlayerData, player, flags)
+    alabasterStats(nil, player, flags, modPlayerData)
+    ffstats(nil, player, flags)
+end
+return ____exports
+ end,
+["callbacks.MC_NPC_UPDATE"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
+local ____exports = {}
+local ____peel = require("entities.peel")
+local peelUpdate = ____peel.peelUpdate
+function ____exports.npcUpdate(self, entity)
+    peelUpdate(nil, entity)
 end
 return ____exports
  end,
@@ -2547,6 +2578,44 @@ function ____exports.ghostShot(self, tear)
         end
     end
 end
+function ____exports.gsLaser(self, laser)
+    if laser.SpawnerEntity ~= nil then
+        local player = laser.SpawnerEntity:ToPlayer()
+        if player ~= nil then
+            if player:HasCollectible(ModItemTypes.GHOST_SHOT) then
+                laser:AddTearFlags(TearFlags.TEAR_HOMING)
+                laser:AddTearFlags(TearFlags.TEAR_SPECTRAL)
+                laser:AddTearFlags(TearFlags.TEAR_EXPLOSIVE)
+            end
+        end
+    end
+end
+function ____exports.gsKnife(self, knife)
+    if knife.SpawnerEntity ~= nil then
+        local player = knife.SpawnerEntity:ToPlayer()
+        if player ~= nil then
+            if player:HasCollectible(ModItemTypes.GHOST_SHOT) then
+                knife:AddTearFlags(TearFlags.TEAR_HOMING)
+                knife:AddTearFlags(TearFlags.TEAR_SPECTRAL)
+                knife:AddTearFlags(TearFlags.TEAR_EXPLOSIVE)
+            end
+        end
+    end
+end
+function ____exports.gsBomb(self, bomb)
+    if bomb.IsFetus then
+        if bomb.SpawnerEntity ~= nil then
+            local player = bomb.SpawnerEntity:ToPlayer()
+            if player ~= nil then
+                if player:HasCollectible(ModItemTypes.GHOST_SHOT) then
+                    bomb:AddTearFlags(TearFlags.TEAR_HOMING)
+                    bomb:AddTearFlags(TearFlags.TEAR_SPECTRAL)
+                    bomb:AddTearFlags(TearFlags.TEAR_EXPLOSIVE)
+                end
+            end
+        end
+    end
+end
 local height = -5
 local multiplier = 0.5
 function ____exports.ghostUpdate(self, tear)
@@ -2567,7 +2636,7 @@ function ____exports.ghostUpdate(self, tear)
                     if ghostExplosion ~= nil then
                         ghostExplosion.SpriteScale = (ghostExplosion.SpriteScale / 2) * (math.sqrt(player.Damage) / math.sqrt(3.5))
                         ghostExplosion.SizeMulti = (ghostExplosion.SizeMulti / 2) * (math.sqrt(player.Damage) / math.sqrt(3.5))
-                        ghostExplosion.CollisionDamage = player.Damage
+                        ghostExplosion.CollisionDamage = player.Damage / 3
                     end
                     i = i + 1
                 end
@@ -2629,7 +2698,7 @@ function ____exports.ghostCollide(self, tear, collider)
                     if ghostExplosion ~= nil then
                         ghostExplosion.SpriteScale = (ghostExplosion.SpriteScale / 2) * (math.sqrt(player.Damage) / math.sqrt(3.5))
                         ghostExplosion.SizeMulti = (ghostExplosion.SizeMulti / 2) * (math.sqrt(player.Damage) / math.sqrt(3.5))
-                        ghostExplosion.CollisionDamage = player.Damage
+                        ghostExplosion.CollisionDamage = player.Damage / 3
                     end
                     i = i + 1
                 end
@@ -2671,37 +2740,6 @@ function ____exports.ghostCollide(self, tear, collider)
         end
     end
 end
-function ____exports.ghostShotStats(self, player, flags)
-    if flags == CacheFlag.CACHE_DAMAGE then
-        if player:HasCollectible(ModItemTypes.BBGHOST_SHOT) then
-            player.Damage = player.Damage * 0.8
-        end
-    end
-end
-return ____exports
- end,
-["callbacks.MC_EVALUATE_CACHE"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
-local ____exports = {}
-local ____alabaster = require("globals.alabaster")
-local alabasterStats = ____alabaster.alabasterStats
-local ____fatfetus = require("items.passive.fatfetus")
-local ffstats = ____fatfetus.ffstats
-local ____ghostshot = require("items.passive.ghostshot")
-local ghostShotStats = ____ghostshot.ghostShotStats
-function ____exports.evalCache(self, modPlayerData, player, flags)
-    alabasterStats(nil, player, flags, modPlayerData)
-    ffstats(nil, player, flags)
-    ghostShotStats(nil, player, flags)
-end
-return ____exports
- end,
-["callbacks.MC_NPC_UPDATE"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
-local ____exports = {}
-local ____peel = require("entities.peel")
-local peelUpdate = ____peel.peelUpdate
-function ____exports.npcUpdate(self, entity)
-    peelUpdate(nil, entity)
-end
 return ____exports
  end,
 ["callbacks.MC_POST_BOMB_INIT"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
@@ -2709,6 +2747,8 @@ local ____exports = {}
 local ____fatfetus = require("items.passive.fatfetus")
 local gigaBombReplace = ____fatfetus.gigaBombReplace
 local gigaInit = ____fatfetus.gigaInit
+local ____ghostshot = require("items.passive.ghostshot")
+local gsBomb = ____ghostshot.gsBomb
 function ____exports.bombInit(self, bomb)
     if (bomb.Variant == BombVariant.BOMB_GIGA) or (bomb.Variant == BombVariant.BOMB_ROCKET_GIGA) then
         gigaBombReplace(nil, bomb)
@@ -2716,6 +2756,7 @@ function ____exports.bombInit(self, bomb)
     if bomb.Variant == 21 then
         gigaInit(nil, bomb)
     end
+    gsBomb(nil, bomb)
 end
 return ____exports
  end,
@@ -2739,7 +2780,6 @@ local ghostShot = ____ghostshot.ghostShot
 function ____exports.postFireTear(self, tear)
     fatFetusTears(nil, tear)
     ghostShot(nil, tear)
-    print(tear.HomingFriction)
 end
 return ____exports
  end,
@@ -2871,23 +2911,20 @@ local ____constants = require("constants")
 local game = ____constants.game
 local ____playerdata = require("playerdata")
 local PlayerData = ____playerdata.PlayerData
-function ____exports.loadData(self, continued, mod, modPlayerData)
+function ____exports.loadData(self, continued, mod, modPlayerData, globalData)
     if continued and mod:HasData() then
-        local olddata = json.decode(
+        local oldData = json.decode(
             mod:LoadData()
         )
         do
             local i = 0
-            while i < #olddata.data do
+            while i < #oldData.playerData.data do
                 local player = game:GetPlayer(i)
-                if player ~= nil then
-                    modPlayerData.data[i + 1] = __TS__New(PlayerData, player, olddata.data[i + 1].bdcharge, olddata.data[i + 1].lost, olddata.data[i + 1].razors)
-                else
-                    modPlayerData.data[i + 1] = __TS__New(PlayerData, nil, 0, false, 0)
-                end
+                modPlayerData.data[i + 1] = __TS__New(PlayerData, player, oldData.playerData.data[i + 1].bdcharge, oldData.playerData.data[i + 1].lost, oldData.playerData.data[i + 1].razors, oldData.playerData.data[i + 1].tStats)
                 i = i + 1
             end
         end
+        __TS__ObjectAssign(oldData.globalData, globalData)
     else
         modPlayerData.data = {
             __TS__New(
@@ -2947,11 +2984,12 @@ function ____exports.loadData(self, continued, mod, modPlayerData)
                 0
             )
         }
+        globalData.roomRespawned = false
     end
 end
-function ____exports.save(self, mod, modPlayerData)
+function ____exports.save(self, mod, data)
     mod:SaveData(
-        json.encode(modPlayerData)
+        json.encode(data)
     )
 end
 return ____exports
@@ -2964,10 +3002,28 @@ local ____pocketItems = require("globals.pocketItems")
 local pocketItems = ____pocketItems.pocketItems
 local ____saveload = require("globals.saveload")
 local loadData = ____saveload.loadData
-function ____exports.gameStart(self, mod, modPlayerData, continued)
-    loadData(nil, continued, mod, modPlayerData)
+function ____exports.gameStart(self, mod, modPlayerData, globalData, continued)
+    loadData(nil, continued, mod, modPlayerData, globalData)
     init(nil)
     pocketItems(nil, modPlayerData)
+end
+return ____exports
+ end,
+["callbacks.MC_POST_KNIFE_INIT"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
+local ____exports = {}
+local ____ghostshot = require("items.passive.ghostshot")
+local gsKnife = ____ghostshot.gsKnife
+function ____exports.knifeInit(self, knife)
+    gsKnife(nil, knife)
+end
+return ____exports
+ end,
+["callbacks.MC_POST_LASER_INIT"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
+local ____exports = {}
+local ____ghostshot = require("items.passive.ghostshot")
+local gsLaser = ____ghostshot.gsLaser
+function ____exports.laserInit(self, laser)
+    gsLaser(nil, laser)
 end
 return ____exports
  end,
@@ -2992,12 +3048,76 @@ function ____exports.costumes(self, _modPlayerData)
 end
 return ____exports
  end,
+["items.passive.reversedMercurius"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
+require("lualib_bundle");
+local ____exports = {}
+local ____constants = require("constants")
+local game = ____constants.game
+local ModItemTypes = ____constants.ModItemTypes
+local barDoors
+function barDoors(self)
+    local doors = {}
+    do
+        local i = 0
+        while i < DoorSlot.NUM_DOOR_SLOTS do
+            if game:GetRoom():IsDoorSlotAllowed(i) then
+                __TS__ArrayPush(doors, i)
+            end
+            i = i + 1
+        end
+    end
+    for ____, i in ipairs(doors) do
+        local door = game:GetRoom():GetDoor(i)
+        if door ~= nil then
+            door:Bar()
+        end
+    end
+end
+function ____exports.reversedMercuriusClear(self, data)
+    if data.roomRespawned then
+        return true
+    end
+    local done = false
+    game:GetRoom():KeepDoorsClosed()
+    do
+        local i = 0
+        while i < game:GetNumPlayers() do
+            local player = game:GetPlayer(i)
+            if (player ~= nil) and player:HasCollectible(ModItemTypes.BOMBCONVERTER) then
+                if not done then
+                    player:UseActiveItem(CollectibleType.COLLECTIBLE_D7, false, false, true, false)
+                end
+                done = true
+            end
+            i = i + 1
+        end
+    end
+    return true
+end
+function ____exports.reversedMercuriusRoomInit(self, data)
+    do
+        local i = 0
+        while i < game:GetNumPlayers() do
+            local player = game:GetPlayer(i)
+            if (player ~= nil) and player:HasCollectible(ModItemTypes.BOMBCONVERTER) then
+                barDoors(nil)
+            end
+            i = i + 1
+        end
+    end
+    data.roomRespawned = true
+end
+return ____exports
+ end,
 ["callbacks.MC_POST_NEW_ROOM"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
 local ____exports = {}
 local ____costumes = require("globals.costumes")
 local costumes = ____costumes.costumes
-function ____exports.postNewRoom(self, modPlayerData)
+local ____reversedMercurius = require("items.passive.reversedMercurius")
+local reversedMercuriusRoomInit = ____reversedMercurius.reversedMercuriusRoomInit
+function ____exports.postNewRoom(self, modPlayerData, data)
     costumes(nil, modPlayerData)
+    reversedMercuriusRoomInit(nil, data)
 end
 return ____exports
  end,
@@ -3351,8 +3471,21 @@ return ____exports
 local ____exports = {}
 local ____saveload = require("globals.saveload")
 local save = ____saveload.save
-function ____exports.preGameExit(self, forgottenFables, modPlayerData)
-    save(nil, forgottenFables, modPlayerData)
+function ____exports.preGameExit(self, forgottenFables, data)
+    save(nil, forgottenFables, data)
+end
+return ____exports
+ end,
+["callbacks.MC_PRE_SPAWN_CLEAN_AWARD"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
+local ____exports = {}
+local ____reversedMercurius = require("items.passive.reversedMercurius")
+local reversedMercuriusClear = ____reversedMercurius.reversedMercuriusClear
+function ____exports.roomClear(self, data)
+    local val = nil
+    val = reversedMercuriusClear(nil, data)
+    if val ~= nil then
+        return val
+    end
 end
 return ____exports
  end,
@@ -3581,6 +3714,10 @@ local ____MC_POST_FIRE_TEAR = require("callbacks.MC_POST_FIRE_TEAR")
 local postFireTear = ____MC_POST_FIRE_TEAR.postFireTear
 local ____MC_POST_GAME_STARTED = require("callbacks.MC_POST_GAME_STARTED")
 local gameStart = ____MC_POST_GAME_STARTED.gameStart
+local ____MC_POST_KNIFE_INIT = require("callbacks.MC_POST_KNIFE_INIT")
+local knifeInit = ____MC_POST_KNIFE_INIT.knifeInit
+local ____MC_POST_LASER_INIT = require("callbacks.MC_POST_LASER_INIT")
+local laserInit = ____MC_POST_LASER_INIT.laserInit
 local ____MC_POST_NEW_ROOM = require("callbacks.MC_POST_NEW_ROOM")
 local postNewRoom = ____MC_POST_NEW_ROOM.postNewRoom
 local ____MC_POST_NPC_RENDER = require("callbacks.MC_POST_NPC_RENDER")
@@ -3601,12 +3738,17 @@ local ____MC_POST_UPDATE = require("callbacks.MC_POST_UPDATE")
 local postUpdate = ____MC_POST_UPDATE.postUpdate
 local ____MC_PRE_GAME_EXIT = require("callbacks.MC_PRE_GAME_EXIT")
 local preGameExit = ____MC_PRE_GAME_EXIT.preGameExit
+local ____MC_PRE_SPAWN_CLEAN_AWARD = require("callbacks.MC_PRE_SPAWN_CLEAN_AWARD")
+local roomClear = ____MC_PRE_SPAWN_CLEAN_AWARD.roomClear
 local ____MC_PRE_TEAR_COLLISION = require("callbacks.MC_PRE_TEAR_COLLISION")
 local preTearCollision = ____MC_PRE_TEAR_COLLISION.preTearCollision
 local ____MC_USE_ITEM = require("callbacks.MC_USE_ITEM")
 local useItem = ____MC_USE_ITEM.useItem
 local ____MC_USE_PILL = require("callbacks.MC_USE_PILL")
 local usePill = ____MC_USE_PILL.usePill
+____exports.roomClear = roomClear
+____exports.knifeInit = knifeInit
+____exports.laserInit = laserInit
 ____exports.tearUpdate = tearUpdate
 ____exports.render = render
 ____exports.gameStart = gameStart
@@ -3654,6 +3796,8 @@ return ____exports
 require("lualib_bundle");
 local ____exports = {}
 local callbacks = require("callbacks.callbacks")
+local ____constants = require("constants")
+local SaveData = ____constants.SaveData
 local ____EID = require("globals.EID")
 local descriptions = ____EID.descriptions
 local ____playerdata = require("playerdata")
@@ -3670,13 +3814,16 @@ local modPlayerData = {
         __TS__New(PlayerData, nil, 0, false, 0, {0, 0, 0, 0, 0})
     }
 }
-local debugEntitySpawn = false
+local globalData = {roomRespawned = false, debugEntitySpawn = false}
 local forgottenFables = RegisterMod("Forgotten Fables", 1)
 descriptions(nil)
 forgottenFables:AddCallback(
     ModCallbacks.MC_PRE_GAME_EXIT,
     function()
-        callbacks:preGameExit(forgottenFables, modPlayerData)
+        callbacks:preGameExit(
+            forgottenFables,
+            __TS__New(SaveData, modPlayerData, globalData)
+        )
     end
 )
 forgottenFables:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, callbacks.playerUpdate)
@@ -3689,7 +3836,7 @@ forgottenFables:AddCallback(
 forgottenFables:AddCallback(
     ModCallbacks.MC_POST_GAME_STARTED,
     function(____, continued)
-        callbacks:gameStart(forgottenFables, modPlayerData, continued)
+        callbacks:gameStart(forgottenFables, modPlayerData, globalData, continued)
     end
 )
 forgottenFables:AddCallback(
@@ -3707,11 +3854,19 @@ forgottenFables:AddCallback(
     end
 )
 forgottenFables:AddCallback(
-    ModCallbacks.MC_POST_NEW_ROOM,
+    ModCallbacks.MC_PRE_SPAWN_CLEAN_AWARD,
     function()
-        callbacks:postNewRoom(modPlayerData)
+        callbacks:roomClear(globalData)
     end
 )
+forgottenFables:AddCallback(
+    ModCallbacks.MC_POST_NEW_ROOM,
+    function()
+        callbacks:postNewRoom(modPlayerData, globalData)
+    end
+)
+forgottenFables:AddCallback(ModCallbacks.MC_POST_LASER_INIT, callbacks.laserInit)
+forgottenFables:AddCallback(ModCallbacks.MC_POST_KNIFE_INIT, callbacks.knifeInit)
 forgottenFables:AddCallback(
     ModCallbacks.MC_USE_PILL,
     function(____, pillEffect, player, flags)
@@ -3741,7 +3896,7 @@ forgottenFables:AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, callbacks.postFireTe
 forgottenFables:AddCallback(ModCallbacks.MC_POST_BOMB_UPDATE, callbacks.bombUpdate)
 forgottenFables:AddCallback(ModCallbacks.MC_POST_BOMB_INIT, callbacks.bombInit)
 forgottenFables:AddCallback(ModCallbacks.MC_POST_PROJECTILE_INIT, callbacks.projectileInit)
-if debugEntitySpawn then
+if globalData.debugEntitySpawn then
     forgottenFables:AddCallback(
         ModCallbacks.MC_PRE_ENTITY_SPAWN,
         function(____, ____type, variant, subtype)

@@ -1,5 +1,4 @@
-import { game, hud, ModPlayerTypes } from "../constants";
-import { PlayerData } from "../playerdata";
+import { game, hud, ModPlayerData, ModPlayerTypes } from "../constants";
 
 const hudOffset = 0;
 const OFFSET = Vector(2, 1.2);
@@ -40,7 +39,7 @@ export function init(): void {
   data.font = Font();
   data.font.Load("font/pftempestasevencondensed.fnt");
 }
-export function render(modPlayerData: { data: PlayerData[] }): void {
+export function render(modPlayerData: ModPlayerData): void {
   if (!data.initialized) {
     init();
   }

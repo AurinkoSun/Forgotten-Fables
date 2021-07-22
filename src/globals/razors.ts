@@ -1,9 +1,9 @@
 // import * as constants from "../constants";
 // import { GetPlayerId, PlayerData } from "../playerdata";
-import { PlayerData } from "../playerdata";
+import { ModPlayerData } from "../constants";
 
 export function razor(
-  _modPlayerData: { data: PlayerData[] },
+  _modPlayerData: ModPlayerData,
   _pickup: EntityPickup,
 ): void {
   /* if (pickup.SubType === 13) {

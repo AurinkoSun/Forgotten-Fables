@@ -1,10 +1,10 @@
 // import { ModPlayerTypes } from "../constants";
 // import { GetPlayerId, PlayerData } from "../playerdata";
-import { PlayerData } from "../playerdata";
+import { ModPlayerData } from "../constants";
 
 export function sarahStats(
   _player: EntityPlayer,
-  _modPlayerData: { data: PlayerData[] },
+  _modPlayerData: ModPlayerData,
   _flags: CacheFlag,
 ): void {
   /* if (player.GetPlayerType() === ModPlayerTypes.TAINTED_SARAH) {

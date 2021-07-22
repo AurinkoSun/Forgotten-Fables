@@ -11,4 +11,5 @@
  <passive name="Holidays Orange" gfx="i_HolidaysOrange.png" description="HP up + You feel merry" maxhearts="2" hearts="4" quality="2" />
  <active name="Bomb Converter" maxcharges="0" gfx="i_BombConverter.png" quality="2" description="Merge!" />
  <active name="Bucket of Meat" maxcharges="0" gfx="i_BucketOfMeat.png" quality="3" description="Blood Shaper" />
+ <passive name="Mercurius?" gfx="i_mercurius_b.png" quality="3" description="You feel obsessive"/>
 </items>

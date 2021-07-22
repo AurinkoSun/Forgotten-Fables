@@ -1,27 +1,26 @@
 import * as json from "json";
-import { game } from "../constants";
+import { game, GlobalData, ModPlayerData, SaveData } from "../constants";
 import { PlayerData } from "../playerdata";
 
 export function loadData(
   continued: boolean,
   mod: Mod,
-  modPlayerData: { data: PlayerData[] },
+  modPlayerData: ModPlayerData,
+  globalData: GlobalData,
 ): void {
   if (continued && mod.HasData()) {
-    const olddata = json.decode(mod.LoadData()) as { data: PlayerData[] };
-    for (let i = 0; i < olddata.data.length; i++) {
+    const oldData = json.decode(mod.LoadData()) as SaveData;
+    for (let i = 0; i < oldData.playerData.data.length; i++) {
       const player = game.GetPlayer(i);
-      if (player !== null) {
-        modPlayerData.data[i] = new PlayerData(
-          player,
-          olddata.data[i].bdcharge,
-          olddata.data[i].lost,
-          olddata.data[i].razors,
-        );
-      } else {
-        modPlayerData.data[i] = new PlayerData(null, 0, false, 0);
-      }
+      modPlayerData.data[i] = new PlayerData(
+        player,
+        oldData.playerData.data[i].bdcharge,
+        oldData.playerData.data[i].lost,
+        oldData.playerData.data[i].razors,
+        oldData.playerData.data[i].tStats,
+      );
     }
+    Object.assign(oldData.globalData, globalData);
   } else {
     modPlayerData.data = [
       new PlayerData(game.GetPlayer(0), 0, false, 0),
@@ -33,8 +32,9 @@ export function loadData(
       new PlayerData(game.GetPlayer(6), 0, false, 0),
       new PlayerData(game.GetPlayer(7), 0, false, 0),
     ];
+    globalData.roomRespawned = false;
   }
 }
-export function save(mod: Mod, modPlayerData: { data: PlayerData[] }): void {
-  mod.SaveData(json.encode(modPlayerData));
+export function save(mod: Mod, data: SaveData): void {
+  mod.SaveData(json.encode(data));
 }

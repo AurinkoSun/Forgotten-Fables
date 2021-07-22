@@ -1,10 +1,10 @@
+import { ModPlayerData } from "../constants";
 import { alabasterStats } from "../globals/alabaster";
 // import { sarahStats } from "../globals/sarah";
 import { ffstats } from "../items/passive/fatfetus";
-import { PlayerData } from "../playerdata";
 
 export function evalCache(
-  modPlayerData: { data: PlayerData[] },
+  modPlayerData: ModPlayerData,
   player: EntityPlayer,
   flags: CacheFlag,
 ): void {

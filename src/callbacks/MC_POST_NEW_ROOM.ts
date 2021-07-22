@@ -1,6 +1,11 @@
+import { GlobalData, ModPlayerData } from "../constants";
 import { costumes } from "../globals/costumes";
-import { PlayerData } from "../playerdata";
+import { reversedMercuriusRoomInit } from "../items/passive/reversedMercurius";
 
-export function postNewRoom(modPlayerData: { data: PlayerData[] }): void {
+export function postNewRoom(
+  modPlayerData: ModPlayerData,
+  data: GlobalData,
+): void {
   costumes(modPlayerData);
+  reversedMercuriusRoomInit(data);
 }

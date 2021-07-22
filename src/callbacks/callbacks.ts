@@ -17,10 +17,12 @@ import { render } from "./MC_POST_RENDER";
 import { tearUpdate } from "./MC_POST_TEAR_UPDATE";
 import { postUpdate } from "./MC_POST_UPDATE";
 import { preGameExit } from "./MC_PRE_GAME_EXIT";
+import { roomClear } from "./MC_PRE_SPAWN_CLEAN_AWARD";
 import { preTearCollision } from "./MC_PRE_TEAR_COLLISION";
 import { useItem } from "./MC_USE_ITEM";
 import { usePill } from "./MC_USE_PILL";
 
+export { roomClear };
 export { knifeInit };
 export { laserInit };
 export { tearUpdate };

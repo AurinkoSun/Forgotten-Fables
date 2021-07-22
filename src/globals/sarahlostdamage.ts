@@ -1,9 +1,9 @@
 // import * as constants from "../constants";
 // import { GetPlayerId, PlayerData } from "../playerdata";
-import { PlayerData } from "../playerdata";
+import { ModPlayerData } from "../constants";
 
 export function sarahLostKill(
-  _modPlayerData: { data: PlayerData[] },
+  _modPlayerData: ModPlayerData,
   _tookDamage: Entity,
   _amount: number,
   _flags: DamageFlag,

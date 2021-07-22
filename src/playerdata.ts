@@ -1,8 +1,9 @@
-import * as constants from "./constants";
 /**
  * Class to keep track of various mod data regarding a player.
  *
  */
+
+const game = Game();
 
 export class PlayerData {
   lost: boolean;
@@ -49,8 +50,8 @@ export function GetPlayerId(player: EntityPlayer | null): number {
    * @returns the player's id, as an integer. If the player is null, returns 0
    */
   let returner = 0;
-  for (let i = 0; i < constants.game.GetNumPlayers(); i++) {
-    const playeri = constants.game.GetPlayer(i);
+  for (let i = 0; i < game.GetNumPlayers(); i++) {
+    const playeri = game.GetPlayer(i);
     if (
       playeri !== null &&
       player !== null &&
