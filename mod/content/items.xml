@@ -12,4 +12,5 @@
  <active name="Bomb Converter" maxcharges="0" gfx="i_BombConverter.png" quality="2" description="Merge!" />
  <active name="Bucket of Meat" maxcharges="0" gfx="i_BucketOfMeat.png" quality="3" description="Blood Shaper" />
  <passive name="Mercurius?" gfx="i_mercurius_b.png" quality="3" description="You feel obsessive"/>
+ <passive name="Necrosis" gfx="i_necrosis.png" quality="3" description="Sometimes, death comes from the dead" cache="firedelay"/>
 </items>
