@@ -1956,6 +1956,8 @@ ____exports.ModItemTypes.MEATBUCKET = Isaac.GetItemIdByName("Bucket of Meat")
 ____exports.ModItemTypes[____exports.ModItemTypes.MEATBUCKET] = "MEATBUCKET"
 ____exports.ModItemTypes.BMERCURIUS = Isaac.GetItemIdByName("Mercurius?")
 ____exports.ModItemTypes[____exports.ModItemTypes.BMERCURIUS] = "BMERCURIUS"
+____exports.ModItemTypes.NECROSIS = Isaac.GetItemIdByName("Necrosis")
+____exports.ModItemTypes[____exports.ModItemTypes.NECROSIS] = "NECROSIS"
 ____exports.SaveData = __TS__Class()
 local SaveData = ____exports.SaveData
 SaveData.name = "SaveData"
@@ -1971,6 +1973,10 @@ ____exports.ModTearVariants[____exports.ModTearVariants.GHOST_HAEMO] = "GHOST_HA
 ____exports.ModEntityVariants = ModEntityVariants or ({})
 ____exports.ModEntityVariants.PEEL = Isaac.GetEntityVariantByName("Peel")
 ____exports.ModEntityVariants[____exports.ModEntityVariants.PEEL] = "PEEL"
+____exports.ModEntityVariants.NECROSIS = Isaac.GetEntityVariantByName("Necrosis Laser")
+____exports.ModEntityVariants[____exports.ModEntityVariants.NECROSIS] = "NECROSIS"
+____exports.ModEntityVariants.NECROSIS2 = Isaac.GetEntityVariantByName("Necrosis Sky Laser")
+____exports.ModEntityVariants[____exports.ModEntityVariants.NECROSIS2] = "NECROSIS2"
 ____exports.ModPlayerTypes = ModPlayerTypes or ({})
 ____exports.ModPlayerTypes.ALABASTER = Isaac.GetPlayerTypeByName("Alabaster")
 ____exports.ModPlayerTypes[____exports.ModPlayerTypes.ALABASTER] = "ALABASTER"
@@ -2637,6 +2643,7 @@ function ____exports.ghostUpdate(self, tear)
                         ghostExplosion.SpriteScale = (ghostExplosion.SpriteScale / 2) * (math.sqrt(player.Damage) / math.sqrt(3.5))
                         ghostExplosion.SizeMulti = (ghostExplosion.SizeMulti / 2) * (math.sqrt(player.Damage) / math.sqrt(3.5))
                         ghostExplosion.CollisionDamage = player.Damage / 3
+                        ghostExplosion.EntityCollisionClass = EntityCollisionClass.ENTCOLL_ENEMIES
                     end
                     i = i + 1
                 end
@@ -3048,6 +3055,81 @@ function ____exports.costumes(self, _modPlayerData)
 end
 return ____exports
  end,
+["items.passive.necrosis"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
+local ____exports = {}
+local ____constants = require("constants")
+local game = ____constants.game
+local ModEntityVariants = ____constants.ModEntityVariants
+local ModItemTypes = ____constants.ModItemTypes
+function ____exports.necrosisLudo(self, tear)
+    if tear.SpawnerEntity ~= nil then
+        local player = tear.SpawnerEntity:ToPlayer()
+        if ((player ~= nil) and player:HasCollectible(ModItemTypes.NECROSIS)) and player:HasCollectible(CollectibleType.COLLECTIBLE_LUDOVICO_TECHNIQUE) then
+            local laser = player:GetData().laser
+            if laser == nil then
+                laser = Isaac.Spawn(
+                    EntityType.ENTITY_EFFECT,
+                    ModEntityVariants.NECROSIS2,
+                    0,
+                    tear.Position,
+                    Vector(0, 0),
+                    player
+                ):ToEffect()
+                player:GetData().laser = laser
+            end
+            if laser == nil then
+                return
+            end
+            laser.Size = tear.Size
+            laser.SizeMulti = tear.SizeMulti
+            laser.SpriteScale = tear.SpriteScale
+            laser.EntityCollisionClass = EntityCollisionClass.ENTCOLL_ENEMIES
+            laser.DamageSource = EntityType.ENTITY_PLAYER
+            laser:AddEntityFlags(EntityFlag.FLAG_FRIENDLY)
+            laser.CollisionDamage = player.Damage
+            laser.Position = tear.Position
+            tear.Visible = false
+        end
+    end
+end
+function ____exports.necrosis(self, tear)
+    local entity = tear.SpawnerEntity
+    if entity == nil then
+        return
+    end
+    local player = entity:ToPlayer()
+    if player == nil then
+        return
+    end
+    if player:HasCollectible(ModItemTypes.NECROSIS) and (not player:HasCollectible(CollectibleType.COLLECTIBLE_LUDOVICO_TECHNIQUE)) then
+    end
+end
+function ____exports.necroLudoNewRoom(self)
+    do
+        local i = 0
+        while i < game:GetNumPlayers() do
+            local player = game:GetPlayer(i)
+            if ((player ~= nil) and player:HasCollectible(ModItemTypes.NECROSIS)) and player:HasCollectible(CollectibleType.COLLECTIBLE_LUDOVICO_TECHNIQUE) then
+                local laser = Isaac.Spawn(
+                    EntityType.ENTITY_EFFECT,
+                    ModEntityVariants.NECROSIS2,
+                    0,
+                    player.Position,
+                    Vector(0, 0),
+                    player
+                ):ToEffect()
+                player:GetData().laser = laser
+                if laser == nil then
+                    return
+                end
+                laser.EntityCollisionClass = EntityCollisionClass.ENTCOLL_NONE
+            end
+            i = i + 1
+        end
+    end
+end
+return ____exports
+ end,
 ["items.passive.reversedMercurius"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
 require("lualib_bundle");
 local ____exports = {}
@@ -3113,11 +3195,14 @@ return ____exports
 local ____exports = {}
 local ____costumes = require("globals.costumes")
 local costumes = ____costumes.costumes
+local ____necrosis = require("items.passive.necrosis")
+local necroLudoNewRoom = ____necrosis.necroLudoNewRoom
 local ____reversedMercurius = require("items.passive.reversedMercurius")
 local reversedMercuriusRoomInit = ____reversedMercurius.reversedMercuriusRoomInit
 function ____exports.postNewRoom(self, modPlayerData, data)
     costumes(nil, modPlayerData)
     reversedMercuriusRoomInit(nil, data)
+    necroLudoNewRoom(nil)
 end
 return ____exports
  end,
@@ -3382,8 +3467,11 @@ return ____exports
 local ____exports = {}
 local ____ghostshot = require("items.passive.ghostshot")
 local ghostUpdate = ____ghostshot.ghostUpdate
+local ____necrosis = require("items.passive.necrosis")
+local necrosisLudo = ____necrosis.necrosisLudo
 function ____exports.tearUpdate(self, tear)
     ghostUpdate(nil, tear)
+    necrosisLudo(nil, tear)
 end
 return ____exports
  end,

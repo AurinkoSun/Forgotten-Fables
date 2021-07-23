@@ -27,7 +27,6 @@ forgottenFables.AddCallback(ModCallbacks.MC_PRE_GAME_EXIT, () => {
     new SaveData(modPlayerData, globalData),
   );
 });
-
 forgottenFables.AddCallback(
   ModCallbacks.MC_POST_PLAYER_UPDATE,
   callbacks.playerUpdate,

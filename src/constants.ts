@@ -16,6 +16,7 @@ export enum ModItemTypes {
   BOMBCONVERTER = Isaac.GetItemIdByName("Bomb Converter"),
   MEATBUCKET = Isaac.GetItemIdByName("Bucket of Meat"),
   BMERCURIUS = Isaac.GetItemIdByName("Mercurius?"),
+  NECROSIS = Isaac.GetItemIdByName("Necrosis"),
 }
 export interface GlobalData {
   roomRespawned: boolean;
@@ -45,6 +46,8 @@ export enum ModTearVariants {
 export enum ModEntityVariants {
   // TSARAHBODY = 200,
   PEEL = Isaac.GetEntityVariantByName("Peel"),
+  NECROSIS = Isaac.GetEntityVariantByName("Necrosis Laser"),
+  NECROSIS2 = Isaac.GetEntityVariantByName("Necrosis Sky Laser"),
 }
 /**
  * Enum for new PlayerTypes
