@@ -1,9 +1,9 @@
 <AnimatedActor>
-	<Info CreatedBy="trtv" CreatedOn="7/14/2021 7:59:13 PM" Version="12" Fps="30"/>
+	<Info CreatedBy="trtv" CreatedOn="7/23/2021 9:29:48 PM" Version="13" Fps="30"/>
 	<Content>
 		<Spritesheets>
-			<Spritesheet Path="./monsters/peel.png" Id="0"/>
-			<Spritesheet Path="./monsters/peel2.png" Id="1"/>
+			<Spritesheet Path="peel.png" Id="0"/>
+			<Spritesheet Path="peel2.png" Id="1"/>
 		</Spritesheets>
 		<Layers>
 			<Layer Name="body" Id="0" SpritesheetId="0"/>
