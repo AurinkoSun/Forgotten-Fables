@@ -27,8 +27,8 @@ export function bloodDrive(
        4% for a  random chest (red, gold, grey, old, wooden)
        1% chance for a random item
     */
-    if (modPlayerData.data[GetPlayerId(player)].bdcharge > 0) {
-      modPlayerData.data[GetPlayerId(player)].bdcharge -= 2;
+    if (modPlayerData.data[GetPlayerId(player)].bdcharge >= 3) {
+      modPlayerData.data[GetPlayerId(player)].bdcharge -= 3;
       let spawned = true;
       birthright(player, modPlayerData);
       const rand = rng.RandomInt(101);
@@ -269,7 +269,8 @@ export function alabasterHearts(
     pickup.Variant === PickupVariant.PICKUP_HEART &&
     (pickup.SubType === HeartSubType.HEART_FULL ||
       pickup.SubType === HeartSubType.HEART_HALF ||
-      pickup.SubType === HeartSubType.HEART_DOUBLEPACK)
+      pickup.SubType === HeartSubType.HEART_DOUBLEPACK ||
+      pickup.SubType === HeartSubType.HEART_SCARED)
   ) {
     for (let i = 0; i < game.GetNumPlayers(); i++) {
       const player = game.GetPlayer(i);
@@ -282,20 +283,21 @@ export function alabasterHearts(
           player.Size + pickup.Size
         ) {
           pickup.Remove();
+          sfxManager.Play(SoundEffect.SOUND_HEARTIN);
           switch (pickup.SubType) {
             case HeartSubType.HEART_DOUBLEPACK:
               modPlayerData.data[i].bdcharge += 4;
               break;
-            case HeartSubType.HEART_FULL: {
+            case HeartSubType.HEART_FULL:
               modPlayerData.data[i].bdcharge += 2;
               break;
-            }
-            default: {
+            case HeartSubType.HEART_SCARED:
+              modPlayerData.data[i].bdcharge += 2;
+              break;
+            default:
               modPlayerData.data[i].bdcharge += 1;
               break;
-            }
           }
-          print(modPlayerData.data[i].bdcharge);
         }
       }
     }

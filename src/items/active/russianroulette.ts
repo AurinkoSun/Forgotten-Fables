@@ -17,7 +17,6 @@ export function rRoulette(rng: RNG, player: EntityPlayer): boolean {
         }
       }
       sfxManager.Play(SoundEffect.SOUND_EXPLOSION_STRONG);
-      print(rng.RandomInt(1));
     }
     return true;
   }

@@ -69,10 +69,8 @@ export function sarahUpdate(): void {
       ) {
         entity.GetSprite().Play("Idle", true);
       } else {
-        print("hi");
         const distance1 = player.Position.Distance(entity.Position);
         const distance2 = player.Size + entity.Size;
-        print(distance1, "  ", distance2);
         if (distance1 <= distance2) {
           if (player.GetPlayerType() !== ModPlayerTypes.ALABASTER) {
             entity.GetData().bumped_player = player;
