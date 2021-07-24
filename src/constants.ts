@@ -49,6 +49,7 @@ export enum ModEntityVariants {
   NECROSIS = Isaac.GetEntityVariantByName("Necrosis Laser"),
   NECROSIS2 = Isaac.GetEntityVariantByName("Necrosis Sky Laser"),
   NECROSIS_SPLASH = Isaac.GetEntityVariantByName("Necrosis Impact"),
+  FETUSGIGA = Isaac.GetEntityVariantByName("Fetus Giga Bomb"),
 }
 /**
  * Enum for new PlayerTypes
