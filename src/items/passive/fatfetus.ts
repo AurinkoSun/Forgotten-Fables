@@ -13,7 +13,7 @@ export function fatFetusTears(tear: EntityTear): void {
     const dmg = player.Damage * (300 / 3.5);
     bomb = Isaac.Spawn(
       EntityType.ENTITY_BOMBDROP,
-      21,
+      constants.ModEntityVariants.FETUSGIGA,
       0,
       player.Position,
       tear.Velocity,
@@ -86,8 +86,8 @@ export function gigaUpdate(bomb: EntityBomb): void {
           );
         }
         const explody = Isaac.Spawn(
-          4,
-          17,
+          EntityType.ENTITY_BOMBDROP,
+          BombVariant.BOMB_GIGA,
           0,
           bomb.Position,
           Vector(0, 0),

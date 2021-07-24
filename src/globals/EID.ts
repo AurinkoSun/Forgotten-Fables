@@ -10,7 +10,7 @@ export function descriptions(): void {
       "en_us",
     );
     EID.addCollectible(
-      ModItemTypes.GHOST_SHOT,
+      ModItemTypes.STONE_D6,
       "Rerolls items into the item with the 'opposite' id. With no mods, item 1 (sad onion) rolls into item 729 (Decap Attack)",
       "Stone D6",
       "en_us",
