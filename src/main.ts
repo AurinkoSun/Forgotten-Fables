@@ -1,5 +1,11 @@
 import * as callbacks from "./callbacks/callbacks";
-import { GlobalData, ModPlayerData, SaveData } from "./constants";
+import {
+  GlobalData,
+  ModEntityVariants,
+  ModItemTypes,
+  ModPlayerData,
+  SaveData,
+} from "./constants";
 import { descriptions } from "./globals/EID";
 import { PlayerData } from "./playerdata";
 
@@ -28,6 +34,10 @@ forgottenFables.AddCallback(ModCallbacks.MC_PRE_GAME_EXIT, () => {
   );
 });
 forgottenFables.AddCallback(
+  ModCallbacks.MC_POST_PEFFECT_UPDATE,
+  callbacks.peffectUpdate,
+);
+forgottenFables.AddCallback(
   ModCallbacks.MC_POST_PLAYER_UPDATE,
   callbacks.playerUpdate,
 );
@@ -40,6 +50,50 @@ forgottenFables.AddCallback(
     callbacks.gameStart(forgottenFables, modPlayerData, globalData, continued);
   },
 );
+forgottenFables.AddCallback(ModCallbacks.MC_PRE_ENTITY_SPAWN, necrosisSplash);
+function necrosisSplash(
+  type: number,
+  variant: number,
+  _subtype: number,
+  _pos: Vector,
+  _vel: Vector,
+  spawner: Entity,
+  i: number,
+): [number, number, number, number] | void {
+  if (spawner === null) {
+    return;
+  }
+  if (
+    type === EntityType.ENTITY_EFFECT &&
+    variant === EffectVariant.LASER_IMPACT
+  ) {
+    // eslint-disable-next-line prefer-const
+    let spawner2 = spawner.SpawnerEntity;
+    if (spawner2 !== null) {
+      // eslint-disable-next-line prefer-const
+      let player = spawner2.ToPlayer();
+      if (player !== null && player.HasCollectible(ModItemTypes.NECROSIS)) {
+        /* const splash = Isaac.Spawn(
+          EntityType.ENTITY_EFFECT,
+          ModEntityVariants.NECROSIS_SPLASH,
+          0,
+          pos,
+          vel,
+          player,
+        );
+        splash.SpriteRotation = spawner.SpriteRotation;
+        splash.Parent = spawner; */
+        // eslint-disable-next-line consistent-return
+        return [
+          EntityType.ENTITY_EFFECT,
+          ModEntityVariants.NECROSIS_SPLASH,
+          0,
+          i,
+        ];
+      }
+    }
+  }
+}
 forgottenFables.AddCallback(
   ModCallbacks.MC_EVALUATE_CACHE,
   (player: EntityPlayer, flag: CacheFlag) => {

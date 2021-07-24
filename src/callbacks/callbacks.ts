@@ -9,6 +9,7 @@ import { knifeInit } from "./MC_POST_KNIFE_INIT";
 import { laserInit } from "./MC_POST_LASER_INIT";
 import { postNewRoom } from "./MC_POST_NEW_ROOM";
 import { npcRender } from "./MC_POST_NPC_RENDER";
+import { peffectUpdate } from "./MC_POST_PEFFECT_UPDATE";
 import { postPickupUpdate } from "./MC_POST_PICKUP_UPDATE";
 import { postPlayerInit } from "./MC_POST_PLAYER_INIT";
 import { playerUpdate } from "./MC_POST_PLAYER_UPDATE";
@@ -22,6 +23,7 @@ import { preTearCollision } from "./MC_PRE_TEAR_COLLISION";
 import { useItem } from "./MC_USE_ITEM";
 import { usePill } from "./MC_USE_PILL";
 
+export { peffectUpdate };
 export { roomClear };
 export { knifeInit };
 export { laserInit };

@@ -48,6 +48,7 @@ export enum ModEntityVariants {
   PEEL = Isaac.GetEntityVariantByName("Peel"),
   NECROSIS = Isaac.GetEntityVariantByName("Necrosis Laser"),
   NECROSIS2 = Isaac.GetEntityVariantByName("Necrosis Sky Laser"),
+  NECROSIS_SPLASH = Isaac.GetEntityVariantByName("Necrosis Impact"),
 }
 /**
  * Enum for new PlayerTypes

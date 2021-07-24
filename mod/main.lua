@@ -1977,6 +1977,8 @@ ____exports.ModEntityVariants.NECROSIS = Isaac.GetEntityVariantByName("Necrosis 
 ____exports.ModEntityVariants[____exports.ModEntityVariants.NECROSIS] = "NECROSIS"
 ____exports.ModEntityVariants.NECROSIS2 = Isaac.GetEntityVariantByName("Necrosis Sky Laser")
 ____exports.ModEntityVariants[____exports.ModEntityVariants.NECROSIS2] = "NECROSIS2"
+____exports.ModEntityVariants.NECROSIS_SPLASH = Isaac.GetEntityVariantByName("Necrosis Impact")
+____exports.ModEntityVariants[____exports.ModEntityVariants.NECROSIS_SPLASH] = "NECROSIS_SPLASH"
 ____exports.ModPlayerTypes = ModPlayerTypes or ({})
 ____exports.ModPlayerTypes.ALABASTER = Isaac.GetPlayerTypeByName("Alabaster")
 ____exports.ModPlayerTypes[____exports.ModPlayerTypes.ALABASTER] = "ALABASTER"
@@ -3092,16 +3094,33 @@ function ____exports.necrosisLudo(self, tear)
         end
     end
 end
-function ____exports.necrosis(self, tear)
-    local entity = tear.SpawnerEntity
-    if entity == nil then
-        return
-    end
-    local player = entity:ToPlayer()
-    if player == nil then
-        return
-    end
+function ____exports.necrosisUpdate(self, player)
     if player:HasCollectible(ModItemTypes.NECROSIS) and (not player:HasCollectible(CollectibleType.COLLECTIBLE_LUDOVICO_TECHNIQUE)) then
+        player.FireDelay = player.MaxFireDelay
+        if player:GetData().ChargeFrame == nil then
+            player:GetData().ChargeFrame = 0
+        end
+        if player:GetData().CoolFrame == nil then
+            player:GetData().CoolFrame = 0
+        end
+        if (player:GetFireDirection() ~= -1) and (player:GetData().CoolFrame == 0) then
+            player:GetData().ChargeFrame = math.min(
+                player.MaxFireDelay * 2,
+                player:GetData().ChargeFrame + 1
+            )
+        elseif (game:GetRoom():GetFrameCount() > 1) and (player:GetData().ChargeFrame == (player.MaxFireDelay * 2)) then
+            local laser = player:FireBrimstone(
+                player:GetAimDirection(),
+                player
+            )
+            laser:AddTearFlags(player.TearFlags)
+            laser.CollisionDamage = player.Damage
+            laser:AddTearFlags(TearFlags.TEAR_SPECTRAL)
+            local sprite = laser:GetSprite()
+            sprite:Load("gfx/necrosisLaser.anm2", true)
+            sprite:Play("Loop", true)
+            player:GetData().ChargeFrame = 0
+        end
     end
 end
 function ____exports.necroLudoNewRoom(self)
@@ -3209,6 +3228,15 @@ return ____exports
 ["callbacks.MC_POST_NPC_RENDER"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
 local ____exports = {}
 function ____exports.npcRender(self, _npc, _renderOffset)
+end
+return ____exports
+ end,
+["callbacks.MC_POST_PEFFECT_UPDATE"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
+local ____exports = {}
+local ____necrosis = require("items.passive.necrosis")
+local necrosisUpdate = ____necrosis.necrosisUpdate
+function ____exports.peffectUpdate(self, player)
+    necrosisUpdate(nil, player)
 end
 return ____exports
  end,
@@ -3810,6 +3838,8 @@ local ____MC_POST_NEW_ROOM = require("callbacks.MC_POST_NEW_ROOM")
 local postNewRoom = ____MC_POST_NEW_ROOM.postNewRoom
 local ____MC_POST_NPC_RENDER = require("callbacks.MC_POST_NPC_RENDER")
 local npcRender = ____MC_POST_NPC_RENDER.npcRender
+local ____MC_POST_PEFFECT_UPDATE = require("callbacks.MC_POST_PEFFECT_UPDATE")
+local peffectUpdate = ____MC_POST_PEFFECT_UPDATE.peffectUpdate
 local ____MC_POST_PICKUP_UPDATE = require("callbacks.MC_POST_PICKUP_UPDATE")
 local postPickupUpdate = ____MC_POST_PICKUP_UPDATE.postPickupUpdate
 local ____MC_POST_PLAYER_INIT = require("callbacks.MC_POST_PLAYER_INIT")
@@ -3834,6 +3864,7 @@ local ____MC_USE_ITEM = require("callbacks.MC_USE_ITEM")
 local useItem = ____MC_USE_ITEM.useItem
 local ____MC_USE_PILL = require("callbacks.MC_USE_PILL")
 local usePill = ____MC_USE_PILL.usePill
+____exports.peffectUpdate = peffectUpdate
 ____exports.roomClear = roomClear
 ____exports.knifeInit = knifeInit
 ____exports.laserInit = laserInit
@@ -3885,11 +3916,28 @@ require("lualib_bundle");
 local ____exports = {}
 local callbacks = require("callbacks.callbacks")
 local ____constants = require("constants")
+local ModEntityVariants = ____constants.ModEntityVariants
+local ModItemTypes = ____constants.ModItemTypes
 local SaveData = ____constants.SaveData
 local ____EID = require("globals.EID")
 local descriptions = ____EID.descriptions
 local ____playerdata = require("playerdata")
 local PlayerData = ____playerdata.PlayerData
+local necrosisSplash
+function necrosisSplash(self, ____type, variant, _subtype, _pos, _vel, spawner, i)
+    if spawner == nil then
+        return
+    end
+    if (____type == EntityType.ENTITY_EFFECT) and (variant == EffectVariant.LASER_IMPACT) then
+        local spawner2 = spawner.SpawnerEntity
+        if spawner2 ~= nil then
+            local player = spawner2:ToPlayer()
+            if (player ~= nil) and player:HasCollectible(ModItemTypes.NECROSIS) then
+                return {EntityType.ENTITY_EFFECT, ModEntityVariants.NECROSIS_SPLASH, 0, i}
+            end
+        end
+    end
+end
 local modPlayerData = {
     data = {
         __TS__New(PlayerData, nil, 0, false, 0, {0, 0, 0, 0, 0}),
@@ -3914,6 +3962,7 @@ forgottenFables:AddCallback(
         )
     end
 )
+forgottenFables:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, callbacks.peffectUpdate)
 forgottenFables:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, callbacks.playerUpdate)
 forgottenFables:AddCallback(
     ModCallbacks.MC_POST_RENDER,
@@ -3927,6 +3976,7 @@ forgottenFables:AddCallback(
         callbacks:gameStart(forgottenFables, modPlayerData, globalData, continued)
     end
 )
+forgottenFables:AddCallback(ModCallbacks.MC_PRE_ENTITY_SPAWN, necrosisSplash)
 forgottenFables:AddCallback(
     ModCallbacks.MC_EVALUATE_CACHE,
     function(____, player, flag)
