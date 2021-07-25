@@ -1,5 +1,5 @@
 <AnimatedActor>
-	<Info CreatedBy="Andre Doruk" CreatedOn="7/26/2021 12:11:02 AM" Version="3" Fps="30"/>
+	<Info CreatedBy="Andre Doruk" CreatedOn="7/26/2021 12:28:23 AM" Version="3" Fps="30"/>
 	<Content>
 		<Spritesheets>
 			<Spritesheet Path="c_Alabaster\c_Alabaster lachryphagy.png" Id="0"/>
