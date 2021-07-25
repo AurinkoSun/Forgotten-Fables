@@ -1,5 +1,5 @@
 <AnimatedActor>
-	<Info CreatedBy="AndreDoruk" CreatedOn="7/25/2021 10:15:44 PM" Version="2" Fps="30"/>
+	<Info CreatedBy="Andre Doruk" CreatedOn="7/25/2021 10:15:44 PM" Version="2" Fps="30"/>
 	<Content>
 		<Spritesheets>
 			<Spritesheet Path="c_Alabaster\c_Alabaster solar system.png" Id="0"/>

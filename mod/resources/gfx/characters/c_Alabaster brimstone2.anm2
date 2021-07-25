@@ -1,5 +1,5 @@
 <AnimatedActor>
-	<Info CreatedBy="Unknown" CreatedOn="7/24/2021 5:24:53 PM" Version="20" Fps="30"/>
+	<Info CreatedBy="Andre Doruk" CreatedOn="7/24/2021 5:24:53 PM" Version="2" Fps="30"/>
 	<Content>
 		<Spritesheets>
 			<Spritesheet Path="c_Alabaster\c_Alabaster brimstone2.png" Id="0"/>

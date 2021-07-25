@@ -1,5 +1,5 @@
 <AnimatedActor>
-	<Info CreatedBy="robot" CreatedOn="7/25/2021 12:35:31 AM" Version="113" Fps="30"/>
+	<Info CreatedBy="Andre Doruk" CreatedOn="7/25/2021 12:35:31 AM" Version="2" Fps="30"/>
 	<Content>
 		<Spritesheets>
 			<Spritesheet Path="c_Alabaster\c_ Alabaster libra.png" Id="0"/>
