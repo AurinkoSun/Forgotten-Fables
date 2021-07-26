@@ -3,4 +3,16 @@
   <costume anm2path="c_sarahhair.anm2" type="none" priority="99" />
   <costume anm2path="c_SaraAlthair.anm2" type="none" priority="99" />
   <costume anm2path="c_Alabaster_Hair.anm2" type="none" priority="99" />
+  <costume anm2path="c_Alabaster libra.anm2" type="none" />
+  <costume anm2path="c_Alabaster brimstone.anm2" type="none" />
+  <costume anm2path="c_Alabaster brimstone2.anm2" type="none"/>
+  <costume anm2path="c_Alabaster chocolate milk.anm2" type="none"/>
+  <costume anm2path="c_Alabaster godsflesh.anm2" type="none"/>
+  <costume anm2path="c_Alabaster ithurts.anm2" type="none"/>
+  <costume anm2path="c_Alabaster ithurts2.anm2" type="none"/>
+  <costume anm2path="c_Alabaster lachryphagy.anm2" type="none"/>
+  <costume anm2path="c_Alabaster necrosis.anm2" type="none"/>
+  <costume anm2path="c_Alabaster solar system.anm2" type="none"/>
+  <costume anm2path="c_solar system.anm2" type="passive" id="1"/>
+  <costume anm2path="c_necrosis.anm2" type="passive" id="2"/>
 </costumes>
