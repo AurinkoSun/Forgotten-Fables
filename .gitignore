@@ -1,7 +1,12 @@
-# ---------------
-# ForgottenFables
-# ---------------
+# ----------------
+# Forgotten-Fables
+# ----------------
 
+# Per-user IsaacScript settings
+isaacscript.json
+
+# The transpiled Lua output
+mod/main.lua
 # MacOS artifacts
 .DS_Store
 

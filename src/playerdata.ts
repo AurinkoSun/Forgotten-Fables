@@ -2,7 +2,6 @@
  * Class to keep track of various mod data regarding a player.
  *
  */
-
 const game = Game();
 
 export class PlayerData {
@@ -13,15 +12,12 @@ export class PlayerData {
   bdcharge: number;
   tStats: number[];
   /**
-   * @param player
-   * the player to attach to the PlayerData
-   * @param lost
-   * Whether or not the player is in their 'lost' form through the Suicide item. Default is 0.
-   * @param razors
-   * The number of razors the player has. Used to calculate T.Sarah's damage.
-   * @param bdcharge
-   * Alabaster's Blood Drive charge.
-   * @returns a new PlayerData object
+   * @param player The player to attach to the PlayerData.
+   * @param bdcharge Alabaster's Blood Drive charge.
+   * @param lost Whether or not the player is in their 'lost' form through the Suicide item. Default is 0.
+   * @param razors The number of razors the player has. Used to calculate T.Sarah's damage.
+   * @param tStats The stat bonuses given by Alabaster's birthright.
+   * @returns Returns a new PlayerData object
    */
   constructor(
     player: EntityPlayer | null = null,
@@ -45,6 +41,7 @@ export class PlayerData {
 export function GetPlayerId(player: EntityPlayer | null): number {
   /**
    * Gets the 'id' of a player. Inverse of Game().GetPlayer()
+   *
    * @param player
    * The player to get the index for.
    * @returns the player's id, as an integer. If the player is null, returns 0
@@ -66,6 +63,7 @@ export function GetPlayerId(player: EntityPlayer | null): number {
 export function PlayerSeed(player: EntityPlayer | null, CollID = 1): number {
   /**
    * For when you need to know the seed of the player to check it against something else.
+   *
    * @param player
    * The player to get the seed of.
    * @param CollID

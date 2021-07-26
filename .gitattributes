@@ -4,3 +4,5 @@
 *.ts text eol=lf
 *.json text eol=lf
 *.xml text eol=lf
+# Prevent Windows systems from cloning this repository with "\r\n" line endings
+core.autocrlf=false
