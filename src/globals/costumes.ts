@@ -24,6 +24,21 @@ export function costumes(_modPlayerData: constants.ModPlayerData): void {
       if (player.GetPlayerType() === Isaac.GetPlayerTypeByName("Alabaster")) {
         player.TryRemoveNullCostume(constants.ModCostumes.ALABASTER_HAIR);
         player.AddNullCostume(constants.ModCostumes.ALABASTER_HAIR);
+        if (player.HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE)) {
+          if (
+            player.GetCollectibleNum(CollectibleType.COLLECTIBLE_BRIMSTONE) < 1
+          ) {
+            player.TryRemoveNullCostume(constants.ModCostumes.ALABASTERBRIM2);
+            player.AddNullCostume(constants.ModCostumes.ALABASTERBRIM2);
+          } else {
+            player.TryRemoveNullCostume(constants.ModCostumes.ALABASTERBRIM);
+            player.AddNullCostume(constants.ModCostumes.ALABASTERBRIM);
+          }
+        }
+        if (player.HasCollectible(CollectibleType.COLLECTIBLE_LIBRA)) {
+          player.TryRemoveNullCostume(constants.ModCostumes.ALABASTERLIBRA);
+          player.AddNullCostume(constants.ModCostumes.ALABASTERLIBRA);
+        }
         player.GetData().costumeEquipped = true;
       }
     }

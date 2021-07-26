@@ -74,6 +74,38 @@ export enum ModCostumes {
   ALABASTER_HAIR = Isaac.GetCostumeIdByPath(
     "gfx/characters/c_Alabaster_Hair.anm2",
   ),
+  ALABASTERLIBRA = Isaac.GetCostumeIdByPath(
+    "gfx/characters/c_Alabaster libra.anm2",
+  ),
+  ALABASTERBRIM = Isaac.GetCostumeIdByPath(
+    "gfx/characters/c_Alabaster brimstone.anm2",
+  ),
+  ALABASTERBRIM2 = Isaac.GetCostumeIdByPath(
+    "gfx/characters/c_Alabaster brimstone2.anm2",
+  ),
+  ALABASTERCHOCOLATEMILK = Isaac.GetCostumeIdByPath(
+    "gfx/characters/c_Alabaster chocolate milk.anm2",
+  ),
+  ALABASTERGODSFLESH = Isaac.GetCostumeIdByPath(
+    "gfx/characters/c_Alabaster godsflesh.anm2",
+  ),
+  ALABASTERITHURTS = Isaac.GetCostumeIdByPath(
+    "gfx/characters/c_Alabaster ithurts.anm2",
+  ),
+  ALABASTERITHURTS2 = Isaac.GetCostumeIdByPath(
+    "gfx/characters/c_Alabaster ithurts2.anm2",
+  ),
+  ALABASTERLACHRYPHAGY = Isaac.GetCostumeIdByPath(
+    "gfx/characters/c_Alabaster lachryphagy.anm2",
+  ),
+  ALABASTERNECROSIS = Isaac.GetCostumeIdByPath(
+    "gfx/characters/c_Alabaster necrosis.anm2",
+  ),
+  ALABASTERSOLARSYSTEM = Isaac.GetCostumeIdByPath(
+    "gfx/characters/c_Alabaster solar system.anm2",
+  ),
+  NECROSIS = Isaac.GetCostumeIdByPath("gfx/characters/c_necrosis.anm2"),
+  SOLARSYSTEM = Isaac.GetCostumeIdByPath("gfx/characters/c_solar system.anm2"),
 }
 export enum ModSlotVariants {
   // We'll most likely add quite a few more of these later
