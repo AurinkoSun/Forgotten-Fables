@@ -1979,12 +1979,38 @@ ____exports.ModEntityVariants.NECROSIS2 = Isaac.GetEntityVariantByName("Necrosis
 ____exports.ModEntityVariants[____exports.ModEntityVariants.NECROSIS2] = "NECROSIS2"
 ____exports.ModEntityVariants.NECROSIS_SPLASH = Isaac.GetEntityVariantByName("Necrosis Impact")
 ____exports.ModEntityVariants[____exports.ModEntityVariants.NECROSIS_SPLASH] = "NECROSIS_SPLASH"
+____exports.ModEntityVariants.FETUSGIGA = Isaac.GetEntityVariantByName("Fetus Giga Bomb")
+____exports.ModEntityVariants[____exports.ModEntityVariants.FETUSGIGA] = "FETUSGIGA"
 ____exports.ModPlayerTypes = ModPlayerTypes or ({})
 ____exports.ModPlayerTypes.ALABASTER = Isaac.GetPlayerTypeByName("Alabaster")
 ____exports.ModPlayerTypes[____exports.ModPlayerTypes.ALABASTER] = "ALABASTER"
 ____exports.ModCostumes = ModCostumes or ({})
 ____exports.ModCostumes.ALABASTER_HAIR = Isaac.GetCostumeIdByPath("gfx/characters/c_Alabaster_Hair.anm2")
 ____exports.ModCostumes[____exports.ModCostumes.ALABASTER_HAIR] = "ALABASTER_HAIR"
+____exports.ModCostumes.ALABASTERLIBRA = Isaac.GetCostumeIdByPath("gfx/characters/c_Alabaster libra.anm2")
+____exports.ModCostumes[____exports.ModCostumes.ALABASTERLIBRA] = "ALABASTERLIBRA"
+____exports.ModCostumes.ALABASTERBRIM = Isaac.GetCostumeIdByPath("gfx/characters/c_Alabaster brimstone.anm2")
+____exports.ModCostumes[____exports.ModCostumes.ALABASTERBRIM] = "ALABASTERBRIM"
+____exports.ModCostumes.ALABASTERBRIM2 = Isaac.GetCostumeIdByPath("gfx/characters/c_Alabaster brimstone2.anm2")
+____exports.ModCostumes[____exports.ModCostumes.ALABASTERBRIM2] = "ALABASTERBRIM2"
+____exports.ModCostumes.ALABASTERCHOCOLATEMILK = Isaac.GetCostumeIdByPath("gfx/characters/c_Alabaster chocolate milk.anm2")
+____exports.ModCostumes[____exports.ModCostumes.ALABASTERCHOCOLATEMILK] = "ALABASTERCHOCOLATEMILK"
+____exports.ModCostumes.ALABASTERGODSFLESH = Isaac.GetCostumeIdByPath("gfx/characters/c_Alabaster godsflesh.anm2")
+____exports.ModCostumes[____exports.ModCostumes.ALABASTERGODSFLESH] = "ALABASTERGODSFLESH"
+____exports.ModCostumes.ALABASTERITHURTS = Isaac.GetCostumeIdByPath("gfx/characters/c_Alabaster ithurts.anm2")
+____exports.ModCostumes[____exports.ModCostumes.ALABASTERITHURTS] = "ALABASTERITHURTS"
+____exports.ModCostumes.ALABASTERITHURTS2 = Isaac.GetCostumeIdByPath("gfx/characters/c_Alabaster ithurts2.anm2")
+____exports.ModCostumes[____exports.ModCostumes.ALABASTERITHURTS2] = "ALABASTERITHURTS2"
+____exports.ModCostumes.ALABASTERLACHRYPHAGY = Isaac.GetCostumeIdByPath("gfx/characters/c_Alabaster lachryphagy.anm2")
+____exports.ModCostumes[____exports.ModCostumes.ALABASTERLACHRYPHAGY] = "ALABASTERLACHRYPHAGY"
+____exports.ModCostumes.ALABASTERNECROSIS = Isaac.GetCostumeIdByPath("gfx/characters/c_Alabaster necrosis.anm2")
+____exports.ModCostumes[____exports.ModCostumes.ALABASTERNECROSIS] = "ALABASTERNECROSIS"
+____exports.ModCostumes.ALABASTERSOLARSYSTEM = Isaac.GetCostumeIdByPath("gfx/characters/c_Alabaster solar system.anm2")
+____exports.ModCostumes[____exports.ModCostumes.ALABASTERSOLARSYSTEM] = "ALABASTERSOLARSYSTEM"
+____exports.ModCostumes.NECROSIS = Isaac.GetCostumeIdByPath("gfx/characters/c_necrosis.anm2")
+____exports.ModCostumes[____exports.ModCostumes.NECROSIS] = "NECROSIS"
+____exports.ModCostumes.SOLARSYSTEM = Isaac.GetCostumeIdByPath("gfx/characters/c_solar system.anm2")
+____exports.ModCostumes[____exports.ModCostumes.SOLARSYSTEM] = "SOLARSYSTEM"
 ____exports.ModSlotVariants = ModSlotVariants or ({})
 ____exports.ModSlotVariants.SARAHNPC = Isaac.GetEntityVariantByName("Sarah (NPC)")
 ____exports.ModSlotVariants[____exports.ModSlotVariants.SARAHNPC] = "SARAHNPC"
@@ -2038,7 +2064,7 @@ function ____exports.fatFetusTears(self, tear)
     end
     if player:HasCollectible(constants.ModItemTypes.FAT_FETUS) then
         local dmg = player.Damage * (300 / 3.5)
-        bomb = Isaac.Spawn(EntityType.ENTITY_BOMBDROP, 21, 0, player.Position, tear.Velocity, player):ToBomb()
+        bomb = Isaac.Spawn(EntityType.ENTITY_BOMBDROP, constants.ModEntityVariants.FETUSGIGA, 0, player.Position, tear.Velocity, player):ToBomb()
         if bomb == nil then
             return
         end
@@ -2086,8 +2112,8 @@ function ____exports.gigaUpdate(self, bomb)
                     )
                 end
                 local explody = Isaac.Spawn(
-                    4,
-                    17,
+                    EntityType.ENTITY_BOMBDROP,
+                    BombVariant.BOMB_GIGA,
                     0,
                     bomb.Position,
                     Vector(0, 0),
@@ -3048,6 +3074,19 @@ function ____exports.costumes(self, _modPlayerData)
                 if player:GetPlayerType() == Isaac.GetPlayerTypeByName("Alabaster") then
                     player:TryRemoveNullCostume(constants.ModCostumes.ALABASTER_HAIR)
                     player:AddNullCostume(constants.ModCostumes.ALABASTER_HAIR)
+                    if player:HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE) then
+                        if player:GetCollectibleNum(CollectibleType.COLLECTIBLE_BRIMSTONE) < 1 then
+                            player:TryRemoveNullCostume(constants.ModCostumes.ALABASTERBRIM2)
+                            player:AddNullCostume(constants.ModCostumes.ALABASTERBRIM2)
+                        else
+                            player:TryRemoveNullCostume(constants.ModCostumes.ALABASTERBRIM)
+                            player:AddNullCostume(constants.ModCostumes.ALABASTERBRIM)
+                        end
+                    end
+                    if player:HasCollectible(CollectibleType.COLLECTIBLE_LIBRA) then
+                        player:TryRemoveNullCostume(constants.ModCostumes.ALABASTERLIBRA)
+                        player:AddNullCostume(constants.ModCostumes.ALABASTERLIBRA)
+                    end
                     player:GetData().costumeEquipped = true
                 end
             end
@@ -3252,9 +3291,9 @@ local ____playerdata = require("playerdata")
 local GetPlayerId = ____playerdata.GetPlayerId
 function ____exports.bloodDrive(self, player, modPlayerData, rng)
     if (player:GetPlayerType() == ModPlayerTypes.ALABASTER) and ((game:GetRoom():GetType() == RoomType.ROOM_ANGEL) or (game:GetRoom():GetType() == RoomType.ROOM_DEVIL)) then
-        if modPlayerData.data[GetPlayerId(nil, player) + 1].bdcharge > 0 then
+        if modPlayerData.data[GetPlayerId(nil, player) + 1].bdcharge >= 3 then
             local ____obj, ____index = modPlayerData.data[GetPlayerId(nil, player) + 1], "bdcharge"
-            ____obj[____index] = ____obj[____index] - 2
+            ____obj[____index] = ____obj[____index] - 3
             local spawned = true
             birthright(nil, player, modPlayerData)
             local rand = rng:RandomInt(101)
@@ -3395,7 +3434,7 @@ function ____exports.bloodDrive(self, player, modPlayerData, rng)
     return nil
 end
 function ____exports.alabasterHearts(self, pickup, modPlayerData)
-    if (pickup.Variant == PickupVariant.PICKUP_HEART) and (((pickup.SubType == HeartSubType.HEART_FULL) or (pickup.SubType == HeartSubType.HEART_HALF)) or (pickup.SubType == HeartSubType.HEART_DOUBLEPACK)) then
+    if (pickup.Variant == PickupVariant.PICKUP_HEART) and ((((pickup.SubType == HeartSubType.HEART_FULL) or (pickup.SubType == HeartSubType.HEART_HALF)) or (pickup.SubType == HeartSubType.HEART_DOUBLEPACK)) or (pickup.SubType == HeartSubType.HEART_SCARED)) then
         do
             local i = 0
             while i < game:GetNumPlayers() do
@@ -3403,11 +3442,14 @@ function ____exports.alabasterHearts(self, pickup, modPlayerData)
                 if (player ~= nil) and (player:GetPlayerType() == ModPlayerTypes.ALABASTER) then
                     if player.Position:Distance(pickup.Position) < (player.Size + pickup.Size) then
                         pickup:Remove()
+                        sfxManager:Play(SoundEffect.SOUND_HEARTIN)
                         local ____switch25 = pickup.SubType
                         if ____switch25 == HeartSubType.HEART_DOUBLEPACK then
                             goto ____switch25_case_0
                         elseif ____switch25 == HeartSubType.HEART_FULL then
                             goto ____switch25_case_1
+                        elseif ____switch25 == HeartSubType.HEART_SCARED then
+                            goto ____switch25_case_2
                         end
                         goto ____switch25_case_default
                         ::____switch25_case_0::
@@ -3418,22 +3460,23 @@ function ____exports.alabasterHearts(self, pickup, modPlayerData)
                         end
                         ::____switch25_case_1::
                         do
-                            do
-                                local ____obj, ____index = modPlayerData.data[i + 1], "bdcharge"
-                                ____obj[____index] = ____obj[____index] + 2
-                                goto ____switch25_end
-                            end
+                            local ____obj, ____index = modPlayerData.data[i + 1], "bdcharge"
+                            ____obj[____index] = ____obj[____index] + 2
+                            goto ____switch25_end
+                        end
+                        ::____switch25_case_2::
+                        do
+                            local ____obj, ____index = modPlayerData.data[i + 1], "bdcharge"
+                            ____obj[____index] = ____obj[____index] + 2
+                            goto ____switch25_end
                         end
                         ::____switch25_case_default::
                         do
-                            do
-                                local ____obj, ____index = modPlayerData.data[i + 1], "bdcharge"
-                                ____obj[____index] = ____obj[____index] + 1
-                                goto ____switch25_end
-                            end
+                            local ____obj, ____index = modPlayerData.data[i + 1], "bdcharge"
+                            ____obj[____index] = ____obj[____index] + 1
+                            goto ____switch25_end
                         end
                         ::____switch25_end::
-                        print(modPlayerData.data[i + 1].bdcharge)
                     end
                 end
                 i = i + 1
@@ -3536,10 +3579,8 @@ function ____exports.sarahUpdate(self)
                 if (not entity:GetSprite():IsPlaying("Idle")) and (not entity:GetSprite():IsPlaying("Thumbsup")) then
                     entity:GetSprite():Play("Idle", true)
                 else
-                    print("hi")
                     local distance1 = player.Position:Distance(entity.Position)
                     local distance2 = player.Size + entity.Size
-                    print(distance1, "  ", distance2)
                     if distance1 <= distance2 then
                         if player:GetPlayerType() ~= ModPlayerTypes.ALABASTER then
                             entity:GetData().bumped_player = player
@@ -3686,9 +3727,6 @@ function ____exports.rRoulette(self, rng, player)
                 end
             end
             sfxManager:Play(SoundEffect.SOUND_EXPLOSION_STRONG)
-            print(
-                rng:RandomInt(1)
-            )
         end
         return true
     end
@@ -3899,7 +3937,7 @@ function ____exports.descriptions(self)
     if EID ~= nil then
         Isaac.DebugString("adding eid stuff")
         EID:addCollectible(ModItemTypes.GHOST_SHOT, "Turns your tears into ghosts that explode", "Ghost Shot", "en_us")
-        EID:addCollectible(ModItemTypes.GHOST_SHOT, "Rerolls items into the item with the 'opposite' id. With no mods, item 1 (sad onion) rolls into item 729 (Decap Attack)", "Stone D6", "en_us")
+        EID:addCollectible(ModItemTypes.STONE_D6, "Rerolls items into the item with the 'opposite' id. With no mods, item 1 (sad onion) rolls into item 729 (Decap Attack)", "Stone D6", "en_us")
         EID:addCollectible(ModItemTypes.BLUE_HEART, "Gives 3 soul hearts.", "Blue Heart", "en_us")
         EID:addCollectible(ModItemTypes.GHOST_SHOT, "Turns your tears into ghosts#When they touch an enemy or the ground, ghosts explode,dealing 0.4x your damage 3 times.", "Ghost Shot", "en_us_detailed")
         EID:addCollectible(ModItemTypes.MEATBUCKET, "On use, sucks up all red hearts from the ground and gives you one blood clot per full heart", "Bucket of Meat", "en_us")
