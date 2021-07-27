@@ -1,7 +1,7 @@
 {
-  "name": "Forgotten-Fables",
+  "name": "forgottenfables",
   "version": "0.0.1",
-  "description": "A mod for The Binding of Isaac: Afterbirth+",
+  "description": "A mod for The Binding of Isaac: Repentance",
   "keywords": [
     "isaac",
     "mod",
@@ -11,6 +11,6 @@
   ],
   "license": "GPL-3.0",
   "dependencies": {
-    "isaacscript": "^1.0.196"
+    "isaacscript": "^1.0.205"
   }
 }
